@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Competência do tabelião por tipo de ato eletrônico — e-Notariado</title>
+<meta name="description" content="Ferramenta destinada a identificar o tabelião de notas competente para realizar o ato notarial eletrônico ou híbrido. Selecione o tipo de ato e responda às perguntas contextuais." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+<style id="tw-compiled">*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.19 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mr-2{margin-right:.5rem}.mt-0\.5{margin-top:.125rem}.mt-1{margin-top:.25rem}.mt-16{margin-top:4rem}.mt-2{margin-top:.5rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}.flex{display:flex}.h-10{height:2.5rem}.h-px{height:1px}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-full{width:100%}.min-w-0{min-width:0}.max-w-2xl{max-width:42rem}.max-w-4xl{max-width:56rem}.flex-1{flex:1 1 0%}.flex-shrink-0{flex-shrink:0}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.space-y-2>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.5rem*var(--tw-space-y-reverse))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.whitespace-nowrap{white-space:nowrap}.break-words{overflow-wrap:break-word}.rounded-full{border-radius:9999px}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-l-2{border-left-width:2px}.border-t{border-top-width:1px}.border-amber-100{--tw-border-opacity:1;border-color:rgb(254 243 199/var(--tw-border-opacity,1))}.border-slate-900{--tw-border-opacity:1;border-color:rgb(15 23 42/var(--tw-border-opacity,1))}.border-stone-200{--tw-border-opacity:1;border-color:rgb(231 229 228/var(--tw-border-opacity,1))}.border-stone-300{--tw-border-opacity:1;border-color:rgb(214 211 209/var(--tw-border-opacity,1))}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235/var(--tw-bg-opacity,1))}.bg-orange-700{--tw-bg-opacity:1;background-color:rgb(0 118 255/var(--tw-bg-opacity,1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.bg-stone-100{--tw-bg-opacity:1;background-color:rgb(245 245 244/var(--tw-bg-opacity,1))}.bg-stone-50{--tw-bg-opacity:1;background-color:rgb(250 250 249/var(--tw-bg-opacity,1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.p-5{padding:1.25rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pl-3{padding-left:.75rem}.pl-9{padding-left:2.25rem}.pt-1{padding-top:.25rem}.pt-6{padding-top:1.5rem}.pt-8{padding-top:2rem}.text-left{text-align:left}.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[15px\]{font-size:15px}.text-base{font-size:1rem;line-height:1.5rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xs{font-size:.75rem;line-height:1rem}.font-light{font-weight:300}.font-medium{font-weight:500}.font-normal{font-weight:400}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-\[1\.05\]{line-height:1.05}.leading-relaxed{line-height:1.625}.leading-tight{line-height:1.25}.tracking-\[0\.25em\]{letter-spacing:.25em}.tracking-widest{letter-spacing:.1em}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9/var(--tw-text-opacity,1))}.text-amber-800{--tw-text-opacity:1;color:rgb(146 64 14/var(--tw-text-opacity,1))}.text-amber-900{--tw-text-opacity:1;color:rgb(120 53 15/var(--tw-text-opacity,1))}.text-orange-400{--tw-text-opacity:1;color:rgb(251 146 60/var(--tw-text-opacity,1))}.text-orange-700{--tw-text-opacity:1;color:rgb(0 118 255/var(--tw-text-opacity,1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.text-stone-300{--tw-text-opacity:1;color:rgb(214 211 209/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.ease-out{transition-timing-function:cubic-bezier(0,0,.2,1)}.hover\:border-orange-700:hover{--tw-border-opacity:1;border-color:rgb(0 118 255/var(--tw-border-opacity,1))}.hover\:text-orange-900:hover{--tw-text-opacity:1;color:rgb(124 45 18/var(--tw-text-opacity,1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.hover\:shadow-sm:hover{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.group:hover .group-hover\:bg-orange-50{--tw-bg-opacity:1;background-color:rgb(255 247 237/var(--tw-bg-opacity,1))}.group:hover .group-hover\:text-orange-700{--tw-text-opacity:1;color:rgb(0 118 255/var(--tw-text-opacity,1))}.group:hover .group-hover\:text-orange-900{--tw-text-opacity:1;color:rgb(124 45 18/var(--tw-text-opacity,1))}@media (min-width:768px){.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}.md\:justify-between{justify-content:space-between}.md\:text-3xl{font-size:1.875rem;line-height:2.25rem}.md\:text-5xl{font-size:3rem;line-height:1}.md\:text-\[17px\]{font-size:17px}}</style>
+<style>
+  body { margin: 0; font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+ .font-display { font-family: 'Fraunces', 'Georgia', serif; font-optical-sizing: auto; }
+ .font-mono { font-family: 'IBM Plex Mono', monospace; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+ .anim-fadeup { animation: fadeUp 0.35s ease-out both; }
+ .grain {
+    background-image: radial-gradient(circle at 1px 1px, rgba(20,15,10,0.04) 1px, transparent 0);
+    background-size: 4px 4px;
+  }
+
+
+  .option-card:hover .option-icon {
+    background-color: rgb(255 247 237);
+  }
+  .option-card:hover .option-icon svg {
+    color: rgb(0 118 255);
+  }
+
+  @media (max-height: 700px) {
+    header.py-10 { padding-top: 1.5rem !important; padding-bottom: 1.5rem !important; }
+    header.mb-6 { margin-bottom: 1rem !important; }
+    header h1 { font-size: 2rem !important; line-height: 1.08 !important; margin-bottom: 0.75rem !important; }
+    header p { font-size: 0.92rem !important; line-height: 1.45 !important; }
+    main.py-10 { padding-top: 1.5rem !important; padding-bottom: 2rem !important; }
+    #consulta { scroll-margin-top: 0px; }
+  }
+</style>
+</head>
+<body class="bg-stone-100 text-slate-900">
+<div id="root">
+  <div style="max-width:56rem;margin:0 auto;padding:2rem 1.5rem;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#334155;">
+    Carregando consulta de competência do e-Notariado...
+  </div>
+</div>
+<noscript>
+  <div style="max-width:56rem;margin:0 auto;padding:1rem 1.5rem;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#7c2d12;background:#fffbeb;border:1px solid #fde68a;">
+    Esta página precisa de JavaScript habilitado para funcionar.
+  </div>
+</noscript>
+<!-- Versão revisada: fluxo de escritura pública com pergunta sobre ato híbrido com imóvel, regra da mesma UF com adquirente/credor, tópico próprio de domiciliados no exterior, nota sobre comprovação de domicílio, dependências fixadas, fallback de carregamento e marcador de visitas discreto. -->
+
+<script>
+const { useState, useEffect } = React;
+// =====================================================================
+// Componente base de ícone (substitui lucide-react)
+// =====================================================================
+const Icon = ({ children, size = 24, className = '' }) => (React.createElement("svg", { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", className: className }, children));
+const FileText = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z" }),
+    React.createElement("path", { d: "M14 2v4a2 2 0 0 0 2 2h4" }),
+    React.createElement("path", { d: "M10 9H8" }),
+    React.createElement("path", { d: "M16 13H8" }),
+    React.createElement("path", { d: "M16 17H8" }));
+const ScrollText = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M19 17V5a2 2 0 0 0-2-2H4" }),
+    React.createElement("path", { d: "M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3" }),
+    React.createElement("path", { d: "M15 8h-5" }),
+    React.createElement("path", { d: "M15 12h-5" }));
+const Stamp = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M5 22h14" }),
+    React.createElement("path", { d: "M19.27 13.73A2.5 2.5 0 0 0 17.5 13h-11A2.5 2.5 0 0 0 4 15.5V17a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1.5c0-.66-.26-1.3-.73-1.77Z" }),
+    React.createElement("path", { d: "M14 13V8.5C14 7 15 7 15 5a3 3 0 0 0-6 0c0 2 1 2 1 3.5V13" }));
+const Globe = (p) => React.createElement(Icon, { ...p },
+    React.createElement("circle", { cx: "12", cy: "12", r: "10" }),
+    React.createElement("path", { d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" }),
+    React.createElement("path", { d: "M2 12h20" }));
+const Building2 = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" }),
+    React.createElement("path", { d: "M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" }),
+    React.createElement("path", { d: "M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" }),
+    React.createElement("path", { d: "M10 6h4" }),
+    React.createElement("path", { d: "M10 10h4" }),
+    React.createElement("path", { d: "M10 14h4" }),
+    React.createElement("path", { d: "M10 18h4" }));
+const ChevronRight = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "m9 18 6-6-6-6" }));
+const RotateCcw = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" }),
+    React.createElement("path", { d: "M3 3v5h5" }));
+const BookOpen = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" }),
+    React.createElement("path", { d: "M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" }));
+const AlertCircle = (p) => React.createElement(Icon, { ...p },
+    React.createElement("circle", { cx: "12", cy: "12", r: "10" }),
+    React.createElement("line", { x1: "12", x2: "12", y1: "8", y2: "12" }),
+    React.createElement("line", { x1: "12", x2: "12.01", y1: "16", y2: "16" }));
+const CheckCircle2 = (p) => React.createElement(Icon, { ...p },
+    React.createElement("circle", { cx: "12", cy: "12", r: "10" }),
+    React.createElement("path", { d: "m9 12 2 2 4-4" }));
+const ArrowLeft = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "m12 19-7-7 7-7" }),
+    React.createElement("path", { d: "M19 12H5" }));
+const ShieldCheck = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" }),
+    React.createElement("path", { d: "m9 12 2 2 4-4" }));
+const Layers = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" }),
+    React.createElement("path", { d: "M2 12a1 1 0 0 0.58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" }),
+    React.createElement("path", { d: "M2 17a1 1 0 0 0.58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" }));
+const Camera = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" }),
+    React.createElement("circle", { cx: "12", cy: "13", r: "3" }));
+const Car = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0.6.4 1 1 1h2" }),
+    React.createElement("circle", { cx: "7", cy: "17", r: "2" }),
+    React.createElement("path", { d: "M9 17h6" }),
+    React.createElement("circle", { cx: "17", cy: "17", r: "2" }));
+const Languages = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "m5 8 6 6" }),
+    React.createElement("path", { d: "m4 14 6-6 2-3" }),
+    React.createElement("path", { d: "M2 5h12" }),
+    React.createElement("path", { d: "M7 2h1" }),
+    React.createElement("path", { d: "m22 22-5-10-5 10" }),
+    React.createElement("path", { d: "M14 18h6" }));
+const Plus = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M5 12h14" }),
+    React.createElement("path", { d: "M12 5v14" }));
+const Quote = (p) => React.createElement(Icon, { ...p },
+    React.createElement("path", { d: "M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2.75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1.008-1 1.031V20c0 1 0 1 1 1z" }),
+    React.createElement("path", { d: "M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2.75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" }));
+// =====================================================================
+// Marcador discreto de visitas
+// =====================================================================
+function VisitMarker() {
+    const [contadorUrl, setContadorUrl] = useState('');
+    useEffect(() => {
+        if (typeof window === 'undefined')
+            return;
+        const host = window.location.hostname || 'localhost';
+        const path = (window.location.pathname || '/').replace(/\/$/, '') || '/';
+        const pagina = `${host}${path}`;
+        const url = `https://hits.sh/${encodeURI(pagina)}.svg?label=visitas&color=94a3b8&labelColor=f5f5f4&style=flat-square`;
+        setContadorUrl(url);
+    }, []);
+    if (!contadorUrl)
+        return null;
+    return (React.createElement("span", { className: "no-print", style: {
+            display: 'inline-flex',
+            alignItems: 'center',
+            minHeight: '18px',
+            opacity: 0.48,
+            filter: 'grayscale(1)',
+            transition: 'opacity 0.2s ease'
+        }, onMouseEnter: (event) => { event.currentTarget.style.opacity = '0.78'; }, onMouseLeave: (event) => { event.currentTarget.style.opacity = '0.48'; }, title: "Marcador discreto de visitas", "aria-label": "Marcador discreto de visitas" },
+        React.createElement("img", { src: contadorUrl, alt: "visitas", loading: "lazy", referrerPolicy: "no-referrer-when-downgrade", onError: (event) => { event.currentTarget.style.display = 'none'; }, style: { height: '18px', width: 'auto' } })));
+}
+// =====================================================================
+// Lógica jurídica
+// =====================================================================
+const FLUXO = {
+    inicio: {
+        titulo: 'Tipo de ato',
+        pergunta: 'Qual o ato eletrônico será praticado?',
+        opcoes: [
+            { rotulo: 'Escritura pública', desc: 'Compra e venda, doação, permuta, dação em pagamento, divisão, financiamento, alienação fiduciária, hipoteca, inventário, divórcio, união estável, emancipação, pacto antenupcial, DAV, dependência econômica, declarações, etc. Lista exemplificativa.', icone: FileText, proximo: 'esc_imovel' },
+            { rotulo: 'Domiciliados no exterior', desc: 'Estrangeiro ou brasileiro com domicílio fora do Brasil, com ou sem imóvel.', icone: Globe, proximo: 'exterior_imovel' },
+            { rotulo: 'Ata notarial', desc: 'Constatação de fato.', icone: ScrollText, proximo: 'ata_local' },
+            { rotulo: 'Procuração pública', desc: 'Outorga de poderes, com ou sem substabelecimento.', icone: BookOpen, proximo: 'proc_imovel' },
+            { rotulo: 'Testamento', desc: 'Disposição de última vontade.', icone: ShieldCheck, proximo: 'testamento_final' },
+            { rotulo: 'Reconhecimento de firma', desc: 'Assinatura eletrônica, em documento físico ou DUT-e/ATPV-e.', icone: Stamp, proximo: 'rec_tipo' },
+            { rotulo: 'Autenticação ou apostila', desc: 'Desmaterialização, e-Not Provas, certificado digital notarizado, apostilamento.', icone: Layers, proximo: 'aut_tipo' }
+        ]
+    },
+    esc_imovel: {
+        titulo: 'Escritura, objeto',
+        pergunta: 'O ato envolve bem imóvel?',
+        opcoes: [
+            { rotulo: 'Sim, com imóvel', icone: Building2, proximo: 'esc_hibrido_imovel' },
+            { rotulo: 'Não, apenas atos pessoais', desc: 'Divórcio, união estável, emancipação, pacto antenupcial, DAV, dependência econômica, declarações, etc. Lista exemplificativa.', icone: FileText, proximo: 'esc_hibrido' }
+        ]
+    },
+    esc_hibrido_imovel: {
+        titulo: 'Escritura com imóvel',
+        pergunta: 'O ato com imóvel é híbrido (uma parte comparece presencialmente e outra à distância pelo e-Notariado)?',
+        opcoes: [
+            { rotulo: 'Sim, é híbrido', icone: Layers, resultado: 'res_hibrido_imovel' },
+            { rotulo: 'Não, todas as partes assinam pelo e-Notariado', icone: Building2, proximo: 'esc_qtd' }
+        ]
+    },
+    esc_hibrido: {
+        titulo: 'Escritura sem imóvel',
+        pergunta: 'O ato é híbrido (uma parte comparece presencialmente e outra à distância pelo e-Notariado)?',
+        opcoes: [
+            { rotulo: 'Sim, é híbrido', icone: Layers, resultado: 'res_hibrido' },
+            { rotulo: 'Não, todas as partes assinam pelo e-Notariado', icone: FileText, resultado: 'res_pessoal_remoto' }
+        ]
+    },
+    esc_qtd: {
+        titulo: 'Escritura com imóvel',
+        pergunta: 'Quantos imóveis estão vinculados ao ato?',
+        opcoes: [
+            { rotulo: 'Um imóvel', icone: Building2, proximo: 'esc_mesma_uf_um' },
+            { rotulo: 'Mais de um imóvel', icone: Layers, proximo: 'esc_mesma_uf_multi' }
+        ]
+    },
+    esc_mesma_uf_um: {
+        titulo: 'Escritura com um imóvel',
+        pergunta: 'O imóvel e o domicílio do(s) adquirente(s) ou credor(es) estão no mesmo Estado (UF)?',
+        opcoes: [
+            { rotulo: 'Sim, mesmo Estado', desc: 'Aplica a regra do local do imóvel, do domicílio do adquirente ou credor e, nessa hipótese, de qualquer tabelionato da unidade federativa.', icone: Globe, resultado: 'res_mesma_uf' },
+            { rotulo: 'Não, Estados diferentes', desc: 'Mantém a competência pelo local do imóvel ou pelo domicílio do adquirente ou credor.', icone: Globe, resultado: 'res_um_imovel_uf_diferente' }
+        ]
+    },
+    esc_mesma_uf_multi: {
+        titulo: 'Escritura com mais de um imóvel',
+        pergunta: 'O(s) imóvel(is) e o domicílio do(s) adquirente(s) ou credor(es) estão no mesmo Estado (UF)?',
+        opcoes: [
+            { rotulo: 'Sim, mesmo Estado', desc: 'Aplica a regra do local dos imóveis, do domicílio do adquirente ou credor e, nessa hipótese, de qualquer tabelionato da unidade federativa.', icone: Globe, resultado: 'res_mesma_uf' },
+            { rotulo: 'Não, Estados diferentes', desc: 'A competência fica vinculada ao local de qualquer dos imóveis ou ao domicílio dos adquirentes ou credores, observada a regra da mesma UF quando houver coincidência.', icone: Globe, resultado: 'res_ufs_distintas' }
+        ]
+    },
+    exterior_imovel: {
+        titulo: 'Domiciliados no exterior',
+        pergunta: 'O ato envolve bem imóvel?',
+        opcoes: [
+            { rotulo: 'Sim, envolve imóvel', desc: 'A competência fica vinculada às regras do ato com imóvel.', icone: Building2, resultado: 'res_exterior_imovel' },
+            { rotulo: 'Não envolve imóvel', desc: 'Aplica-se a regra geral do tópico de domiciliados no exterior.', icone: Globe, resultado: 'res_exterior_livre' }
+        ]
+    },
+    ata_local: {
+        titulo: 'Ata notarial',
+        pergunta: 'Há fato a ser constatado em local determinado?',
+        opcoes: [
+            { rotulo: 'Sim, com vínculo a local específico', desc: 'Constatação física de fato em endereço identificável.', icone: ScrollText, resultado: 'res_ata_fato' },
+            { rotulo: 'Não há vínculo a local específico', desc: 'Conteúdo digital, declarações, documentos eletrônicos.', icone: ScrollText, resultado: 'res_ata_requerente' }
+        ]
+    },
+    proc_imovel: {
+        titulo: 'Procuração',
+        pergunta: 'A procuração outorga poderes sobre bem imóvel?',
+        opcoes: [
+            { rotulo: 'Sim, envolve imóvel', icone: Building2, resultado: 'res_proc_imovel' },
+            { rotulo: 'Não envolve imóvel', icone: BookOpen, resultado: 'res_proc_outorgante' }
+        ]
+    },
+    rec_tipo: {
+        titulo: 'Reconhecimento de firma',
+        pergunta: 'Qual a natureza da assinatura?',
+        opcoes: [
+            { rotulo: 'Assinatura eletrônica via e-Not Assina', desc: 'Documento digital firmado com certificado digital notarizado.', icone: Stamp, resultado: 'res_rec_enot' },
+            { rotulo: 'Assinatura em documento físico', desc: 'Ratificação por videoconferência.', icone: Camera, resultado: 'res_rec_fisico' },
+            { rotulo: 'DUT-e ou ATPV-e (veículo automotor)', icone: Car, resultado: 'res_rec_veiculo' }
+        ]
+    },
+    aut_tipo: {
+        titulo: 'Autenticação ou apostila',
+        pergunta: 'Qual o subtipo do ato?',
+        opcoes: [
+            { rotulo: 'Desmaterialização', icone: Layers, resultado: 'res_aut_desmat' },
+            { rotulo: 'e-Not Provas', icone: ScrollText, resultado: 'res_aut_internet' },
+            { rotulo: 'Emissão de certificado digital notarizado', icone: ShieldCheck, resultado: 'res_aut_certificado' },
+            { rotulo: 'Apostilamento (Convenção da Haia)', icone: Languages, resultado: 'res_aut_apostila' }
+        ]
+    }
+};
+const RESULTADOS = {
+    res_imovel_simples: {
+        competencia: 'Local do imóvel ou domicílio do(s) adquirente(s) ou credor(es).',
+        base: 'CNN, art. 302, caput.',
+        detalhe: 'A competência é definida pelo local do imóvel ou pelo domicílio do adquirente ou credor. Para os fins do art. 302, §3º, adquirente compreende o comprador, a parte que adquire direito real ou a parte em relação à qual é reconhecido crédito. O domicílio deve ser comprovado na forma do art. 304 do CNN.',
+        aviso: null
+    },
+    res_imovel_credor: {
+        competencia: 'Local do imóvel, domicílio do(s) adquirente(s) ou domicílio do(s) credor(es).',
+        base: 'CNN, art. 302, caput e § 3º.',
+        detalhe: 'Nas escrituras com financiamento, alienação fiduciária, hipoteca ou reconhecimento de crédito, o domicílio do credor também pode fixar a competência.',
+        aviso: null
+    },
+    res_um_imovel_uf_diferente: {
+        competencia: 'Local do imóvel ou domicílio do(s) adquirente(s) ou credor(es).',
+        base: 'CNN, art. 302, caput e § 3º.',
+        detalhe: 'Para escritura eletrônica com imóvel em Estado diverso do domicílio do adquirente ou credor, a competência permanece vinculada ao local do imóvel ou ao domicílio do adquirente ou credor. Quando houver coincidência entre o imóvel e o domicílio do adquirente ou credor no mesmo Estado, qualquer tabelião de notas desse Estado é competente. Havendo mais de um imóvel no mesmo ato, o tabelião competente por qualquer dos critérios acima também será competente para os demais imóveis constantes do ato.',
+        aviso: null
+    },
+    res_mesma_uf: {
+        competencia: 'Tabelião de notas do local do imóvel, tabelião de notas do domicílio do(s) adquirente(s) ou credor(es) ou qualquer tabelião de notas da unidade federativa quando o imóvel e o adquirente ou credor estiverem situados no mesmo Estado (UF).',
+        base: 'CNN, art. 302, caput e §§ 2º e 3º.',
+        detalhe: 'A competência pode ser fixada pelo local do imóvel ou pelo domicílio do adquirente ou credor. Quando o imóvel e o domicílio do adquirente ou credor estiverem no mesmo Estado, qualquer tabelião de notas dessa unidade federativa é competente.',
+        aviso: null
+    },
+    res_ufs_distintas: {
+        competencia: 'Local de qualquer dos imóveis ou domicílio dos adquirentes ou credores. Quando houver coincidência entre imóvel e adquirente ou credor situados no mesmo Estado (UF), qualquer tabelião de notas desse Estado é competente.',
+        base: 'CNN, art. 302, caput e §§ 1º, 2º e 3º.',
+        detalhe: 'Quando houver mais de um imóvel no mesmo ato, a competência pode ser fixada pelo local de qualquer dos imóveis ou pelo domicílio dos adquirentes ou credores. Quando houver coincidência entre imóvel e domicílio do adquirente ou credor no mesmo Estado, qualquer tabelião de notas desse Estado é competente. O tabelião competente por qualquer dos critérios acima também será competente para os demais imóveis constantes do ato.',
+        aviso: null
+    },
+    res_exterior_livre: {
+        competencia: 'Qualquer tabelião de notas do território nacional.',
+        base: 'CNN, art. 289 e arts. 302 a 306.',
+        detalhe: 'Aplica-se ao estrangeiro ou brasileiro com domicílio no exterior quando o ato não envolve bem imóvel. Como os arts. 302 a 306 do CNN não trazem critério territorial específico para essa hipótese, a ferramenta mantém a indicação de qualquer tabelião de notas do território nacional como critério operacional.',
+        aviso: 'Quando houver vínculo objetivo no Brasil, recomenda-se documentá-lo no ato, em atenção à competência territorial prevista no art. 289 do CNN.'
+    },
+    res_exterior_imovel: {
+        competencia: 'Tabelião de notas do local do(s) imóvel(is).',
+        base: 'CNN, art. 302.',
+        detalhe: 'Quando o ato envolve bem imóvel e a parte possui domicílio no exterior, a competência fica vinculada ao local do imóvel. Havendo mais de um imóvel, pode ser observado o local de qualquer dos imóveis envolvidos no ato.',
+        aviso: null
+    },
+    res_pessoal_remoto: {
+        competencia: 'Qualquer tabelião de notas do domicílio de qualquer das partes.',
+        base: 'CNN, art. 289 e arts. 302 a 306.',
+        detalhe: 'Aplica-se a divórcio, união estável, emancipação, pacto antenupcial, DAV, dependência econômica, declarações, etc. Lista exemplificativa. A parte pode ter mais de um domicílio. Qualquer domicílio comprovado de qualquer das partes pode ser utilizado como vínculo territorial para fixar a competência.',
+        aviso: 'Não há disciplina expressa nos arts. 302 a 306 do CNN para todos os atos pessoais sem imóvel. A ferramenta utiliza o domicílio comprovado de qualquer das partes como critério operacional, em atenção à competência territorial prevista no art. 289 do CNN.'
+    },
+    res_hibrido: {
+        competencia: 'Tabelião que recebe a rogação presencial ou o tabelião que detém competência para o ato eletrônico.',
+        base: 'CNN, art. 313; Lei 8.935/1994, art. 8º.',
+        detalhe: 'No ato híbrido, autorizado pelo art. 313 do Código Nacional de Normas, admite-se a competência do tabelião que recebe a rogação presencial, com apoio no art. 8º da Lei 8.935/1994, sem afastar a competência do tabelião definido pelas regras próprias do ato eletrônico, quando aplicáveis.',
+        aviso: 'Não desconhecemos a zona de tensão interpretativa sobre a aplicação do art. 313 do CNN. A linha adotada considera a rogação presencial, com menção ao art. 8º da Lei 8.935/1994, sem afastar o tabelião que detém competência própria para o ato eletrônico.'
+    },
+    res_hibrido_imovel: {
+        competencia: 'Tabelião que recebe a rogação presencial ou o tabelião que detém competência para o ato eletrônico com imóvel.',
+        base: 'CNN, arts. 302 e 313; Lei 8.935/1994, art. 8º.',
+        detalhe: 'No ato híbrido com imóvel, autorizado pelo art. 313 do Código Nacional de Normas, admite-se a competência do tabelião que recebe a rogação presencial, com apoio no art. 8º da Lei 8.935/1994, sem afastar a competência do tabelião definido pelas regras do art. 302 do CNN, quando aplicáveis.',
+        aviso: 'Não desconhecemos a zona de tensão interpretativa sobre a aplicação do art. 313 do CNN. A linha adotada considera a rogação presencial, sem afastar a competência própria do tabelião definida pelo art. 302 do CNN.'
+    },
+    res_ata_fato: {
+        competencia: 'Local do fato constatado. Subsidiariamente, domicílio do requerente.',
+        base: 'CNN, art. 303, caput.',
+        detalhe: 'A competência da ata notarial eletrônica é fixada pela circunscrição do fato constatado. Quando esse critério for inaplicável, utiliza-se o domicílio do requerente.',
+        aviso: null
+    },
+    res_ata_requerente: {
+        competencia: 'Domicílio do requerente.',
+        base: 'CNN, art. 303, caput, parte final.',
+        detalhe: 'Aplica-se quando não for possível fixar a circunscrição do fato constatado, como em conteúdo digital, documentos eletrônicos ou declarações sem vínculo territorial determinado.',
+        aviso: null
+    },
+    res_proc_outorgante: {
+        competencia: 'Domicílio do outorgante.',
+        base: 'CNN, art. 303, parágrafo único.',
+        detalhe: 'O domicílio deve ser comprovado na forma do art. 304 do CNN. Para pessoa jurídica, considera-se a sede da matriz ou da filial quanto a negócios praticados no local desta. Para pessoa física, admite-se título de eleitor ou outro domicílio comprovado.',
+        aviso: null
+    },
+    res_proc_imovel: {
+        competencia: 'Domicílio do outorgante. Se houver imóvel, também o local do imóvel.',
+        base: 'CNN, art. 303, parágrafo único.',
+        detalhe: 'Quando a procuração pública eletrônica outorga poderes sobre bem imóvel, a competência pode ser fixada pelo domicílio do outorgante ou pelo local do imóvel.',
+        aviso: null
+    },
+    res_testamento: {
+        competencia: 'Domicílio do testador.',
+        base: 'CNN, art. 289 e arts. 302 a 306.',
+        detalhe: 'Não há regra específica para testamento eletrônico nos arts. 302 a 306 do CNN. A ferramenta utiliza o domicílio do testador como vínculo territorial para fixar a competência, por analogia ao regime da procuração pública eletrônica.',
+        aviso: 'A indicação de competência não afasta as solenidades próprias do testamento previstas na legislação civil. Diante da ausência de disciplina específica nos arts. 302 a 306 do CNN, recomenda-se cautela na prática eletrônica e avaliação da conveniência da via presencial.'
+    },
+    res_rec_enot: {
+        competencia: 'Tabelião que emitiu o certificado digital notarizado usado na assinatura.',
+        base: 'CNN, art. 306, III; art. 293, XIII.',
+        detalhe: 'O reconhecimento de assinatura eletrônica em documento digital tem a mesma força jurídica do reconhecimento de firma e é vinculado ao tabelião emissor do certificado digital notarizado.',
+        aviso: null
+    },
+    res_rec_fisico: {
+        competencia: 'Qualquer tabelião de notas em que o interessado possua cartão de assinatura arquivado, com confirmação por videoconferência.',
+        base: 'CNN, art. 306, IV.',
+        detalhe: 'No reconhecimento de firma em documento físico por meio remoto, a videoconferência deve confirmar identidade, capacidade e autoria da assinatura. O ato pode ser praticado por tabelião de notas que mantenha cartão de assinatura arquivado do interessado.',
+        aviso: null
+    },
+    res_rec_veiculo: {
+        competencia: 'Município de emplacamento do veículo ou domicílio do adquirente, conforme indicados no CRV ou na ATPV-e.',
+        base: 'CNN, art. 306, § 1º.',
+        detalhe: 'A competência é específica para documento de veículo automotor e observa o município de emplacamento do veículo ou o domicílio do adquirente indicados no CRV ou na ATPV-e.',
+        aviso: null
+    },
+    res_aut_desmat: {
+        competencia: 'Qualquer tabelião de notas. Sem vinculação territorial.',
+        base: 'CNN, art. 305 e art. 306, I e II.',
+        detalhe: 'A desmaterialização é realizada por meio da CENAD e tem a mesma força jurídica da autenticação de cópia, observadas as regras dos arts. 305 e 306 do CNN.',
+        aviso: null
+    },
+    res_aut_internet: {
+        competencia: 'Tabelião que emitiu o certificado digital notarizado da assinatura.',
+        base: 'CNN, art. 306, III.',
+        detalhe: 'O e-Not Provas segue, para fins de competência operacional, o regime da assinatura eletrônica em documento digital, vinculado ao tabelião emissor do certificado digital notarizado utilizado.',
+        aviso: null
+    },
+    res_aut_certificado: {
+        competencia: 'Qualquer tabelião de notas, independentemente do local da emissão anterior.',
+        base: 'CNN, art. 292, § 6º.',
+        detalhe: 'A vinculação do certificado digital notarizado ao tabelião emissor não impede a livre escolha do notário. O usuário pode revogar o certificado e obter novo certificado perante outro tabelião de notas.',
+        aviso: null
+    },
+    res_aut_apostila: {
+        competencia: 'Qualquer tabelião cadastrado, sem limite de circunscrição territorial.',
+        base: 'CNN, art. 4º, § 1º.',
+        detalhe: 'O apostilamento pode ser realizado por notário cadastrado e capacitado, independentemente da especialização do serviço ou da circunscrição territorial.',
+        aviso: null
+    }
+};
+const TEXTOS_ARTIGOS = {
+    'CNN, art. 302, caput.': {
+        titulo: `Código Nacional de Normas, art. 302, caput`,
+        texto: `Art. 302. Ao tabelião de notas da circunscrição do imóvel ou do domicílio do adquirente compete, de forma remota e com exclusividade, lavrar as escrituras eletronicamente, por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes.`
+    },
+    'CNN, art. 302, caput e § 3º.': {
+        titulo: `Código Nacional de Normas, art. 302, caput e § 3º`,
+        texto: `Art. 302. Ao tabelião de notas da circunscrição do imóvel ou do domicílio do adquirente compete, de forma remota e com exclusividade, lavrar as escrituras eletronicamente, por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes. § 3.º Para os fins desta Seção, entende-se por adquirente, nesta ordem, o comprador, a parte que está adquirindo direito real ou a parte em relação à qual é reconhecido crédito.`
+    },
+    'CNN, art. 302, caput e §§ 2º e 3º.': {
+        titulo: `Código Nacional de Normas, art. 302, caput e §§ 2º e 3º`,
+        texto: `Art. 302. Ao tabelião de notas da circunscrição do imóvel ou do domicílio do adquirente compete, de forma remota e com exclusividade, lavrar as escrituras eletronicamente, por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes. § 2.º Estando o imóvel localizado no mesmo estado da federação do domicílio do adquirente, este poderá escolher qualquer tabelionato de notas da unidade federativa para a lavratura do ato. § 3.º Para os fins desta Seção, entende-se por adquirente, nesta ordem, o comprador, a parte que está adquirindo direito real ou a parte em relação à qual é reconhecido crédito.`
+    },
+    'CNN, art. 302, caput e §§ 1º, 2º e 3º.': {
+        titulo: `Código Nacional de Normas, art. 302, caput e §§ 1º, 2º e 3º`,
+        texto: `Art. 302. Ao tabelião de notas da circunscrição do imóvel ou do domicílio do adquirente compete, de forma remota e com exclusividade, lavrar as escrituras eletronicamente, por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes. § 1.º Quando houver um ou mais imóveis de diferentes circunscrições no mesmo ato notarial, será competente para a prática de atos remotos o tabelião de quaisquer delas. § 2.º Estando o imóvel localizado no mesmo estado da federação do domicílio do adquirente, este poderá escolher qualquer tabelionato de notas da unidade federativa para a lavratura do ato. § 3.º Para os fins desta Seção, entende-se por adquirente, nesta ordem, o comprador, a parte que está adquirindo direito real ou a parte em relação à qual é reconhecido crédito.`
+    },
+    'CNN, art. 302.': {
+        titulo: `Código Nacional de Normas, art. 302`,
+        texto: `Art. 302. Ao tabelião de notas da circunscrição do imóvel ou do domicílio do adquirente compete, de forma remota e com exclusividade, lavrar as escrituras eletronicamente, por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes. § 1.º Quando houver um ou mais imóveis de diferentes circunscrições no mesmo ato notarial, será competente para a prática de atos remotos o tabelião de quaisquer delas. § 2.º Estando o imóvel localizado no mesmo estado da federação do domicílio do adquirente, este poderá escolher qualquer tabelionato de notas da unidade federativa para a lavratura do ato. § 3.º Para os fins desta Seção, entende-se por adquirente, nesta ordem, o comprador, a parte que está adquirindo direito real ou a parte em relação à qual é reconhecido crédito.`
+    },
+    'CNN, art. 289 e arts. 302 a 306.': {
+        titulo: `Código Nacional de Normas, art. 289 e arts. 302 a 306`,
+        texto: `Art. 289. A competência para a prática dos atos regulados nesta Seção é absoluta e observará a circunscrição territorial em que o tabelião recebeu sua delegação, nos termos do art. 9.º da Lei n. 8.935/1994. Art. 302. Ao tabelião de notas da circunscrição do imóvel ou do domicílio do adquirente compete, de forma remota e com exclusividade, lavrar as escrituras eletronicamente, por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes. § 1.º Quando houver um ou mais imóveis de diferentes circunscrições no mesmo ato notarial, será competente para a prática de atos remotos o tabelião de quaisquer delas. § 2.º Estando o imóvel localizado no mesmo estado da federação do domicílio do adquirente, este poderá escolher qualquer tabelionato de notas da unidade federativa para a lavratura do ato. § 3.º Para os fins desta Seção, entende-se por adquirente, nesta ordem, o comprador, a parte que está adquirindo direito real ou a parte em relação à qual é reconhecido crédito. Art. 303. Ao tabelião de notas da circunscrição do fato constatado ou, quando inaplicável este critério, ao tabelião do domicílio do requerente compete lavrar as atas notariais eletrônicas, de forma remota e com exclusividade por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes. Parágrafo único. A lavratura de procuração pública eletrônica caberá ao tabelião do domicílio do outorgante ou do local do imóvel, se for o caso. Art. 304. A comprovação do domicílio, em qualquer das hipóteses desta Seção do Código Nacional de Normas, será realizada: I — em se tratando de pessoa jurídica ou ente equiparado: pela verificação da sede da matriz, ou da filial em relação a negócios praticados no local desta, conforme registrado nos órgãos de registro competentes; e II — em se tratando de pessoa física: pela verificação do título de eleitor, ou outro domicílio comprovado. Parágrafo único. Na falta de comprovação do domicílio da pessoa física, será observado apenas o local do imóvel, podendo ser estabelecidos convênios com órgãos fiscais para que os notários identifiquem, de forma mais célere e segura, o domicílio das partes. Art. 305. A desmaterialização será realizada por meio da CENAD nos seguintes documentos: I — na cópia de um documento físico digitalizado, mediante a conferência com o documento original ou eletrônico; e II - em documento híbrido. § 1.º Após a conferência do documento físico, o notário poderá expedir cópias autenticadas em papel ou em meio digital. § 2.º As cópias eletrônicas oriundas da digitalização de documentos físicos serão conferidas na CENAD. § 3.º A autenticação notarial gerará um registro na CENAD, que conterá os dados do notário ou preposto que o tenha assinado, a data e hora da assinatura e um código de verificação (hash), que será arquivado. § 4.º O interessado poderá conferir o documento eletrônico autenticado pelo envio desse mesmo documento à CENAD, que confirmará a autenticidade por até cinco anos. § 5º A desmaterialização de que trata este artigo tem a mesma força jurídica de uma autenticação de cópia. Art. 306. Compete, exclusivamente, ao tabelião de notas: I — a materialização, a desmaterialização, a autenticação e a verificação da autoria de documento eletrônico; II — autenticar a cópia em papel de documento original digitalizado e autenticado eletronicamente perante outro notário; III - reconhecer as assinaturas eletrônicas apostas em documentos digitais, ato que terá a mesma força jurídica de um reconhecimento de firma; e IV — realizar o reconhecimento da firma como autêntica no documento físico, devendo ser confirmadas, por videoconferência, a identidade, a capacidade daquele que assinou e a autoria da assinatura a ser reconhecida. § 1.º Tratando-se de documento atinente a veículo automotor, será competente para o reconhecimento de firma, de forma remota, o tabelião de notas do município de emplacamento do veículo ou de domicílio do adquirente indicados no Certificado de Registro de Veículo (CRV) ou na Autorização para Transferência de Propriedade de Veículo (ATPV). § 2.º O tabelião arquivará o trecho da videoconferência em que constar a ratificação da assinatura pelo signatário com expressa menção ao documento assinado, observados os requisitos previstos para o conteúdo da gravação da videoconferência notarial na forma desta Seção do Código Nacional de Normas. § 3.º A identidade das partes será atestada remotamente nos termos desta Seção do Código de Normas.`
+    },
+    'CNN, arts. 302 a 306.': {
+        titulo: `Código Nacional de Normas, arts. 302 a 306`,
+        texto: `Art. 302. Ao tabelião de notas da circunscrição do imóvel ou do domicílio do adquirente compete, de forma remota e com exclusividade, lavrar as escrituras eletronicamente, por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes. § 1.º Quando houver um ou mais imóveis de diferentes circunscrições no mesmo ato notarial, será competente para a prática de atos remotos o tabelião de quaisquer delas. § 2.º Estando o imóvel localizado no mesmo estado da federação do domicílio do adquirente, este poderá escolher qualquer tabelionato de notas da unidade federativa para a lavratura do ato. § 3.º Para os fins desta Seção, entende-se por adquirente, nesta ordem, o comprador, a parte que está adquirindo direito real ou a parte em relação à qual é reconhecido crédito. Art. 303. Ao tabelião de notas da circunscrição do fato constatado ou, quando inaplicável este critério, ao tabelião do domicílio do requerente compete lavrar as atas notariais eletrônicas, de forma remota e com exclusividade por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes. Parágrafo único. A lavratura de procuração pública eletrônica caberá ao tabelião do domicílio do outorgante ou do local do imóvel, se for o caso. Art. 304. A comprovação do domicílio, em qualquer das hipóteses desta Seção do Código Nacional de Normas, será realizada: I — em se tratando de pessoa jurídica ou ente equiparado: pela verificação da sede da matriz, ou da filial em relação a negócios praticados no local desta, conforme registrado nos órgãos de registro competentes; e II — em se tratando de pessoa física: pela verificação do título de eleitor, ou outro domicílio comprovado. Parágrafo único. Na falta de comprovação do domicílio da pessoa física, será observado apenas o local do imóvel, podendo ser estabelecidos convênios com órgãos fiscais para que os notários identifiquem, de forma mais célere e segura, o domicílio das partes. Art. 305. A desmaterialização será realizada por meio da CENAD nos seguintes documentos: I — na cópia de um documento físico digitalizado, mediante a conferência com o documento original ou eletrônico; e II - em documento híbrido. § 1.º Após a conferência do documento físico, o notário poderá expedir cópias autenticadas em papel ou em meio digital. § 2.º As cópias eletrônicas oriundas da digitalização de documentos físicos serão conferidas na CENAD. § 3.º A autenticação notarial gerará um registro na CENAD, que conterá os dados do notário ou preposto que o tenha assinado, a data e hora da assinatura e um código de verificação (hash), que será arquivado. § 4.º O interessado poderá conferir o documento eletrônico autenticado pelo envio desse mesmo documento à CENAD, que confirmará a autenticidade por até cinco anos. § 5º A desmaterialização de que trata este artigo tem a mesma força jurídica de uma autenticação de cópia. Art. 306. Compete, exclusivamente, ao tabelião de notas: I — a materialização, a desmaterialização, a autenticação e a verificação da autoria de documento eletrônico; II — autenticar a cópia em papel de documento original digitalizado e autenticado eletronicamente perante outro notário; III - reconhecer as assinaturas eletrônicas apostas em documentos digitais, ato que terá a mesma força jurídica de um reconhecimento de firma; e IV — realizar o reconhecimento da firma como autêntica no documento físico, devendo ser confirmadas, por videoconferência, a identidade, a capacidade daquele que assinou e a autoria da assinatura a ser reconhecida. § 1.º Tratando-se de documento atinente a veículo automotor, será competente para o reconhecimento de firma, de forma remota, o tabelião de notas do município de emplacamento do veículo ou de domicílio do adquirente indicados no Certificado de Registro de Veículo (CRV) ou na Autorização para Transferência de Propriedade de Veículo (ATPV). § 2.º O tabelião arquivará o trecho da videoconferência em que constar a ratificação da assinatura pelo signatário com expressa menção ao documento assinado, observados os requisitos previstos para o conteúdo da gravação da videoconferência notarial na forma desta Seção do Código Nacional de Normas. § 3.º A identidade das partes será atestada remotamente nos termos desta Seção do Código de Normas.`
+    },
+    'CNN, art. 313; Lei 8.935/1994, art. 8º.': {
+        titulo: `Código Nacional de Normas, art. 313, e Lei 8.935/1994, art. 8º`,
+        texto: `Art. 313. Fica autorizada a realização de ato notarial híbrido, com uma das partes assinando fisicamente o ato notarial e a outra, a distância, nos termos deste Código de Normas. Art. 8º É livre a escolha do tabelião de notas, qualquer que seja o domicílio das partes ou o lugar de situação dos bens objeto do ato ou negócio.`
+    },
+    'CNN, arts. 302 e 313; Lei 8.935/1994, art. 8º.': {
+        titulo: `Código Nacional de Normas, arts. 302 e 313, e Lei 8.935/1994, art. 8º`,
+        texto: `Art. 302. Ao tabelião de notas da circunscrição do imóvel ou do domicílio do adquirente compete, de forma remota e com exclusividade, lavrar as escrituras eletronicamente, por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes. § 1.º Quando houver um ou mais imóveis de diferentes circunscrições no mesmo ato notarial, será competente para a prática de atos remotos o tabelião de quaisquer delas. § 2.º Estando o imóvel localizado no mesmo estado da federação do domicílio do adquirente, este poderá escolher qualquer tabelionato de notas da unidade federativa para a lavratura do ato. § 3.º Para os fins desta Seção, entende-se por adquirente, nesta ordem, o comprador, a parte que está adquirindo direito real ou a parte em relação à qual é reconhecido crédito. Art. 313. Fica autorizada a realização de ato notarial híbrido, com uma das partes assinando fisicamente o ato notarial e a outra, a distância, nos termos deste Código de Normas. Art. 8º É livre a escolha do tabelião de notas, qualquer que seja o domicílio das partes ou o lugar de situação dos bens objeto do ato ou negócio.`
+    },
+    'CNN, art. 303, caput.': {
+        titulo: `Código Nacional de Normas, art. 303, caput`,
+        texto: `Art. 303. Ao tabelião de notas da circunscrição do fato constatado ou, quando inaplicável este critério, ao tabelião do domicílio do requerente compete lavrar as atas notariais eletrônicas, de forma remota e com exclusividade por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes.`
+    },
+    'CNN, art. 303, caput, parte final.': {
+        titulo: `Código Nacional de Normas, art. 303, caput`,
+        texto: `Art. 303. Ao tabelião de notas da circunscrição do fato constatado ou, quando inaplicável este critério, ao tabelião do domicílio do requerente compete lavrar as atas notariais eletrônicas, de forma remota e com exclusividade por meio do e-Notariado, com a realização de videoconferência e assinaturas digitais das partes.`
+    },
+    'CNN, art. 303, parágrafo único.': {
+        titulo: `Código Nacional de Normas, art. 303, parágrafo único`,
+        texto: `Parágrafo único. A lavratura de procuração pública eletrônica caberá ao tabelião do domicílio do outorgante ou do local do imóvel, se for o caso.`
+    },
+    'CNN, art. 306, III; art. 293, XIII.': {
+        titulo: `Código Nacional de Normas, art. 306, III, e art. 293, XIII`,
+        texto: `Art. 306. Compete, exclusivamente, ao tabelião de notas: III - reconhecer as assinaturas eletrônicas apostas em documentos digitais, ato que terá a mesma força jurídica de um reconhecimento de firma. Art. 293. O e-Notariado disponibilizará as seguintes funcionalidades: XIII - Reconhecimento de Assinatura Eletrônica em Documento Digital por meio do módulo operacional e-Not Assina.`
+    },
+    'CNN, art. 306, IV.': {
+        titulo: `Código Nacional de Normas, art. 306, IV`,
+        texto: `Art. 306. Compete, exclusivamente, ao tabelião de notas: IV — realizar o reconhecimento da firma como autêntica no documento físico, devendo ser confirmadas, por videoconferência, a identidade, a capacidade daquele que assinou e a autoria da assinatura a ser reconhecida.`
+    },
+    'CNN, art. 306, § 1º.': {
+        titulo: `Código Nacional de Normas, art. 306, § 1º`,
+        texto: `§ 1.º Tratando-se de documento atinente a veículo automotor, será competente para o reconhecimento de firma, de forma remota, o tabelião de notas do município de emplacamento do veículo ou de domicílio do adquirente indicados no Certificado de Registro de Veículo (CRV) ou na Autorização para Transferência de Propriedade de Veículo (ATPV).`
+    },
+    'CNN, art. 305 e art. 306, I e II.': {
+        titulo: `Código Nacional de Normas, art. 305, e art. 306, I e II`,
+        texto: `Art. 305. A desmaterialização será realizada por meio da CENAD nos seguintes documentos: I — na cópia de um documento físico digitalizado, mediante a conferência com o documento original ou eletrônico; e II - em documento híbrido. § 1.º Após a conferência do documento físico, o notário poderá expedir cópias autenticadas em papel ou em meio digital. § 2.º As cópias eletrônicas oriundas da digitalização de documentos físicos serão conferidas na CENAD. § 3.º A autenticação notarial gerará um registro na CENAD, que conterá os dados do notário ou preposto que o tenha assinado, a data e hora da assinatura e um código de verificação (hash), que será arquivado. § 4.º O interessado poderá conferir o documento eletrônico autenticado pelo envio desse mesmo documento à CENAD, que confirmará a autenticidade por até cinco anos. § 5º A desmaterialização de que trata este artigo tem a mesma força jurídica de uma autenticação de cópia. Art. 306. Compete, exclusivamente, ao tabelião de notas: I — a materialização, a desmaterialização, a autenticação e a verificação da autoria de documento eletrônico; II — autenticar a cópia em papel de documento original digitalizado e autenticado eletronicamente perante outro notário.`
+    },
+    'CNN, art. 306, III.': {
+        titulo: `Código Nacional de Normas, art. 306, III`,
+        texto: `Art. 306. Compete, exclusivamente, ao tabelião de notas: III - reconhecer as assinaturas eletrônicas apostas em documentos digitais, ato que terá a mesma força jurídica de um reconhecimento de firma.`
+    },
+    'CNN, art. 292, § 6º.': {
+        titulo: `Código Nacional de Normas, art. 292, § 6º`,
+        texto: `Art. 292, § 6º. A vinculação do certificado digital notarizado ao tabelião emissor não impede o exercício da liberdade de escolha do notário por parte do usuário. A qualquer tempo, o usuário poderá solicitar revogação, possibilitando a emissão de novo certificado digital notarizado perante qualquer outro tabelião de notas, independentemente do prazo de validade outrora atribuído ao certificado revogado.`
+    },
+    'CNN, art. 4º, § 1º.': {
+        titulo: `Código Nacional de Normas, art. 4º, § 1º`,
+        texto: `Art. 4.º, § 1.º O apostilamento poderá ser executado por qualquer notário ou registrador cadastrado, mediante capacitação oferecida por suas entidades de classe, sob supervisão da Corregedoria Nacional de Justiça, independentemente de especialização do serviço ou de circunscrição territorial.`
+    }
+};
+
+function paragrafosNormativos(texto) {
+    if (!texto) {
+        return [];
+    }
+    return texto
+        .split(/\s+(?=(?:Art\.|§|Parágrafo único\.))/g)
+        .map((paragrafo) => paragrafo.trim())
+        .filter(Boolean);
+}
+// =====================================================================
+// Componente principal
+// =====================================================================
+function CompetenciaENotariado() {
+    const [historico, setHistorico] = useState(['inicio']);
+    const [respostas, setRespostas] = useState([]);
+    const [resultadoId, setResultadoId] = useState(null);
+    const [excertoAberto, setExcertoAberto] = useState(false);
+    function scrollParaConsulta() {
+        setTimeout(() => {
+            const alvo = document.getElementById('consulta');
+            if (alvo)
+                alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 0);
+    }
+    const passoAtual = historico[historico.length - 1];
+    const noAtual = FLUXO[passoAtual];
+    function selecionar(opcao) {
+        setExcertoAberto(false);
+        const novoRegistro = {
+            passo: passoAtual,
+            titulo: noAtual.titulo,
+            pergunta: noAtual.pergunta,
+            escolha: opcao.rotulo
+        };
+        setRespostas([...respostas, novoRegistro]);
+        if (opcao.proximo === 'testamento_final') {
+            setResultadoId('res_testamento');
+            scrollParaConsulta();
+            return;
+        }
+        if (opcao.resultado) {
+            setResultadoId(opcao.resultado);
+            scrollParaConsulta();
+            return;
+        }
+        if (opcao.proximo) {
+            setHistorico([...historico, opcao.proximo]);
+        }
+        scrollParaConsulta();
+    }
+    function voltar() {
+        if (resultadoId) {
+            setResultadoId(null);
+            setRespostas(respostas.slice(0, -1));
+            return;
+        }
+        if (historico.length > 1) {
+            setHistorico(historico.slice(0, -1));
+            setRespostas(respostas.slice(0, -1));
+        }
+    }
+    function reiniciar() {
+        setHistorico(['inicio']);
+        setRespostas([]);
+        setResultadoId(null);
+        setExcertoAberto(false);
+    }
+    function novaConsulta() {
+        reiniciar();
+        setTimeout(() => {
+            const alvo = document.getElementById('consulta');
+            if (alvo) {
+                alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }, 0);
+    }
+    const resultado = resultadoId ? RESULTADOS[resultadoId] : null;
+    const passos = historico.length;
+    const totalEstimado = respostas.length + (resultado ? 0 : 1);
+    return (React.createElement("div", { className: "min-h-screen w-full bg-stone-100 text-slate-900" },
+        React.createElement("header", { className: "no-print border-b border-stone-300 bg-stone-50" },
+            React.createElement("div", { className: "max-w-4xl mx-auto px-6 py-10" },
+                React.createElement("div", { className: "flex items-center gap-3 mb-6" },
+                    React.createElement("div", { className: "h-px w-10 bg-orange-700" }),
+                    React.createElement("span", { className: "text-xs uppercase tracking-[0.25em] text-orange-700 font-medium" }, "e-Notariado")),
+                React.createElement("h1", { className: "font-display text-4xl md:text-5xl font-light leading-[1.05] text-slate-900 mb-4" },
+                    "Compet\u00EAncia do ",
+                    React.createElement("span", { className: "italic font-normal" }, "tabeli\u00E3o"),
+                    React.createElement("br", null),
+                    "por tipo de ato eletr\u00F4nico"),
+                React.createElement("p", { className: "text-slate-600 max-w-2xl leading-relaxed", style: { fontSize: "18px" } }, "Ferramenta destinada a identificar o tabeli\u00E3o de notas competente para realizar o ato notarial eletr\u00F4nico ou h\u00EDbrido. Selecione o tipo de ato e responda \u00E0s perguntas contextuais."))),
+        React.createElement("main", { id: "consulta", className: "max-w-4xl mx-auto px-6 py-10 grain" },
+            false && respostas.length > 0 && !resultado && (React.createElement("div", { className: "mb-8 anim-fadeup" },
+                React.createElement("p", { className: "text-xs uppercase tracking-widest text-slate-500 mb-3 font-medium" }, "Respostas registradas"),
+                React.createElement("div", { className: "space-y-2" }, respostas.map((r, i) => (React.createElement("div", { key: i, className: "flex items-start gap-3 text-sm" },
+                    React.createElement("span", { className: "font-mono text-xs text-slate-400 mt-1" },
+                        "0",
+                        i + 1),
+                    React.createElement("div", { className: "flex-1 border-l-2 border-stone-300 pl-3" },
+                        React.createElement("p", { className: "text-slate-500 text-xs" }, r.titulo),
+                        React.createElement("p", { className: "text-slate-900" }, r.escolha)))))))),
+            !resultado && noAtual && (React.createElement("div", { className: "anim-fadeup" },
+                React.createElement("div", { className: "mb-6" },
+                    React.createElement("p", { className: "text-xs uppercase tracking-[0.25em] text-orange-700 mb-2 font-medium" }, noAtual.titulo),
+                    React.createElement("h2", { className: "font-display text-2xl md:text-3xl font-light text-slate-900 leading-tight" }, noAtual.pergunta)),
+                React.createElement("div", { className: "space-y-3" }, noAtual.opcoes.map((op, i) => {
+                    const Icone = op.icone || ChevronRight;
+                    return (React.createElement("button", { key: i, type: "button", onClick: () => selecionar(op), className: "option-card w-full text-left bg-white border border-stone-200 hover:border-orange-700 hover:shadow-sm transition-all p-5 group flex items-start gap-4" },
+                        React.createElement("div", { className: "option-icon flex-shrink-0 w-10 h-10 rounded-full bg-stone-100 group-hover:bg-orange-50 flex items-center justify-center transition" },
+                            React.createElement(Icone, { size: 18, className: "text-slate-600 group-hover:text-orange-700 transition" })),
+                        React.createElement("div", { className: "flex-1 pt-1" },
+                            React.createElement("p", { className: "font-medium text-orange-700 group-hover:text-orange-700 transition" }, op.rotulo),
+                            op.desc && React.createElement("p", { className: "text-[15px] text-slate-500 mt-1 leading-relaxed" }, op.desc)),
+                        React.createElement(ChevronRight, { size: 20, className: "text-stone-300 group-hover:text-orange-700 transition mt-2" })));
+                })))),
+            resultado && (React.createElement("div", { className: "anim-fadeup" },
+                React.createElement("div", { className: "bg-white border border-stone-200 overflow-hidden" },
+                    React.createElement("div", { className: "bg-orange-700 text-white px-8 py-6" },
+                        React.createElement("div", { className: "flex items-center gap-2 mb-2" },
+                            React.createElement(CheckCircle2, { size: 16, className: "text-white" }),
+                            React.createElement("span", { className: "text-xs uppercase tracking-[0.25em] text-white font-medium" }, "Tabeli\u00E3o competente")),
+                        React.createElement("p", { className: "font-display text-2xl md:text-3xl font-light leading-tight" }, resultado.competencia)),
+                    React.createElement("div", { className: "px-8 py-6 border-b border-stone-200" },
+                        React.createElement("div", { className: "flex items-start gap-3" },
+                            React.createElement(BookOpen, { size: 18, className: "text-slate-400 mt-0.5 flex-shrink-0" }),
+                            React.createElement("div", { className: "min-w-0" },
+                                React.createElement("p", { className: "text-xs uppercase tracking-widest text-slate-500 mb-1 font-medium" }, "Base normativa"),
+                                React.createElement("p", { className: "font-mono text-sm text-slate-900 break-words" }, resultado.base),
+                                TEXTOS_ARTIGOS[resultado.base] && React.createElement("div", { className: "space-y-2 mt-2" }, paragrafosNormativos(TEXTOS_ARTIGOS[resultado.base].texto).map((paragrafo, indice) => React.createElement("p", { key: indice, className: "text-slate-700 leading-relaxed text-[15px]" }, paragrafo)))))),
+                    resultado.detalhe && (React.createElement("div", { className: "px-8 py-6 border-b border-stone-200" },
+                        React.createElement("p", { className: "text-xs uppercase tracking-widest text-slate-500 mb-2 font-medium" }, "Detalhamento"),
+                        React.createElement("p", { className: "text-slate-700 leading-relaxed text-[15px]" }, resultado.detalhe))),
+                    resultado.aviso && (React.createElement("div", { className: "px-8 py-6 bg-amber-50 border-b border-amber-100" },
+                        React.createElement("div", { className: "flex items-start gap-3" },
+                            React.createElement(AlertCircle, { size: 18, className: "text-amber-700 mt-0.5 flex-shrink-0" }),
+                            React.createElement("div", null,
+                                React.createElement("p", { className: "text-xs uppercase tracking-widest text-amber-800 mb-1 font-medium" }, "Aten\u00E7\u00E3o interpretativa"),
+                                React.createElement("p", { className: "text-amber-900 leading-relaxed text-[15px]" }, resultado.aviso))))),
+                    React.createElement("div", { className: "no-print px-8 py-5 bg-stone-50 flex items-center justify-end" },
+                        React.createElement("button", { type: "button", onClick: novaConsulta, className: "text-sm font-medium text-orange-700 hover:text-orange-900 flex items-center gap-1 transition" },
+                            React.createElement(Plus, { size: 15 }),
+                            "Nova consulta"))),
+                false && React.createElement("div", { className: "mt-8 pt-8 border-t border-stone-300" },
+                    React.createElement("p", { className: "text-xs uppercase tracking-widest text-slate-500 mb-3 font-medium" }, ""),
+                    React.createElement("div", { className: "space-y-2" }, respostas.map((r, i) => (React.createElement("div", { key: i, className: "flex items-start gap-3 text-sm" },
+                        React.createElement("span", { className: "font-mono text-xs text-slate-400 mt-1" },
+                            "0",
+                            i + 1),
+                        React.createElement("div", { className: "flex-1" },
+                            React.createElement("p", { className: "text-slate-500 text-xs" }, r.pergunta),
+                            React.createElement("p", { className: "text-slate-900" }, r.escolha)))))))))),
+        React.createElement("footer", { className: "no-print border-t border-stone-300 bg-stone-50 mt-16" },
+            React.createElement("div", { className: "max-w-4xl mx-auto px-6 py-10" },
+                React.createElement("p", { className: "text-xs uppercase tracking-[0.25em] text-orange-700 mb-4 font-medium" }, "Notas de leitura"),
+                React.createElement("div", { className: "space-y-3 text-sm text-slate-700 leading-relaxed" },
+                    React.createElement("p", null,
+                        React.createElement("span", { className: "font-mono text-slate-400 mr-2" }, "i."),
+                        "Esta ferramenta se baseia exclusivamente nas regras de compet\u00EAncia dos atos eletr\u00F4nicos previstas no Provimento CNJ 149/2023, C\u00F3digo Nacional de Normas, sem examinar normas estaduais."),
+                    React.createElement("p", null,
+                        React.createElement("span", { className: "font-mono text-slate-400 mr-2" }, "ii."),
+                        "A parte pode possuir mais de um domic\u00EDlio. Qualquer deles \u00E9 v\u00E1lido para fixar a compet\u00EAncia. A escolha do domic\u00EDlio invocado \u00E9 da parte, desde que haja comprova\u00E7\u00E3o na forma do art. 304 do CNN."),
+                    React.createElement("p", null,
+                        React.createElement("span", { className: "font-mono text-slate-400 mr-2" }, "iii."),
+                        "Na falta de comprova\u00E7\u00E3o do domic\u00EDlio da pessoa f\u00EDsica, ser\u00E1 observado apenas o local do im\u00F3vel, quando o ato envolver bem im\u00F3vel, conforme o art. 304, par\u00E1grafo \u00FAnico, do CNN."),
+                    React.createElement("p", null,
+                        React.createElement("span", { className: "font-mono text-slate-400 mr-2" }, "iv."),
+                        "Presentante de pessoa jur\u00EDdica, procurador e assistente jur\u00EDdico n\u00E3o s\u00E3o partes para fins de fixa\u00E7\u00E3o da compet\u00EAncia. A regra observa as partes em sentido material."),
+                    React.createElement("p", null,
+                        React.createElement("span", { className: "font-mono text-slate-400 mr-2" }, "v."),
+                        "Adquirente, conforme art. 302, \u00A73\u00BA, abrange comprador(es), credor(es), herdeiro(s), divorciando(s), usufrutu\u00E1rio(s), donat\u00E1rios e demais partes em rela\u00E7\u00E3o \u00E0s quais \u00E9 reconhecido cr\u00E9dito ou direito real, ou pessoa jur\u00EDdica, matriz ou filial."),
+                    React.createElement("p", null,
+                        React.createElement("span", { className: "font-mono text-slate-400 mr-2" }, "vi."),
+                        "Im\u00F3vel situado no mesmo Estado do domic\u00EDlio do adquirente ou credor permite a escolha de qualquer tabelionato de notas dessa unidade federativa, conforme o art. 302, \u00A7\u00A72\u00BA e 3\u00BA."),
+                    React.createElement("p", null,
+                        React.createElement("span", { className: "font-mono text-slate-400 mr-2" }, "vii."),
+                        "Domiciliados no exterior foram tratados em t\u00F3pico pr\u00F3prio. Quando houver parte domiciliada no exterior em ata, procura\u00E7\u00E3o, testamento ou escritura sem im\u00F3vel, recomenda-se iniciar a consulta por esse t\u00F3pico. Sem im\u00F3vel, a ferramenta indica qualquer tabeli\u00E3o de notas do territ\u00F3rio nacional; com im\u00F3vel, a compet\u00EAncia fica vinculada \u00E0s regras da escritura com im\u00F3vel."),
+                    React.createElement("p", null,
+                        React.createElement("span", { className: "font-mono text-slate-400 mr-2" }, "viii."),
+                        "Escritura sem im\u00F3vel n\u00E3o tem disciplina expressa nos arts. 302 a 306 do CNN para todas as suas modalidades; a ferramenta utiliza o domic\u00EDlio de qualquer das partes como crit\u00E9rio operacional."),
+                    React.createElement("p", null,
+                        React.createElement("span", { className: "font-mono text-slate-400 mr-2" }, "ix."),
+                        "Ato h\u00EDbrido. N\u00E3o desconhecemos a zona de tens\u00E3o interpretativa sobre a aplica\u00E7\u00E3o do art. 313 do CNN e do art. 8\u00BA da Lei 8.935/1994. Admite-se o tabeli\u00E3o que recebe a roga\u00E7\u00E3o presencial ou o tabeli\u00E3o que det\u00E9m compet\u00EAncia para o ato eletr\u00F4nico."),
+                    React.createElement("p", null,
+                        React.createElement("span", { className: "font-mono text-slate-400 mr-2" }, "x."),
+                        "Testamento eletr\u00F4nico n\u00E3o tem disciplina expressa nos arts. 302 a 306 do CNN; a ferramenta utiliza o domic\u00EDlio do testador como crit\u00E9rio operacional.")),
+                React.createElement("div", { className: "mt-8 pt-6 border-t border-stone-300 flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-xs text-slate-500" },
+                    React.createElement("span", null,
+                        "Projeto apoiado por",
+                        ' ',
+                        React.createElement("a", { href: "https://escriturapublica.substack.com", target: "_blank", rel: "noopener noreferrer", className: "text-orange-700 hover:text-orange-900 transition" }, "Escritura P\u00FAblica")),
+                    React.createElement(VisitMarker, null))))));
+}
+const rootElement = document.getElementById('root');
+try {
+    if (!window.React || !window.ReactDOM || !rootElement) {
+        throw new Error('Dependências da página não foram carregadas.');
+    }
+    ReactDOM.createRoot(rootElement).render(React.createElement(CompetenciaENotariado, null));
+}
+catch (error) {
+    if (rootElement) {
+        rootElement.innerHTML = '<div style="max-width:56rem;margin:0 auto;padding:2rem 1.5rem;font-family:system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;color:#7c2d12;background:#fffbeb;border:1px solid #fde68a;">Não foi possível carregar a ferramenta. Recarregue a página ou verifique a conexão com os arquivos externos necessários.</div>';
+    }
+    console.error(error);
+}
+
+</script>
+
+<script>
+window.setTimeout(function () {
+  var root = document.getElementById('root');
+  if (!root) return;
+  var texto = root.textContent || '';
+  if (texto.indexOf('Carregando consulta de competência do e-Notariado') !== -1) {
+    root.innerHTML = '<div style="max-width:56rem;margin:0 auto;padding:2rem 1.5rem;font-family:system-ui,-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;color:#7c2d12;background:#fffbeb;border:1px solid #fde68a;">A ferramenta não carregou. Verifique a conexão, limpe o cache do navegador ou recarregue a página.</div>';
+  }
+}, 7000);
+</script>
+</body>
+</html>
