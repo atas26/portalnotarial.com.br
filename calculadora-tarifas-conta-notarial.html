@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calculadora de tarifas conta notarial</title>
+<meta name="description" content="Calculadora estimativa de tarifa da conta notarial por faixa de movimentação, a partir do valor base da operação." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --accent: rgb(0, 118, 255);
+  --accent-soft: rgba(0, 118, 255, .08);
+  --accent-border: rgba(0, 118, 255, .18);
+  --slate-950:#0f172a;
+  --slate-900:#172033;
+  --slate-800:#334155;
+  --slate-700:#475569;
+  --slate-600:#64748b;
+  --slate-500:#94a3b8;
+  --stone-50:#ffffff;
+  --stone-100:#f8fafc;
+  --stone-150:#f5f7fb;
+  --stone-200:#e5e7eb;
+  --stone-300:#d7dce3;
+  --amber-50:#fffbeb;
+  --amber-200:#fde68a;
+  --amber-900:#78350f;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:'IBM Plex Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--slate-900);
+  background:var(--stone-100);
+  line-height:1.5;
+}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+button{cursor:pointer}
+.page{max-width:1140px;margin:0 auto;padding:38px 24px 42px}
+.hero{margin-bottom:26px}
+.hero-card{padding:14px 0 28px;position:relative}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  color:var(--accent);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+.eyebrow::before{
+  content:"";
+  width:48px;
+  height:2px;
+  background:var(--accent);
+  border-radius:999px;
+}
+h1{
+  font-family:'Fraunces','Georgia',serif;
+  font-size:clamp(2.6rem,4.3vw,4.2rem);
+  line-height:1.05;
+  margin:0 0 16px;
+  font-weight:400;
+  letter-spacing:-.03em;
+  color:#172033;
+  max-width:none;
+  width:100%;
+}
+.lead{
+  max-width:none;
+  margin:0;
+  font-size:18px;
+  line-height:1.55;
+  color:var(--slate-700);
+}
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 390px;
+  gap:26px;
+  align-items:start;
+}
+.panel,
+.result-card{
+  background:var(--stone-50);
+  border:1px solid var(--stone-200);
+  border-radius:0;
+  box-shadow:none;
+}
+.panel{padding:28px;background:#fbfcfe}
+.panel h2,
+.result-card h2{
+  margin:0 0 14px;
+  font-size:22px;
+  font-weight:700;
+  color:var(--slate-950);
+}
+.panel p{margin:0 0 14px;color:var(--slate-700)}
+.section-kicker{
+  display:block;
+  margin:0 0 10px;
+  color:var(--accent);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+}
+.question-title{
+  font-family:'Fraunces','Georgia',serif;
+  font-size:clamp(2rem,3vw,3rem);
+  line-height:1.08;
+  font-weight:400;
+  letter-spacing:-.02em;
+  margin:0 0 26px;
+  color:var(--slate-950);
+}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.form-field{display:flex;flex-direction:column;gap:7px}
+.form-field.full{grid-column:1/-1}
+label{font-size:13px;font-weight:700;color:var(--slate-800)}
+.hint{font-size:12px;color:var(--slate-600)}
+input{
+  width:100%;height:52px;border:1px solid var(--stone-300);border-radius:10px;
+  padding:0 14px;background:white;color:var(--slate-950);outline:none;
+  transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,118,255,.08)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btn{
+  border:1px solid transparent;
+  border-radius:10px;
+  padding:12px 18px;
+  font-weight:700;
+  font-size:14px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  transition:transform .15s ease,box-shadow .15s ease,background .15s ease,color .15s ease,border-color .15s ease;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:white}.btn-primary:hover{background:#005fce}
+.btn-secondary{background:white;color:var(--slate-800);border-color:var(--stone-300)}.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ghost{background:transparent;color:var(--slate-600);border-color:transparent}.btn-ghost:hover{color:var(--slate-950);box-shadow:none}
+.result-card{padding:28px;min-height:100%}
+.result-total{
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg, #0f1f49 0%, #112a67 100%);
+  color:white;
+  padding:22px 24px;
+  margin-bottom:18px;
+  position:relative;
+  overflow:hidden;
+}
+.result-total:after{
+  content:"";
+  position:absolute;
+  width:170px;
+  height:170px;
+  border-radius:50%;
+  right:-55px;
+  top:-48px;
+  background:rgba(0, 118, 255, .48);
+}
+.result-total .label{
+  display:block;
+  font-size:12px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:#dbe7ff;
+  margin-bottom:10px;
+}
+.result-total .value{
+  font-size:32px;
+  font-weight:800;
+  letter-spacing:-.03em;
+  position:relative;
+  z-index:1;
+}
+.breakdown{display:flex;flex-direction:column;gap:0}
+.row-item{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 0;
+  border-bottom:1px solid var(--stone-200);
+}
+.row-item:last-child{border-bottom:none}
+.row-item span:first-child{color:var(--slate-700)}
+.row-item span:last-child{font-weight:800;color:var(--slate-950);white-space:nowrap}
+.status{margin-top:12px;padding:12px 14px;font-size:13px;line-height:1.5;background:var(--amber-50);border:1px solid var(--amber-200);color:var(--amber-900);display:none}
+.status.show{display:block}
+.footer{
+  margin-top:24px;
+  padding-top:18px;
+  border-top:1px solid var(--stone-200);
+  color:var(--slate-600);
+  font-size:12px;
+}
+.footer a{color:var(--accent)}
+.visit{
+  position:fixed;
+  right:14px;
+  bottom:12px;
+  z-index:40;
+  opacity:.62;
+  transition:opacity .2s ease;
+  font-size:11px;
+  color:var(--slate-600);
+  background:rgba(255,255,255,.88);
+  border:1px solid var(--stone-200);
+  padding:5px 8px;
+}
+.visit:hover{opacity:.9}
+@media (max-width:980px){
+  .grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  h1{max-width:none}
+  .lead{max-width:none}
+}
+@media print{
+  .actions,.visit{display:none!important}
+  body{background:white}
+  .page{padding:0}
+  .hero,.grid{display:block}
+  .panel,.result-card{border:1px solid #ddd}
+}
+</style>
+</head>
+<body>
+<main class="page" id="inicio">
+  <section class="hero" aria-labelledby="titulo-principal">
+    <div class="hero-card">
+      <span class="eyebrow">Valor estimado</span>
+      <h1 id="titulo-principal">Calculadora de tarifas conta notarial</h1>
+      <p class="lead">Informe o valor base da operação e obtenha o valor da tarifa.</p>
+    </div>
+  </section>
+
+  <section class="grid" id="calculadora">
+    <div>
+      <section class="panel" aria-labelledby="dados-calculo">
+        <span class="section-kicker">Valor da operação</span>
+        <h2 class="question-title" id="dados-calculo">Dados do cálculo</h2>
+        <p>Use o valor base da operação.</p>
+        <p><strong>Importante:</strong> este valor não contempla o valor da escritura, eventual tributo e registro imobiliário, bem como outras diligências necessárias à lavratura e à segurança do ato.</p>
+
+        <div class="form-grid">
+          <div class="form-field full">
+            <label for="valorBase">Valor base da operação</label>
+            <input id="valorBase" inputmode="decimal" autocomplete="off" placeholder="R$ 0,00" />
+            <span class="hint">Informe o valor em reais.</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="btnCalcular">Calcular</button>
+          <button type="button" class="btn btn-secondary" id="btnCopiar">Copiar resultado</button>
+          <button type="button" class="btn btn-secondary" id="btnImprimir">Imprimir</button>
+          <button type="button" class="btn btn-ghost" id="btnLimpar">Limpar</button>
+        </div>
+      </section>
+    </div>
+
+    <aside class="result-card" id="resultado" aria-labelledby="resultado-titulo">
+      <h2 id="resultado-titulo">Resultado</h2>
+      <div class="result-total">
+        <span class="label">Valor estimado</span>
+        <span class="value" id="totalResultado">R$ 0,00</span>
+      </div>
+      <div class="breakdown">
+        <div class="row-item"><span>Valor base</span><span id="valorResultado">R$ 0,00</span></div>
+        <div class="row-item"><span>Tarifa R$</span><span id="tarifaResultado">R$ 0,00</span></div>
+        <div class="row-item"><span>Tarifa %</span><span id="percentualResultado">-</span></div>
+        <div class="row-item"><span>Total</span><span id="totalLinhaResultado">R$ 0,00</span></div>
+      </div>
+      <div class="status" id="statusCalculo"></div>
+    </aside>
+  </section>
+
+  <footer class="footer">
+    <span>Projeto apoiado por Escritura Pública - <a href="https://escriturapublica.substack.com" target="_blank" rel="noopener noreferrer">https://escriturapublica.substack.com</a> | Atesta - <a href="https://www.atesta.com.br" target="_blank" rel="noopener noreferrer">https://www.atesta.com.br</a></span>
+  </footer>
+</main>
+
+<span class="visit" title="Visitas" aria-label="Marcador discreto de visitas">
+  <span id="visitCounterText">Visitas: 1</span>
+</span>
+
+<script>
+// =====================================================================
+// Tarifas por faixa de movimentação
+// Vigência informada na tabela-base: a partir de 01/04/2026.
+// Regra aplicada: tarifa = maior valor entre o percentual da faixa e o valor mínimo da tarifa.
+// Na faixa 1, sem percentual aplicável, adota-se o valor mínimo da tarifa.
+// =====================================================================
+const TABELA_TARIFAS = [
+  { faixa: '1', de: 0.00, ate: 99999.99, percentual: null, valorMinimo: 500.00, rotulo: 'Faixa 1 — até R$ 99.999,99' },
+  { faixa: '2', de: 100000.00, ate: 299999.99, percentual: 0.0045, valorMinimo: 500.00, rotulo: 'Faixa 2 — de R$ 100.000,00 até R$ 299.999,99' },
+  { faixa: '3', de: 300000.00, ate: 499999.99, percentual: 0.0035, valorMinimo: 1350.00, rotulo: 'Faixa 3 — de R$ 300.000,00 até R$ 499.999,99' },
+  { faixa: '4', de: 500000.00, ate: 699999.99, percentual: 0.0032, valorMinimo: 1750.00, rotulo: 'Faixa 4 — de R$ 500.000,00 até R$ 699.999,99' },
+  { faixa: '5', de: 700000.00, ate: 999999.99, percentual: 0.0031, valorMinimo: 2240.00, rotulo: 'Faixa 5 — de R$ 700.000,00 até R$ 999.999,99' },
+  { faixa: '6', de: 1000000.00, ate: 1999999.99, percentual: 0.0023, valorMinimo: 3100.00, rotulo: 'Faixa 6 — de R$ 1.000.000,00 até R$ 1.999.999,99' },
+  { faixa: '7', de: 2000000.00, ate: 2999999.99, percentual: 0.0017, valorMinimo: 4600.00, rotulo: 'Faixa 7 — de R$ 2.000.000,00 até R$ 2.999.999,99' },
+  { faixa: '8', de: 3000000.00, ate: 3999999.99, percentual: 0.0016, valorMinimo: 5100.00, rotulo: 'Faixa 8 — de R$ 3.000.000,00 até R$ 3.999.999,99' },
+  { faixa: '9', de: 4000000.00, ate: 4999999.99, percentual: 0.0015, valorMinimo: 6400.00, rotulo: 'Faixa 9 — de R$ 4.000.000,00 até R$ 4.999.999,99' },
+  { faixa: '10', de: 5000000.00, ate: 5999999.99, percentual: 0.0014, valorMinimo: 7500.00, rotulo: 'Faixa 10 — de R$ 5.000.000,00 até R$ 5.999.999,99' },
+  { faixa: '11', de: 6000000.00, ate: Infinity, percentual: 0.0013, valorMinimo: 8400.00, rotulo: 'Faixa 11 — a partir de R$ 6.000.000,00' },
+];
+
+let ultimoResultado = null;
+
+const el = (id) => document.getElementById(id);
+
+const campoValorBase = el('valorBase');
+if (campoValorBase) {
+  campoValorBase.addEventListener('input', () => mascaraMoeda(campoValorBase));
+  campoValorBase.addEventListener('blur', () => {
+    const valor = parseMoeda(campoValorBase.value);
+    campoValorBase.value = valor ? formatMoeda(valor) : '';
+  });
+}
+
+el('btnCalcular').addEventListener('click', calcular);
+el('btnLimpar').addEventListener('click', limpar);
+el('btnImprimir').addEventListener('click', () => window.print());
+el('btnCopiar').addEventListener('click', copiarResultado);
+
+configuraContador();
+calcular(false);
+
+function configuraContador(){
+  const contador = el('visitCounterText');
+  if (!contador) return;
+  const pagina = (window.location.pathname || 'pagina-local').replace(/\/$/, '') || 'pagina-local';
+  const chave = `portal-notarial-visitas:${pagina}`;
+  let visitas = Number(localStorage.getItem(chave) || '0');
+  visitas += 1;
+  localStorage.setItem(chave, String(visitas));
+  contador.textContent = `Visitas: ${visitas}`;
+}
+
+function mascaraMoeda(campo){
+  const somenteNumeros = campo.value.replace(/\D/g, '');
+  if (!somenteNumeros) { campo.value = ''; return; }
+  const valor = Number(somenteNumeros) / 100;
+  campo.value = formatMoeda(valor);
+}
+
+function parseMoeda(valor){
+  if (typeof valor === 'number') return Number.isFinite(valor) ? valor : 0;
+  if (!valor) return 0;
+  const limpo = String(valor).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
+  const numero = Number(limpo);
+  return Number.isFinite(numero) ? numero : 0;
+}
+
+function formatMoeda(valor){
+  return valor.toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+}
+
+function formatPercentual(valorDecimal){
+  const numero = Number(valorDecimal);
+  if (!Number.isFinite(numero) || numero <= 0) return '0%';
+  return (numero * 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+}
+
+function buscaFaixa(valorBase, tabela){
+  if (!valorBase || valorBase <= 0) return { valor:0, rotulo:'aguardando valor base' };
+  const faixa = tabela.find((item) => valorBase >= item.de && valorBase <= item.ate) || tabela[tabela.length - 1];
+  return faixa || { valor:0, rotulo:'sem faixa configurada' };
+}
+
+function calcular(rolar = true){
+  const valorBase = parseMoeda(el('valorBase').value);
+  const faixaTarifa = buscaFaixa(valorBase, TABELA_TARIFAS);
+  const tarifaPercentual = faixaTarifa.percentual === null ? 0 : valorBase * Number(faixaTarifa.percentual || 0);
+  const tarifaMinima = Number(faixaTarifa.valorMinimo || 0);
+  const tarifa = valorBase > 0 ? Math.max(tarifaPercentual, tarifaMinima) : 0;
+  const total = tarifa;
+  const criterioPercentual = formatPercentual(faixaTarifa.percentual);
+
+  ultimoResultado = {
+    valorBase,
+    tarifa,
+    total,
+    faixa: faixaTarifa.faixa || '-',
+    percentual: criterioPercentual,
+    tarifaMinima,
+    criterioTarifa: `${faixaTarifa.rotulo}; percentual: ${criterioPercentual}; valor mínimo da tarifa: ${formatMoeda(tarifaMinima)}`
+  };
+
+  renderResultado(ultimoResultado);
+  if (rolar && window.innerWidth < 900) el('resultado').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function renderResultado(r){
+  el('valorResultado').textContent = formatMoeda(r.valorBase);
+  el('tarifaResultado').textContent = formatMoeda(r.tarifa);
+  el('percentualResultado').textContent = r.percentual || '-';
+  el('totalResultado').textContent = formatMoeda(r.total);
+  el('totalLinhaResultado').textContent = formatMoeda(r.total);
+
+  const status = el('statusCalculo');
+  status.textContent = '';
+  status.classList.remove('show');
+}
+
+function limpar(){
+  el('valorBase').value = '';
+  calcular(false);
+}
+
+async function copiarResultado(){
+  if (!ultimoResultado) calcular(false);
+  const r = ultimoResultado;
+  const texto = [
+    'Calculadora de tarifas conta notarial',
+    `Valor base da operação: ${formatMoeda(r.valorBase)}`,
+    `Tarifa R$: ${formatMoeda(r.tarifa)} (${r.criterioTarifa})`,
+    `Tarifa %: ${r.percentual || '-'}`,
+    `Valor estimado: ${formatMoeda(r.total)}`,
+    'Observação: valores meramente estimativos.'
+  ].join('\n');
+
+  try {
+    await navigator.clipboard.writeText(texto);
+    mostrarAvisoTemporario('Resultado copiado.');
+  } catch (error) {
+    mostrarAvisoTemporario('Não foi possível copiar automaticamente.');
+  }
+}
+
+function mostrarAvisoTemporario(texto){
+  const status = el('statusCalculo');
+  const original = status.textContent;
+  const estavaVisivel = status.classList.contains('show');
+  status.textContent = texto;
+  status.classList.add('show');
+  setTimeout(() => {
+    status.textContent = original;
+    status.classList.toggle('show', estavaVisivel);
+  }, 1800);
+}
+</script>
+</body>
+</html>
