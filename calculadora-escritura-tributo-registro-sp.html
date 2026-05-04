@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calculadora de escritura, tributo e registro</title>
+<meta name="description" content="Calculadora estimativa de escritura pública, tributo e registro imobiliário, com ITCMD de São Paulo em 4% e alíquota municipal de ITBI preenchível." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --accent: rgb(0, 118, 255);
+  --accent-soft: rgba(0, 118, 255, .08);
+  --accent-border: rgba(0, 118, 255, .18);
+  --slate-950:#0f172a;
+  --slate-900:#172033;
+  --slate-800:#334155;
+  --slate-700:#475569;
+  --slate-600:#64748b;
+  --slate-500:#94a3b8;
+  --stone-50:#ffffff;
+  --stone-100:#f8fafc;
+  --stone-150:#f5f7fb;
+  --stone-200:#e5e7eb;
+  --stone-300:#d7dce3;
+  --amber-50:#fffbeb;
+  --amber-200:#fde68a;
+  --amber-900:#78350f;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:'IBM Plex Sans',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--slate-900);
+  background:var(--stone-100);
+  line-height:1.5;
+}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.page{max-width:1140px;margin:0 auto;padding:38px 24px 42px}
+.hero{
+  margin-bottom:26px;
+}
+.hero-card{
+  padding:14px 0 28px;
+  position:relative;
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  color:var(--accent);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+.eyebrow::before{
+  content:"";
+  width:48px;
+  height:2px;
+  background:var(--accent);
+  border-radius:999px;
+}
+h1{
+  font-family:'Fraunces','Georgia',serif;
+  font-size:clamp(2.6rem,4.3vw,4.2rem);
+  line-height:1.05;
+  margin:0 0 16px;
+  font-weight:400;
+  letter-spacing:-.03em;
+  color:#172033;
+  max-width:none;
+  width:100%;
+}
+.lead{
+  max-width:none;
+  margin:0;
+  font-size:18px;
+  line-height:1.55;
+  color:var(--slate-700);
+}
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 390px;
+  gap:26px;
+  align-items:start;
+}
+.panel,
+.result-card{
+  background:var(--stone-50);
+  border:1px solid var(--stone-200);
+  border-radius:0;
+  box-shadow:none;
+}
+.panel{
+  padding:28px;
+  background:#fbfcfe;
+}
+.panel h2,
+.result-card h2{
+  margin:0 0 14px;
+  font-size:22px;
+  font-weight:700;
+  color:var(--slate-950);
+}
+.panel p{margin:0 0 14px;color:var(--slate-700)}
+.section-kicker{
+  display:block;
+  margin:0 0 10px;
+  color:var(--accent);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+}
+.question-title{
+  font-family:'Fraunces','Georgia',serif;
+  font-size:clamp(2rem,3vw,3rem);
+  line-height:1.08;
+  font-weight:400;
+  letter-spacing:-.02em;
+  margin:0 0 26px;
+  color:var(--slate-950);
+}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.form-field{display:flex;flex-direction:column;gap:7px}
+.form-field.full{grid-column:1/-1}
+label{font-size:13px;font-weight:700;color:var(--slate-800)}
+.hint{font-size:12px;color:var(--slate-600)}
+input,select{
+  width:100%;height:52px;border:1px solid var(--stone-300);border-radius:10px;
+  padding:0 14px;background:white;color:var(--slate-950);outline:none;
+  transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,118,255,.08)}
+.segmented{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:4px}
+.radio-card{position:relative}
+.radio-card input{position:absolute;opacity:0;pointer-events:none}
+.radio-card span{
+  min-height:108px;
+  border:1px solid var(--stone-200);
+  border-radius:10px;
+  background:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:6px;
+  padding:18px 20px;
+  transition:all .15s ease;
+}
+.radio-card strong{font-size:17px;color:var(--accent);font-weight:700}
+.radio-card small{font-size:13px;color:var(--slate-600);line-height:1.45}
+.radio-card input:checked + span{
+  border-color:var(--accent);
+  box-shadow:inset 0 0 0 1px var(--accent);
+  background:linear-gradient(to bottom, rgba(0,118,255,.02), rgba(0,118,255,.02)), #fff;
+}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btn{
+  border:1px solid transparent;
+  border-radius:10px;
+  padding:12px 18px;
+  font-weight:700;
+  font-size:14px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  transition:transform .15s ease,box-shadow .15s ease,background .15s ease,color .15s ease,border-color .15s ease;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:white}.btn-primary:hover{background:#005fce}
+.btn-secondary{background:white;color:var(--slate-800);border-color:var(--stone-300)}.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.btn-ghost{background:transparent;color:var(--slate-600);border-color:transparent}.btn-ghost:hover{color:var(--slate-950);box-shadow:none}
+.result-card{
+  padding:28px;
+  min-height:100%;
+}
+.result-total{
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg, #0f1f49 0%, #112a67 100%);
+  color:white;
+  padding:22px 24px;
+  margin-bottom:18px;
+  position:relative;
+  overflow:hidden;
+}
+.result-total:after{
+  content:"";
+  position:absolute;
+  width:170px;
+  height:170px;
+  border-radius:50%;
+  right:-55px;
+  top:-48px;
+  background:rgba(0, 118, 255, .48);
+}
+.result-total .label{
+  display:block;
+  font-size:12px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:#dbe7ff;
+  margin-bottom:10px;
+}
+.result-total .value{
+  font-size:32px;
+  font-weight:800;
+  letter-spacing:-.03em;
+  position:relative;
+  z-index:1;
+}
+.breakdown{display:flex;flex-direction:column;gap:0}
+.row-item{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 0;
+  border-bottom:1px solid var(--stone-200);
+}
+.row-item:last-child{border-bottom:none}
+.row-item span:first-child{color:var(--slate-700)}
+.row-item span:last-child{font-weight:800;color:var(--slate-950);white-space:nowrap}
+.status{margin-top:12px;padding:12px 14px;font-size:13px;line-height:1.5;background:var(--amber-50);border:1px solid var(--amber-200);color:var(--amber-900);display:none}
+.status.show{display:block}
+.footer{
+  margin-top:24px;
+  padding-top:18px;
+  border-top:1px solid var(--stone-200);
+  color:var(--slate-600);
+  font-size:12px;
+}
+.footer a{color:var(--accent)}
+.visit{
+  position:fixed;
+  right:14px;
+  bottom:12px;
+  z-index:40;
+  opacity:.62;
+  transition:opacity .2s ease;
+  font-size:11px;
+  color:var(--slate-600);
+  background:rgba(255,255,255,.88);
+  border:1px solid var(--stone-200);
+  padding:5px 8px;
+}
+.visit:hover{opacity:.9}
+.hidden{display:none !important}
+@media (max-width:980px){
+  .grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .segmented{grid-template-columns:1fr}
+  h1{max-width:none}
+  .lead{max-width:none}
+}
+@media print{
+  .actions,.visit{display:none!important}
+  body{background:white}
+  .page{padding:0}
+  .hero,.grid{display:block}
+  .panel,.result-card{border:1px solid #ddd}
+}
+</style>
+</head>
+<body>
+<main class="page" id="inicio">
+  <section class="hero" aria-labelledby="titulo-principal">
+    <div class="hero-card">
+      <span class="eyebrow">Valor estimado - Estado de São Paulo</span>
+      <h1 id="titulo-principal">Calculadora de escritura, tributo e registro</h1>
+      <p class="lead">Informe o valor base, selecione a natureza do ato e preencha a alíquota aplicável. Na opção onerosa, use a alíquota municipal do ITBI. Na opção não onerosa, use a alíquota estadual do ITCMD.</p>
+    </div>
+  </section>
+
+  <section class="grid" id="calculadora">
+    <div>
+      <section class="panel" aria-labelledby="dados-calculo">
+        <span class="section-kicker">Tipo de ato</span>
+        <h2 class="question-title" id="dados-calculo">Dados do cálculo</h2>
+        <p>Use o valor venal de referência, quando aplicável, o valor fiscal (IPTU) ou o valor do negócio, o que for maior. A escritura e o registro serão calculados pelas faixas de preços.</p>
+        <p><strong>Importante:</strong> este valor não contempla custos necessários para atualização de documentos, averbações no registro imobiliário e outras diligências necessárias à lavratura e à segurança do ato.</p>
+
+        <div class="form-grid">
+          <div class="form-field full">
+            <label for="valorBase">Valor base de cálculo</label>
+            <input id="valorBase" inputmode="decimal" autocomplete="off" placeholder="R$ 0,00" />
+            <span class="hint">Informe o maior valor aplicável entre as referências acima.</span>
+          </div>
+
+          <div class="form-field full">
+            <label>Natureza da transmissão</label>
+            <div class="segmented" role="radiogroup" aria-label="Natureza da transmissão">
+              <label class="radio-card">
+                <input type="radio" name="tipoTributo" value="itbi" checked />
+                <span><strong>Onerosa</strong><small>ITBI municipal</small></span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="tipoTributo" value="itcmd" />
+                <span><strong>Não onerosa</strong><small>ITCMD estadual</small></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-field" id="campoAliquotaITBI">
+            <label for="aliquotaITBI">Alíquota do ITBI municipal</label>
+            <input id="aliquotaITBI" inputmode="decimal" autocomplete="off" placeholder="Ex.: 3" />
+            <span class="hint">Preencha apenas o número. Exemplo: 3 para 3%.</span>
+          </div>
+
+          <div class="form-field hidden" id="campoAliquotaITCMD">
+            <label for="aliquotaITCMD">Alíquota do ITCMD estadual</label>
+            <input id="aliquotaITCMD" inputmode="decimal" autocomplete="off" value="4%" readonly aria-readonly="true" />
+          </div>
+
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="btnCalcular">Calcular</button>
+          <button type="button" class="btn btn-secondary" id="btnCopiar">Copiar resultado</button>
+          <button type="button" class="btn btn-secondary" id="btnImprimir">Imprimir</button>
+          <button type="button" class="btn btn-ghost" id="btnLimpar">Limpar</button>
+        </div>
+      </section>
+
+    </div>
+
+    <aside class="result-card" id="resultado" aria-labelledby="resultado-titulo">
+      <h2 id="resultado-titulo">Resultado</h2>
+      <div class="result-total">
+        <span class="label">Total estimado</span>
+        <span class="value" id="totalResultado">R$ 0,00</span>
+      </div>
+      <div class="breakdown">
+        <div class="row-item"><span>Valor base</span><span id="valorResultado">R$ 0,00</span></div>
+        <div class="row-item"><span>Escritura</span><span id="escrituraResultado">R$ 0,00</span></div>
+        <div class="row-item"><span>Tributo</span><span id="tributoResultado">R$ 0,00</span></div>
+        <div class="row-item"><span>Registro</span><span id="registroResultado">R$ 0,00</span></div>
+        <div class="row-item"><span>Total</span><span id="totalLinhaResultado">R$ 0,00</span></div>
+      </div>
+      <div class="status" id="statusCalculo"></div>
+    </aside>
+  </section>
+
+  <footer class="footer">
+    <span>Projeto apoiado por Escritura Pública - <a href="https://escriturapublica.substack.com" target="_blank" rel="noopener noreferrer">https://escriturapublica.substack.com</a> | Atesta - <a href="https://www.atesta.com.br" target="_blank" rel="noopener noreferrer">https://www.atesta.com.br</a></span>
+  </footer>
+</main>
+
+<span class="visit" title="Visitas" aria-label="Marcador discreto de visitas">
+  <span id="visitCounterText">Visitas: 1</span>
+</span>
+
+<script>
+// =====================================================================
+// Tabelas de emolumentos 2026
+// Regra: o primeiro item cujo "ate" seja maior ou igual ao valor base será aplicado.
+// =====================================================================
+const TABELA_ESCRITURA = [
+  // Tabelionato de Notas, item 1. Escritura com valor declarado, coluna TOTAL, base 2026.
+  { faixa: 'a', de: 0.00, ate: 1524.00, valor: 356.90, rotulo: 'A — de R$ 0,00 até R$ 1.524,00' },
+  { faixa: 'b', de: 1524.01, ate: 5761.00, valor: 533.35, rotulo: 'B — de R$ 1.524,01 até R$ 5.761,00' },
+  { faixa: 'c', de: 5761.01, ate: 9603.00, valor: 832.77, rotulo: 'C — de R$ 5.761,01 até R$ 9.603,00' },
+  { faixa: 'd', de: 9603.01, ate: 19210.00, valor: 1189.68, rotulo: 'D — de R$ 9.603,01 até R$ 19.210,00' },
+  { faixa: 'e', de: 19210.01, ate: 38420.00, valor: 1608.08, rotulo: 'E — de R$ 19.210,01 até R$ 38.420,00' },
+  { faixa: 'f', de: 38420.01, ate: 76840.00, valor: 1907.60, rotulo: 'F — de R$ 38.420,01 até R$ 76.840,00' },
+  { faixa: 'g', de: 76840.01, ate: 115260.00, valor: 2264.49, rotulo: 'G — de R$ 76.840,01 até R$ 115.260,00' },
+  { faixa: 'h', de: 115260.01, ate: 153680.00, valor: 2682.90, rotulo: 'H — de R$ 115.260,01 até R$ 153.680,00' },
+  { faixa: 'i', de: 153680.01, ate: 192100.00, valor: 3039.89, rotulo: 'I — de R$ 153.680,01 até R$ 192.100,00' },
+  { faixa: 'j', de: 192100.01, ate: 230520.00, valor: 3400.86, rotulo: 'J — de R$ 192.100,01 até R$ 230.520,00' },
+  { faixa: 'k', de: 230520.01, ate: 268940.00, valor: 3815.19, rotulo: 'K — de R$ 230.520,01 até R$ 268.940,00' },
+  { faixa: 'l', de: 268940.01, ate: 307360.00, valor: 4176.24, rotulo: 'L — de R$ 268.940,01 até R$ 307.360,00' },
+  { faixa: 'm', de: 307360.01, ate: 330146.00, valor: 4594.65, rotulo: 'M — de R$ 307.360,01 até R$ 330.146,00' },
+  { faixa: 'n', de: 330146.01, ate: 384200.00, valor: 4890.01, rotulo: 'N — de R$ 330.146,01 até R$ 384.200,00' },
+  { faixa: 'o', de: 384200.01, ate: 768400.00, valor: 5427.43, rotulo: 'O — de R$ 384.200,01 até R$ 768.400,00' },
+  { faixa: 'p', de: 768400.01, ate: 1152600.00, valor: 6026.36, rotulo: 'P — de R$ 768.400,01 até R$ 1.152.600,00' },
+  { faixa: 'q', de: 1152600.01, ate: 1536800.00, valor: 6682.74, rotulo: 'Q — de R$ 1.152.600,01 até R$ 1.536.800,00' },
+  { faixa: 'r', de: 1536800.01, ate: 2345066.00, valor: 7384.26, rotulo: 'R — de R$ 1.536.800,01 até R$ 2.345.066,00' },
+  { faixa: 's', de: 2345066.01, ate: 3908444.00, valor: 10255.96, rotulo: 'S — de R$ 2.345.066,01 até R$ 3.908.444,00' },
+  { faixa: 't', de: 3908444.01, ate: 5862665.00, valor: 13332.69, rotulo: 'T — de R$ 3.908.444,01 até R$ 5.862.665,00' },
+  { faixa: 'u', de: 5862665.01, ate: 7816887.00, valor: 16409.51, rotulo: 'U — de R$ 5.862.665,01 até R$ 7.816.887,00' },
+  { faixa: 'v', de: 7816887.01, ate: 9771109.00, valor: 19486.25, rotulo: 'V — de R$ 7.816.887,01 até R$ 9.771.109,00' },
+  { faixa: 'w', de: 9771109.01, ate: 11725331.00, valor: 22562.98, rotulo: 'W — de R$ 9.771.109,01 até R$ 11.725.331,00' },
+  { faixa: 'x', de: 11725331.01, ate: 13679552.00, valor: 25639.80, rotulo: 'X — de R$ 11.725.331,01 até R$ 13.679.552,00' },
+  { faixa: 'y', de: 13679552.01, ate: 15633774.00, valor: 28716.54, rotulo: 'Y — de R$ 13.679.552,01 até R$ 15.633.774,00' },
+  { faixa: 'z', de: 15633774.01, ate: 17587996.00, valor: 31793.33, rotulo: 'Z — de R$ 15.633.774,01 até R$ 17.587.996,00' },
+  { faixa: 'z1', de: 17587996.01, ate: 19542217.00, valor: 34870.18, rotulo: 'Z1 — de R$ 17.587.996,01 até R$ 19.542.217,00' },
+  { faixa: 'z2', de: 19542217.01, ate: 23450661.00, valor: 41023.73, rotulo: 'Z2 — de R$ 19.542.217,01 até R$ 23.450.661,00' },
+  { faixa: 'z3', de: 23450661.01, ate: 27359105.00, valor: 47177.25, rotulo: 'Z3 — de R$ 23.450.661,01 até R$ 27.359.105,00' },
+  { faixa: 'z4', de: 27359105.01, ate: 31267548.00, valor: 53330.81, rotulo: 'Z4 — de R$ 27.359.105,01 até R$ 31.267.548,00' },
+  { faixa: 'z5', de: 31267548.01, ate: 35175992.00, valor: 59484.31, rotulo: 'Z5 — de R$ 31.267.548,01 até R$ 35.175.992,00' },
+  { faixa: 'z6', de: 35175992.01, ate: Infinity, valor: 65637.95, rotulo: 'Z6 — acima de R$ 35.175.992,01' },
+];
+
+const TABELA_REGISTRO = [
+  // Registro de Imóveis, item 1. Registro com valor declarado, coluna Total, base 2026.
+  { faixa: 'a', de: 0.01, ate: 2306.00, valor: 260.39, rotulo: 'A — de R$ 0,01 até R$ 2.306,00' },
+  { faixa: 'b', de: 2306.01, ate: 5761.00, valor: 417.83, rotulo: 'B — de R$ 2.306,01 até R$ 5.761,00' },
+  { faixa: 'c', de: 5761.01, ate: 9603.00, valor: 749.59, rotulo: 'C — de R$ 5.761,01 até R$ 9.603,00' },
+  { faixa: 'd', de: 9603.01, ate: 19210.00, valor: 1112.17, rotulo: 'D — de R$ 9.603,01 até R$ 19.210,00' },
+  { faixa: 'e', de: 19210.01, ate: 38420.00, valor: 1352.14, rotulo: 'E — de R$ 19.210,01 até R$ 38.420,00' },
+  { faixa: 'f', de: 38420.01, ate: 115260.00, valor: 1507.90, rotulo: 'F — de R$ 38.420,01 até R$ 115.260,00' },
+  { faixa: 'g', de: 115260.01, ate: 192100.00, valor: 1924.63, rotulo: 'G — de R$ 115.260,01 até R$ 192.100,00' },
+  { faixa: 'h', de: 192100.01, ate: 230520.00, valor: 2340.51, rotulo: 'H — de R$ 192.100,01 até R$ 230.520,00' },
+  { faixa: 'i', de: 230520.01, ate: 268940.00, valor: 2548.04, rotulo: 'I — de R$ 230.520,01 até R$ 268.940,00' },
+  { faixa: 'j', de: 268940.01, ate: 307360.00, valor: 2756.74, rotulo: 'J — de R$ 268.940,01 até R$ 307.360,00' },
+  { faixa: 'k', de: 307360.01, ate: 345780.00, valor: 2906.16, rotulo: 'K — de R$ 307.360,01 até R$ 345.780,00' },
+  { faixa: 'l', de: 345780.01, ate: 384200.00, valor: 2981.91, rotulo: 'L — de R$ 345.780,01 até R$ 384.200,00' },
+  { faixa: 'm', de: 384200.01, ate: 768400.00, valor: 3324.85, rotulo: 'M — de R$ 384.200,01 até R$ 768.400,00' },
+  { faixa: 'n', de: 768400.01, ate: 1152600.00, valor: 3893.73, rotulo: 'N — de R$ 768.400,01 até R$ 1.152.600,00' },
+  { faixa: 'o', de: 1152600.01, ate: 1536800.00, valor: 4482.62, rotulo: 'O — de R$ 1.152.600,01 até R$ 1.536.800,00' },
+  { faixa: 'p', de: 1536800.01, ate: 1921000.00, valor: 5071.57, rotulo: 'P — de R$ 1.536.800,01 até R$ 1.921.000,00' },
+  { faixa: 'q', de: 1921000.01, ate: 2305200.00, valor: 5376.06, rotulo: 'Q — de R$ 1.921.000,01 até R$ 2.305.200,00' },
+  { faixa: 'r', de: 2305200.01, ate: 3842000.00, valor: 6898.44, rotulo: 'R — de R$ 2.305.200,01 até R$ 3.842.000,00' },
+  { faixa: 's', de: 3842000.01, ate: 5763000.00, valor: 9638.72, rotulo: 'S — de R$ 3.842.000,01 até R$ 5.763.000,00' },
+  { faixa: 't', de: 5763000.01, ate: 7684000.00, valor: 12683.48, rotulo: 'T — de R$ 5.763.000,01 até R$ 7.684.000,00' },
+  { faixa: 'u', de: 7684000.01, ate: 9605000.00, valor: 15728.24, rotulo: 'U — de R$ 7.684.000,01 até R$ 9.605.000,00' },
+  { faixa: 'v', de: 9605000.01, ate: 11526000.00, valor: 18773.00, rotulo: 'V — de R$ 9.605.000,01 até R$ 11.526.000,00' },
+  { faixa: 'w', de: 11526000.01, ate: 13447000.00, valor: 21817.76, rotulo: 'W — de R$ 11.526.000,01 até R$ 13.447.000,00' },
+  { faixa: 'x', de: 13447000.01, ate: 15368000.00, valor: 24862.51, rotulo: 'X — de R$ 13.447.000,01 até R$ 15.368.000,00' },
+  { faixa: 'y', de: 15368000.01, ate: 17289000.00, valor: 27907.28, rotulo: 'Y — de R$ 15.368.000,01 até R$ 17.289.000,00' },
+  { faixa: 'z', de: 17289000.01, ate: 19210000.00, valor: 30952.04, rotulo: 'Z — de R$ 17.289.000,01 até R$ 19.210.000,00' },
+  { faixa: 'z1', de: 19210000.01, ate: 23052000.00, valor: 35519.18, rotulo: 'Z1 — de R$ 19.210.000,01 até R$ 23.052.000,00' },
+  { faixa: 'z2', de: 23052000.01, ate: 26894000.00, valor: 41608.70, rotulo: 'Z2 — de R$ 23.052.000,01 até R$ 26.894.000,00' },
+  { faixa: 'z3', de: 26894000.01, ate: 30736000.00, valor: 47698.24, rotulo: 'Z3 — de R$ 26.894.000,01 até R$ 30.736.000,00' },
+  { faixa: 'z4', de: 30736000.01, ate: 34578000.00, valor: 53787.77, rotulo: 'Z4 — de R$ 30.736.000,01 até R$ 34.578.000,00' },
+  { faixa: 'z5', de: 34578000.01, ate: 38420000.00, valor: 59877.30, rotulo: 'Z5 — de R$ 34.578.000,01 até R$ 38.420.000,00' },
+  { faixa: 'z6', de: 38420000.01, ate: 42262000.00, valor: 65966.81, rotulo: 'Z6 — de R$ 38.420.000,01 até R$ 42.262.000,00' },
+  { faixa: 'z7', de: 42262000.01, ate: 46104000.00, valor: 72056.34, rotulo: 'Z7 — de R$ 42.262.000,01 até R$ 46.104.000,00' },
+  { faixa: 'z8', de: 46104000.01, ate: 49946000.00, valor: 78145.85, rotulo: 'Z8 — de R$ 46.104.000,01 até R$ 49.946.000,00' },
+  { faixa: 'z9', de: 49946000.01, ate: 53788000.00, valor: 84235.38, rotulo: 'Z9 — de R$ 49.946.000,01 até R$ 53.788.000,00' },
+  { faixa: 'z10', de: 53788000.01, ate: 57630000.00, valor: 90324.90, rotulo: 'Z10 — de R$ 53.788.000,01 até R$ 57.630.000,00' },
+  { faixa: 'z11', de: 57630000.01, ate: 65314000.00, valor: 99459.19, rotulo: 'Z11 — de R$ 57.630.000,01 até R$ 65.314.000,00' },
+  { faixa: 'z12', de: 65314000.01, ate: 72998000.00, valor: 111638.23, rotulo: 'Z12 — de R$ 65.314.000,01 até R$ 72.998.000,00' },
+  { faixa: 'z13', de: 72998000.01, ate: 80682000.00, valor: 123817.29, rotulo: 'Z13 — de R$ 72.998.000,01 até R$ 80.682.000,00' },
+  { faixa: 'z14', de: 80682000.01, ate: 88366000.00, valor: 135996.33, rotulo: 'Z14 — de R$ 80.682.000,01 até R$ 88.366.000,00' },
+  { faixa: 'z15', de: 88366000.01, ate: 96050000.00, valor: 148175.38, rotulo: 'Z15 — de R$ 88.366.000,01 até R$ 96.050.000,00' },
+  { faixa: 'z16', de: 96050000.01, ate: 103734000.00, valor: 160354.41, rotulo: 'Z16 — de R$ 96.050.000,01 até R$ 103.734.000,00' },
+  { faixa: 'z17', de: 103734000.01, ate: 111418000.00, valor: 172533.47, rotulo: 'Z17 — de R$ 103.734.000,01 até R$ 111.418.000,00' },
+  { faixa: 'z18', de: 111418000.01, ate: 119102000.00, valor: 184712.51, rotulo: 'Z18 — de R$ 111.418.000,01 até R$ 119.102.000,00' },
+  { faixa: 'z19', de: 119102000.01, ate: 126786000.00, valor: 196891.55, rotulo: 'Z19 — de R$ 119.102.000,01 até R$ 126.786.000,00' },
+  { faixa: 'z20', de: 126786000.01, ate: 134470000.00, valor: 209070.61, rotulo: 'Z20 — de R$ 126.786.000,01 até R$ 134.470.000,00' },
+  { faixa: 'z21', de: 134470000.01, ate: 142154000.00, valor: 221249.65, rotulo: 'Z21 — de R$ 134.470.000,01 até R$ 142.154.000,00' },
+  { faixa: 'z22', de: 142154000.01, ate: Infinity, valor: 234138.12, rotulo: 'Z22 — acima de R$ 142.154.000,01' },
+];
+
+let ultimoResultado = null;
+
+const el = (id) => document.getElementById(id);
+const dinheiroInputs = ['valorBase'];
+
+dinheiroInputs.forEach((id) => {
+  const campo = el(id);
+  if (!campo) return;
+  campo.addEventListener('input', () => mascaraMoeda(campo));
+  campo.addEventListener('blur', () => {
+    const valor = parseMoeda(campo.value);
+    campo.value = valor ? formatMoeda(valor) : '';
+  });
+});
+
+['aliquotaITBI','aliquotaITCMD'].forEach((id) => {
+  const campo = el(id);
+  campo.addEventListener('input', () => {
+    campo.value = campo.value.replace(/[^0-9,\.]/g, '').replace(/\.(?=.*\.)/g, '');
+  });
+});
+
+document.querySelectorAll('input[name="tipoTributo"]').forEach((radio) => {
+  radio.addEventListener('change', atualizaCamposTributo);
+});
+
+el('btnCalcular').addEventListener('click', calcular);
+el('btnLimpar').addEventListener('click', limpar);
+el('btnImprimir').addEventListener('click', () => window.print());
+el('btnCopiar').addEventListener('click', copiarResultado);
+
+configuraContador();
+atualizaCamposTributo();
+calcular(false);
+
+function configuraContador(){
+  const contador = el('visitCounterText');
+  if (!contador) return;
+  const pagina = (window.location.pathname || 'pagina-local').replace(/\/$/, '') || 'pagina-local';
+  const chave = `portal-notarial-visitas:${pagina}`;
+  let visitas = Number(localStorage.getItem(chave) || '0');
+  visitas += 1;
+  localStorage.setItem(chave, String(visitas));
+  contador.textContent = `Visitas: ${visitas}`;
+}
+
+function atualizaCamposTributo(){
+  const tipo = tipoTributoSelecionado();
+  el('campoAliquotaITBI').classList.toggle('hidden', tipo !== 'itbi');
+  el('campoAliquotaITCMD').classList.toggle('hidden', tipo !== 'itcmd');
+}
+
+function tipoTributoSelecionado(){
+  return document.querySelector('input[name="tipoTributo"]:checked')?.value || 'itbi';
+}
+
+function mascaraMoeda(campo){
+  const somenteNumeros = campo.value.replace(/\D/g, '');
+  if (!somenteNumeros) { campo.value = ''; return; }
+  const valor = Number(somenteNumeros) / 100;
+  campo.value = formatMoeda(valor);
+}
+
+function parseMoeda(valor){
+  if (typeof valor === 'number') return Number.isFinite(valor) ? valor : 0;
+  if (!valor) return 0;
+  const limpo = String(valor).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
+  const numero = Number(limpo);
+  return Number.isFinite(numero) ? numero : 0;
+}
+
+function parsePercentual(valor){
+  if (!valor) return 0;
+  const numero = Number(String(valor).replace(/[^\d,.-]/g, '').replace(',', '.'));
+  return Number.isFinite(numero) ? numero / 100 : 0;
+}
+
+function formatMoeda(valor){
+  return valor.toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+}
+
+function formatPercentual(valorDecimal){
+  return (valorDecimal * 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+}
+
+function buscaFaixa(valorBase, tabela){
+  if (!valorBase || valorBase <= 0) return { valor:0, rotulo:'aguardando valor base' };
+  const faixa = tabela.find((item) => valorBase <= item.ate) || tabela[tabela.length - 1];
+  return faixa || { valor:0, rotulo:'sem faixa configurada' };
+}
+
+function calcular(rolar = true){
+  const valorBase = parseMoeda(el('valorBase').value);
+  const tipo = tipoTributoSelecionado();
+  const faixaEscritura = buscaFaixa(valorBase, TABELA_ESCRITURA);
+  const faixaRegistro = buscaFaixa(valorBase, TABELA_REGISTRO);
+
+  const escritura = Number(faixaEscritura.valor || 0);
+  const registro = Number(faixaRegistro.valor || 0);
+
+  let tributo = 0;
+  let criterioTributo = '';
+
+  if (tipo === 'itbi') {
+    const aliquota = parsePercentual(el('aliquotaITBI').value);
+    tributo = valorBase * aliquota;
+    criterioTributo = `ITBI municipal: ${formatPercentual(aliquota)}`;
+  }
+
+  if (tipo === 'itcmd') {
+    const aliquota = parsePercentual(el('aliquotaITCMD').value || '4');
+    tributo = valorBase * aliquota;
+    criterioTributo = `ITCMD estadual: ${formatPercentual(aliquota)}`;
+  }
+
+  const total = escritura + tributo + registro;
+
+  ultimoResultado = {
+    valorBase, escritura, tributo, registro, total,
+    tipo, criterioTributo,
+    criterioEscritura: `Tabela de escritura: ${faixaEscritura.rotulo}`,
+    criterioRegistro: `Tabela de registro: ${faixaRegistro.rotulo}`
+  };
+
+  renderResultado(ultimoResultado);
+  if (rolar && window.innerWidth < 900) el('resultado').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function renderResultado(r){
+  el('valorResultado').textContent = formatMoeda(r.valorBase);
+  el('escrituraResultado').textContent = formatMoeda(r.escritura);
+  el('tributoResultado').textContent = formatMoeda(r.tributo);
+  el('registroResultado').textContent = formatMoeda(r.registro);
+  el('totalResultado').textContent = formatMoeda(r.total);
+  el('totalLinhaResultado').textContent = formatMoeda(r.total);
+
+  const linhas = [
+    ['Valor base', 'Valor informado pelo usuário', r.valorBase],
+    ['Escritura', r.criterioEscritura, r.escritura],
+    ['Tributo', r.criterioTributo, r.tributo],
+    ['Registro', r.criterioRegistro, r.registro],
+    ['Total estimado', 'Escritura + tributo + registro', r.total]
+  ];
+
+  const memoriaTabela = el('memoriaTabela');
+  if (memoriaTabela) {
+    memoriaTabela.innerHTML = linhas.map(([item, criterio, valor]) => `
+      <tr>
+        <td>${escapeHtml(item)}</td>
+        <td>${escapeHtml(criterio)}</td>
+        <td class="money-cell">${formatMoeda(valor)}</td>
+      </tr>
+    `).join('');
+  }
+
+  const status = el('statusCalculo');
+  status.textContent = '';
+  status.classList.remove('show');
+}
+
+function limpar(){
+  ['valorBase','aliquotaITBI'].forEach((id) => el(id).value = '');
+  el('aliquotaITCMD').value = '4%';
+  document.querySelector('input[name="tipoTributo"][value="itbi"]').checked = true;
+  atualizaCamposTributo();
+  calcular(false);
+}
+
+async function copiarResultado(){
+  if (!ultimoResultado) calcular(false);
+  const r = ultimoResultado;
+  const texto = [
+    'Calculadora de escritura, tributo e registro',
+    `Valor base: ${formatMoeda(r.valorBase)}`,
+    `Escritura: ${formatMoeda(r.escritura)} (${r.criterioEscritura})`,
+    `Tributo: ${formatMoeda(r.tributo)} (${r.criterioTributo})`,
+    `Registro: ${formatMoeda(r.registro)} (${r.criterioRegistro})`,
+    `Total estimado: ${formatMoeda(r.total)}`,
+    'Observação: valores meramente estimativos.'
+  ].join('\n');
+
+  try {
+    await navigator.clipboard.writeText(texto);
+    mostrarAvisoTemporario('Resultado copiado.');
+  } catch (error) {
+    mostrarAvisoTemporario('Não foi possível copiar automaticamente.');
+  }
+}
+
+function mostrarAvisoTemporario(texto){
+  const status = el('statusCalculo');
+  const original = status.textContent;
+  const estavaVisivel = status.classList.contains('show');
+  status.textContent = texto;
+  status.classList.add('show');
+  setTimeout(() => {
+    status.textContent = original;
+    status.classList.toggle('show', estavaVisivel);
+  }, 1800);
+}
+
+function escapeHtml(valor){
+  return String(valor)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+</script>
+</body>
+</html>
