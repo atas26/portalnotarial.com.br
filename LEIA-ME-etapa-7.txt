@@ -1,0 +1,1 @@
+Etapa 7: ajustado conteúdo estático de fallback da página competencia-e-notariado.html para que a explicação da ferramenta seja legível mesmo antes do carregamento do JavaScript. Publique apenas competencia-e-notariado.html na raiz do repositório.
