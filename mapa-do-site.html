@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Mapa do site | Portal Notarial</title>
+  <meta name="description" content="Mapa do site do Portal Notarial, com links para ferramentas, páginas institucionais, fontes normativas, atualizações e políticas do site." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://portalnotarial.com.br/mapa-do-site.html" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Portal Notarial" />
+  <meta property="og:title" content="Mapa do site | Portal Notarial" />
+  <meta property="og:description" content="Mapa do site do Portal Notarial, com links para ferramentas, páginas institucionais, fontes normativas, atualizações e políticas do site." />
+  <meta property="og:url" content="https://portalnotarial.com.br/mapa-do-site.html" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Mapa do site | Portal Notarial" />
+  <meta name="twitter:description" content="Mapa do site do Portal Notarial, com links para ferramentas, páginas institucionais, fontes normativas, atualizações e políticas do site." />
+
+<style>
+
+    :root {
+      --azul: rgb(11, 95, 255);
+      --vermelho: rgb(232, 57, 70);
+      --verde: rgb(0, 144, 157);
+      --amarelo: rgb(245, 196, 66);
+      --roxo: rgb(168, 85, 247);
+      --fundo: #071323;
+      --fundo-2: #0a1d31;
+      --texto: #f8fafc;
+      --texto-suave: rgba(248, 250, 252, 0.84);
+      --texto-fraco: rgba(248, 250, 252, 0.62);
+      --linha: rgba(255, 255, 255, 0.16);
+      --branco: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+    }
+    a { color: inherit; }
+
+    .page {
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      padding-top: 76px;
+      background:
+        radial-gradient(circle at 15% 18%, rgba(11, 95, 255, 0.34), transparent 28%),
+        radial-gradient(circle at 88% 28%, rgba(0, 144, 157, 0.28), transparent 30%),
+        radial-gradient(circle at 72% 82%, rgba(232, 57, 70, 0.16), transparent 28%),
+        linear-gradient(135deg, #071323 0%, #0a1d31 48%, #081827 100%);
+    }
+    .page::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.75), transparent 88%);
+    }
+    .orb {
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(20px);
+      opacity: 0.18;
+      pointer-events: none;
+      animation: float 12s ease-in-out infinite alternate;
+    }
+    .orb.one { top: 80px; right: -140px; background: var(--azul); }
+    .orb.two { bottom: -180px; left: -120px; background: var(--verde); animation-delay: 2s; }
+    @keyframes float {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(-42px, 28px, 0) scale(1.08); }
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      width: 100%;
+      border-bottom: 1px solid var(--linha);
+      background: rgba(7, 19, 35, 0.88);
+      backdrop-filter: blur(18px);
+    }
+    .nav-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      font-size: 18px;
+      color: var(--branco);
+      white-space: nowrap;
+    }
+    .support-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      color: var(--texto-suave);
+      font-size: 13px;
+      line-height: 1.4;
+      text-align: right;
+      flex-wrap: wrap;
+    }
+    .support-links span { color: var(--texto-fraco); }
+    .support-links a {
+      text-decoration: none;
+      color: var(--texto-suave);
+      font-weight: 700;
+    }
+    .support-links a:hover { color: var(--branco); }
+
+    .main {
+      position: relative;
+      z-index: 2;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 78px 22px 84px;
+    }
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--texto-fraco);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      max-width: 920px;
+      font-size: clamp(42px, 6vw, 82px);
+      line-height: 0.94;
+      letter-spacing: -0.07em;
+      font-weight: 800;
+      color: var(--verde);
+    }
+    .lead {
+      max-width: 820px;
+      margin: 28px 0 0;
+      color: var(--texto-suave);
+      font-size: 19px;
+      line-height: 1.65;
+    }
+    .content-card {
+      margin-top: 48px;
+      border: 1px solid var(--linha);
+      background: rgba(255,255,255,0.07);
+      padding: 34px;
+      backdrop-filter: blur(12px);
+    }
+    .content-card h2 {
+      margin: 0 0 16px;
+      color: var(--branco);
+      font-size: 26px;
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+    }
+    .content-card h3 {
+      margin: 30px 0 12px;
+      color: #8bb2ff;
+      font-size: 20px;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+    }
+    .content-card p {
+      margin: 0 0 16px;
+      color: var(--texto-suave);
+      font-size: 16px;
+      line-height: 1.72;
+    }
+    .content-card ul {
+      margin: 8px 0 18px 20px;
+      padding: 0;
+      color: var(--texto-suave);
+      font-size: 16px;
+      line-height: 1.72;
+    }
+    .content-card li { margin: 0 0 8px; }
+    .content-card a {
+      color: var(--branco);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+    .notice {
+      margin: 28px 0 26px;
+      padding: 18px;
+      border-left: 4px solid var(--vermelho);
+      background: rgba(232, 57, 70, 0.10);
+      color: var(--texto-suave);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0 8px;
+    }
+    .source-card {
+      border: 1px solid var(--linha);
+      background: rgba(255,255,255,0.055);
+      padding: 18px;
+      min-height: 150px;
+    }
+    .source-card h3 {
+      margin-top: 0;
+    }
+    .source-card p:last-child { margin-bottom: 0; }
+    .meta {
+      margin: 28px 0 0;
+      color: var(--texto-fraco);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    footer {
+      position: relative;
+      z-index: 3;
+      border-top: 1px solid var(--linha);
+      color: var(--texto-suave);
+      padding: 22px;
+      font-size: 13px;
+    }
+    .footer-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .footer-links a {
+      color: var(--texto-suave);
+      text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--branco); }
+
+    @media (max-width: 980px) {
+      .nav-inner { align-items: flex-start; flex-direction: column; gap: 10px; }
+      .support-links { justify-content: flex-start; text-align: left; }
+      .page { padding-top: 116px; }
+      .main { padding-top: 48px; }
+      .source-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .nav-inner { padding: 14px 16px; }
+      .page { padding-top: 126px; }
+      .main { padding: 38px 16px 58px; }
+      h1 { font-size: clamp(42px, 14vw, 68px); }
+      .lead { font-size: 16px; }
+      .content-card { padding: 24px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+      .footer-links { justify-content: flex-start; }
+    }
+
+    h1 { color: var(--verde); }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <nav class="navbar" aria-label="Navegação principal">
+      <div class="nav-inner">
+        <a class="brand" href="index.html">Portal Notarial</a>
+        <div class="support-links">
+          <span>Apoio:</span>
+          <a href="https://escriturapublica.substack.com" target="_blank" rel="noopener noreferrer">Escritura Pública</a>
+          <span>|</span>
+          <a href="https://www.atesta.com.br" target="_blank" rel="noopener noreferrer">Atesta</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main">
+      <p class="eyebrow">Portal Notarial</p>
+      <h1>Mapa do site.</h1>
+      <p class="lead">Lista das páginas públicas do Portal Notarial para navegação, rastreamento e conferência.</p>
+      <article class="content-card">
+
+        <h2>Páginas principais</h2>
+        <ul>
+          <li><a href="index.html">Página inicial</a></li>
+          <li><a href="sobre.html">Sobre o Portal Notarial</a></li>
+          <li><a href="contato.html">Contato</a></li>
+          <li><a href="fontes-normativas.html">Fontes normativas</a></li>
+          <li><a href="atualizacoes.html">Atualizações</a></li>
+        </ul>
+        <h3>Ferramentas</h3>
+        <ul>
+          <li><a href="competencia-e-notariado.html">Competência em ato notarial eletrônico</a></li>
+          <li><a href="codigo-de-normas-nacional.html">Código Nacional de Normas</a></li>
+          <li><a href="codigo-de-normas-de-sao-paulo.html">Normas da Corregedoria de São Paulo</a></li>
+          <li><a href="calculadora-escritura-tributo-registro-sp.html">Calculadora de escritura, tributo e registro</a></li>
+          <li><a href="calculadora-tarifas-conta-notarial.html">Calculadora de tarifas conta notarial</a></li>
+        </ul>
+        <h3>Páginas legais e privacidade</h3>
+        <ul>
+          <li><a href="politica-de-privacidade.html">Política de Privacidade</a></li>
+          <li><a href="termos-de-uso.html">Termos de Uso</a></li>
+          <li><a href="aviso-legal.html">Aviso Legal</a></li>
+        </ul>
+        <div class="notice">Este mapa do site foi criado para facilitar navegação, rastreamento e conferência das páginas públicas do Portal Notarial.</div>
+
+        <p class="meta">Última atualização: 04/05/2026.</p>
+      </article>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>Portal Notarial | 2026</div>
+        <div class="footer-links" aria-label="Links institucionais">
+          <a href="sobre.html">Sobre</a>
+          <span>|</span>
+          <a href="contato.html">Contato</a>
+          <span>|</span>
+          <a href="fontes-normativas.html">Fontes</a>
+          <span>|</span>
+          <a href="atualizacoes.html">Atualizações</a>
+          <span>|</span>
+          <a href="mapa-do-site.html">Mapa do site</a>
+          <span>|</span>
+          <a href="politica-de-privacidade.html">Privacidade</a>
+          <span>|</span>
+          <a href="termos-de-uso.html">Termos</a>
+          <span>|</span>
+          <a href="aviso-legal.html">Aviso legal</a>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Portal Notarial | Ferramentas para atos notariais e normas extrajudiciais</title>
+  <meta name="description" content="Ferramentas para consulta de competência notarial eletrônica, Código Nacional de Normas, Normas da Corregedoria de São Paulo, escritura, tributo, registro e conta notarial." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://portalnotarial.com.br/" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Portal Notarial" />
+  <meta property="og:title" content="Portal Notarial | Ferramentas para atos notariais e normas extrajudiciais" />
+  <meta property="og:description" content="Ferramentas para consulta de competência notarial eletrônica, Código Nacional de Normas, Normas da Corregedoria de São Paulo, escritura, tributo, registro e conta notarial." />
+  <meta property="og:url" content="https://portalnotarial.com.br/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Portal Notarial | Ferramentas para atos notariais e normas extrajudiciais" />
+  <meta name="twitter:description" content="Ferramentas para consulta de competência notarial eletrônica, Código Nacional de Normas, Normas da Corregedoria de São Paulo, escritura, tributo, registro e conta notarial." />
+
+<style>
+    :root {
+      --azul: rgb(11, 95, 255);
+      --vermelho: rgb(232, 57, 70);
+      --verde: rgb(0, 144, 157);
+      --amarelo: rgb(245, 196, 66);
+      --roxo: rgb(168, 85, 247);
+      --fundo: #071323;
+      --fundo-2: #0a1d31;
+      --texto: #f8fafc;
+      --texto-suave: rgba(248, 250, 252, 0.82);
+      --texto-fraco: rgba(248, 250, 252, 0.62);
+      --linha: rgba(255, 255, 255, 0.16);
+      --branco: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      padding-top: 76px;
+      background:
+        radial-gradient(circle at 15% 18%, rgba(11, 95, 255, 0.34), transparent 28%),
+        radial-gradient(circle at 88% 28%, rgba(0, 144, 157, 0.28), transparent 30%),
+        radial-gradient(circle at 72% 82%, rgba(232, 57, 70, 0.16), transparent 28%),
+        linear-gradient(135deg, #071323 0%, #0a1d31 48%, #081827 100%);
+    }
+
+    .page::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.75), transparent 88%);
+    }
+
+    .orb {
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(20px);
+      opacity: 0.18;
+      pointer-events: none;
+      animation: float 12s ease-in-out infinite alternate;
+    }
+
+    .orb.one {
+      top: 80px;
+      right: -140px;
+      background: var(--azul);
+    }
+
+    .orb.two {
+      bottom: -180px;
+      left: -120px;
+      background: var(--verde);
+      animation-delay: 2s;
+    }
+
+    @keyframes float {
+      from {
+        transform: translate3d(0, 0, 0) scale(1);
+      }
+
+      to {
+        transform: translate3d(-42px, 28px, 0) scale(1.08);
+      }
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      width: 100%;
+      border-bottom: 1px solid var(--linha);
+      background: rgba(7, 19, 35, 0.88);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      text-decoration: none;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      font-size: 18px;
+      color: var(--branco);
+      white-space: nowrap;
+    }
+
+
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 24px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .primary-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      color: var(--texto-suave);
+      font-size: 13px;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    .primary-links a {
+      text-decoration: none;
+      color: var(--texto-suave);
+      font-weight: 600;
+    }
+
+    .primary-links a:hover {
+      color: var(--branco);
+    }
+
+    .support-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      color: var(--texto-suave);
+      font-size: 13px;
+      line-height: 1.4;
+      text-align: right;
+    }
+
+    .support-links span {
+      color: var(--texto-fraco);
+    }
+
+    .support-links a {
+      text-decoration: none;
+      color: var(--texto-suave);
+      font-weight: 700;
+    }
+
+    .support-links a:hover {
+      color: var(--branco);
+    }
+
+    .hero {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      padding: 80px 22px 66px;
+    }
+
+    .hero-inner {
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .hero-content {
+      max-width: 780px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 780px;
+      font-size: clamp(54px, 8vw, 118px);
+      line-height: 0.92;
+      letter-spacing: -0.075em;
+      font-weight: 800;
+    }
+
+    .hero-title span {
+      display: block;
+    }
+
+    .hero-title .blue {
+      color: var(--azul);
+    }
+
+    .hero-title .red {
+      color: var(--vermelho);
+    }
+
+    .hero-title .green {
+      color: var(--verde);
+    }
+
+    .lead {
+      max-width: 700px;
+      margin: 30px 0 0;
+      color: var(--texto-suave);
+      font-size: 19px;
+      line-height: 1.65;
+    }
+
+
+    .quote-rotator {
+      width: min(100%, 1040px);
+      min-height: 86px;
+      margin: 0 0 38px;
+      padding: 0;
+      position: relative;
+    }
+
+    .quote-text {
+      min-height: 42px;
+      color: var(--texto-suave);
+      font-size: clamp(17px, 1.8vw, 25px);
+      line-height: 1.45;
+      letter-spacing: -0.015em;
+    }
+
+    .quote-author {
+      min-height: 18px;
+      margin-top: 10px;
+      color: var(--texto-fraco);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      margin-left: 4px;
+      vertical-align: -0.12em;
+      background: var(--verde);
+      animation: blink 0.9s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      0%, 45% {
+        opacity: 1;
+      }
+
+      46%, 100% {
+        opacity: 0;
+      }
+    }
+
+    .tools {
+      position: relative;
+      z-index: 3;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 20px 22px 86px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      border-top: 1px solid var(--linha);
+      border-left: 1px solid var(--linha);
+      background: rgba(255,255,255,0.02);
+    }
+
+    .card {
+      min-height: 340px;
+      border-right: 1px solid var(--linha);
+      border-bottom: 1px solid var(--linha);
+      background: rgba(255,255,255,0.065);
+      padding: 28px;
+      text-decoration: none;
+      color: var(--branco);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: background 0.18s ease, transform 0.18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 5px;
+      background: var(--verde);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.22s ease;
+    }
+
+    .card:nth-child(2)::after {
+      background: var(--vermelho);
+    }
+
+    .card:nth-child(3)::after {
+      background: var(--azul);
+    }
+
+    .card:nth-child(4)::after {
+      background: var(--amarelo);
+    }
+
+    .card:nth-child(5)::after {
+      background: var(--roxo);
+    }
+
+    .card:hover {
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-4px);
+    }
+
+    .card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: clamp(25px, 2.2vw, 38px);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+    }
+
+    .card:nth-child(1) h3 {
+      color: var(--verde);
+    }
+
+    .card:nth-child(2) h3 {
+      color: var(--vermelho);
+    }
+
+    .card:nth-child(3) h3 {
+      color: #8bb2ff;
+    }
+
+    .card:nth-child(4) h3 {
+      color: var(--amarelo);
+    }
+
+    .card:nth-child(5) h3 {
+      color: var(--roxo);
+    }
+
+    .card p {
+      margin: 24px 0 0;
+      color: var(--texto-suave);
+      line-height: 1.62;
+      font-size: 15px;
+    }
+
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 34px;
+    }
+
+    .arrow {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--linha);
+      display: grid;
+      place-items: center;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+
+    .card:hover .arrow {
+      background: var(--branco);
+      color: #020617;
+    }
+
+    .visit-counter {
+      position: fixed;
+      right: 14px;
+      bottom: 64px;
+      z-index: 60;
+      padding: 6px 10px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      background: rgba(7, 19, 35, 0.78);
+      backdrop-filter: blur(12px);
+      color: var(--texto-fraco);
+      font-size: 11px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    footer {
+      position: relative;
+      z-index: 3;
+      border-top: 1px solid var(--linha);
+      color: var(--texto-suave);
+      padding: 22px;
+      font-size: 13px;
+    }
+
+
+
+    .footer-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      flex-wrap: wrap;
+      color: var(--texto-suave);
+    }
+
+    .footer-links a {
+      color: var(--texto-suave);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--branco);
+    }
+
+    @media (max-width: 1380px) {
+      .cards {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 980px) {
+      .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .nav-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .nav-right {
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      .primary-links {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .support-links {
+        justify-content: flex-start;
+        text-align: left;
+        flex-wrap: wrap;
+      }
+
+      .page {
+        padding-top: 116px;
+      }
+
+      .hero {
+        padding-top: 48px;
+      }
+
+
+      .quote-rotator {
+        margin-bottom: 30px;
+        min-height: 96px;
+      }
+
+      .quote-text {
+        font-size: 17px;
+      }
+
+      .card {
+        min-height: 280px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .nav-inner {
+        padding: 14px 16px;
+      }
+
+      .page {
+        padding-top: 126px;
+      }
+
+      .hero {
+        padding: 38px 16px 34px;
+      }
+
+
+      .quote-rotator {
+        min-height: 112px;
+        margin-bottom: 26px;
+      }
+
+      .quote-author {
+        font-size: 12px;
+      }
+
+      .tools {
+        padding: 18px 16px 58px;
+      }
+
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: clamp(48px, 16vw, 78px);
+      }
+
+      .lead {
+        font-size: 16px;
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .footer-links {
+        justify-content: flex-start;
+        gap: 10px;
+      }
+
+      .visit-counter {
+        right: 10px;
+        bottom: 76px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+
+    <nav class="navbar" aria-label="Navegação principal">
+      <div class="nav-inner">
+        <a class="brand" href="/">
+          Portal Notarial
+        </a>
+
+        <div class="nav-right">
+          <div class="primary-links" aria-label="Links institucionais">
+            <a href="#ferramentas">Ferramentas</a>
+            <a href="fontes-normativas.html">Fontes</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="contato.html">Contato</a>
+          </div>
+
+          <div class="support-links">
+            <span>Apoio:</span>
+            <a href="https://escriturapublica.substack.com" target="_blank" rel="noopener noreferrer">Escritura Pública</a>
+            <span>|</span>
+            <a href="https://www.atesta.com.br" target="_blank" rel="noopener noreferrer">Atesta</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="hero-inner">
+
+        <div class="quote-rotator" aria-live="polite">
+          <div class="quote-text">
+            <span id="quoteText"></span><span class="typing-cursor" aria-hidden="true"></span>
+          </div>
+          <div class="quote-author" id="quoteAuthor"></div>
+        </div>
+
+        <section class="hero-content">
+          <h1 class="hero-title">
+            <span class="blue">Notariado.</span>
+            <span class="red">Técnica.</span>
+            <span class="green">Fé pública.</span>
+          </h1>
+
+          <p class="lead">
+            Ferramentas de apoio para a rotina de tabelionatos de notas e da advocacia, com acesso rápido a consultas sobre competência notarial eletrônica, Código Nacional de Normas, Normas da Corregedoria Geral da Justiça de São Paulo, cálculo de escritura, tributo e registro imobiliário e tarifas da conta notarial.
+          </p>
+        </section>
+      </div>
+    </header>
+
+    <main class="tools" id="ferramentas">
+      <section class="cards" aria-label="Ferramentas disponíveis">
+        <a class="card" href="competencia-e-notariado.html" aria-label="Abrir ferramenta de competência em ato notarial eletrônico">
+          <div>
+            <h3>Competência em ato notarial eletrônico</h3>
+            <p>
+              Identificação do tabelião de notas competente para a prática de ato notarial eletrônico ou híbrido.
+            </p>
+          </div>
+          <div class="card-bottom" aria-hidden="true">
+            <div class="arrow">→</div>
+          </div>
+        </a>
+
+        <a class="card" href="codigo-de-normas-nacional.html" aria-label="Abrir consulta ao Código Nacional de Normas">
+          <div>
+            <h3>Código Nacional de Normas</h3>
+            <p>
+              Consulta estruturada ao Código Nacional de Normas da Corregedoria Nacional de Justiça, com busca por dispositivo, tema e especialidade.
+            </p>
+          </div>
+          <div class="card-bottom" aria-hidden="true">
+            <div class="arrow">→</div>
+          </div>
+        </a>
+
+        <a class="card" href="codigo-de-normas-de-sao-paulo.html" aria-label="Abrir consulta às Normas da Corregedoria de São Paulo">
+          <div>
+            <h3>Normas da Corregedoria de São Paulo</h3>
+            <p>
+              Consulta às Normas de Serviço da Corregedoria Geral da Justiça de São Paulo, organizada para localização rápida de capítulos.
+            </p>
+          </div>
+          <div class="card-bottom" aria-hidden="true">
+            <div class="arrow">→</div>
+          </div>
+        </a>
+
+        <a class="card" href="calculadora-escritura-tributo-registro-sp.html" aria-label="Abrir calculadora de escritura, tributo e registro">
+          <div>
+            <h3>Calculadora de escritura, tributo e registro</h3>
+            <p>
+              Calcule com rapidez e facilidade o valor da escritura, tributo e registro imobiliário.
+            </p>
+          </div>
+          <div class="card-bottom" aria-hidden="true">
+            <div class="arrow">→</div>
+          </div>
+        </a>
+
+        <a class="card" href="calculadora-tarifas-conta-notarial.html" aria-label="Abrir calculadora de tarifas da conta notarial">
+          <div>
+            <h3>Calculadora de tarifas conta notarial</h3>
+            <p>
+              Calcule de forma simples e rápida o valor da tarifa.
+            </p>
+          </div>
+          <div class="card-bottom" aria-hidden="true">
+            <div class="arrow">→</div>
+          </div>
+        </a>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>Portal Notarial | 2026</div>
+        <div class="footer-links" aria-label="Links do rodapé">
+          <a href="sobre.html">Sobre</a>
+          <a href="contato.html">Contato</a>
+          <a href="fontes-normativas.html">Fontes</a>
+          <a href="atualizacoes.html">Atualizações</a>
+          <a href="mapa-do-site.html">Mapa do site</a>
+          <a href="politica-de-privacidade.html">Privacidade</a>
+          <a href="termos-de-uso.html">Termos</a>
+          <a href="aviso-legal.html">Aviso legal</a>
+        </div>
+      </div>
+    </footer>
+
+    <div class="visit-counter" id="visitCounter">
+      Visitas: 0
+    </div>
+  </div>
+
+  <script>
+    const counterKey = "portal-notarial-local-visits";
+    const currentValue = Number(localStorage.getItem(counterKey) || "0") + 1;
+
+    localStorage.setItem(counterKey, String(currentValue));
+
+    const counterElement = document.getElementById("visitCounter");
+
+    if (counterElement) {
+      counterElement.textContent = `Visitas: ${currentValue}`;
+    }
+
+    const frasesNotariais = [
+      {
+        texto: "Quanto mais notário, menos juiz.",
+        autor: "Francesco Carnelutti"
+      },
+      {
+        texto: "Sou o notário que por causa do notariado me tornei jurista.",
+        autor: "Zeno Veloso"
+      },
+      {
+        texto: "O tabellio romano revela a raiz documental do notariado latino.",
+        autor: "Tradição justinianeia"
+      },
+      {
+        texto: "Se o tabelião não salvar o seu notariado, ninguém mais o fará.",
+        autor: "Carlos Luiz Poisl"
+      },
+      {
+        texto: "A pública forma é documento público elaborado por tabelião, sob responsabilidade de sua fé pública.",
+        autor: "Antônio Albergaria Pereira"
+      },
+      {
+        texto: "O notário é jurista profissional e agente público.",
+        autor: "União Internacional do Notariado"
+      },
+      {
+        texto: "Notaria aberta, juizado fechado.",
+        autor: "Joaquín Costa"
+      },
+      {
+        texto: "O notário não pratica ato do processo judicial. Sua função é preventiva e extrajudicial.",
+        autor: "Antônio Augusto Firmo da Silva"
+      },
+      {
+        texto: "A imparcialidade notarial não é passiva. É uma imparcialidade ativa.",
+        autor: "Vallet de Goytisolo"
+      },
+      {
+        texto: "A única vinculação essencial do notariado com o Estado não esgota a natureza da função.",
+        autor: "Francisco Martínez Segovia"
+      },
+      {
+        texto: "O tabelião é profissional do direito, dotado de fé pública.",
+        autor: "Lei nº 8.935/1994, art. 3º"
+      },
+      {
+        texto: "O certificado notarial trata de fatos já ocorridos, verificados por documentos ou outras fontes.",
+        autor: "Julia Siri García"
+      },
+      {
+        texto: "A fé pública é a essência da função notarial.",
+        autor: "Carlos Luiz Poisl"
+      },
+      {
+        texto: "O tabelião é guardião moral, legal e prático da vontade das partes.",
+        autor: "Zeno Veloso"
+      },
+      {
+        texto: "A função notarial opera na vida jurídica normal, antes da controvérsia.",
+        autor: "José Castán Tobeñas"
+      },
+      {
+        texto: "O notário atua com imparcialidade e independência.",
+        autor: "União Internacional do Notariado"
+      },
+      {
+        texto: "A ação funcional do notário tem etapa profissional e etapa documental.",
+        autor: "Francisco Martínez Segovia"
+      },
+      {
+        texto: "Fé é confiança na autoridade de quem afirma.",
+        autor: "Rufino Larraud"
+      },
+      {
+        texto: "A escritura pública é ato notarial por excelência.",
+        autor: "Carlos Luiz Poisl"
+      },
+      {
+        texto: "O tabelião também é um conselheiro, uma espécie de magistrado.",
+        autor: "Zeno Veloso"
+      },
+      {
+        texto: "A função notarial não se limita à documentação ou à autenticação.",
+        autor: "José Castán Tobeñas"
+      },
+      {
+        texto: "O notário interpreta a vontade das partes e verifica sua conformidade com a lei.",
+        autor: "União Internacional do Notariado"
+      },
+      {
+        texto: "O notário recebe a vontade, assessora as partes e interpreta seu sentido jurídico.",
+        autor: "Francisco Martínez Segovia"
+      },
+      {
+        texto: "Sem fé notarial, o notário não teria razão de ser.",
+        autor: "Carlos Nicolás Gattari"
+      },
+      {
+        texto: "Conselheiro e assessor jurídico imparcial, receptor e intérprete da vontade das partes.",
+        autor: "Carlos Luiz Poisl"
+      },
+      {
+        texto: "A atividade cartorial deu base intelectual e científica à atividade doutrinária.",
+        autor: "Zeno Veloso"
+      },
+      {
+        texto: "O notariado assume tarefas legitimadoras e constitutivas dos atos jurídicos.",
+        autor: "José Castán Tobeñas"
+      },
+      {
+        texto: "O notário é responsável pela redação do ato que autoriza.",
+        autor: "União Internacional do Notariado"
+      },
+      {
+        texto: "A fé pública notarial é grau de eficácia atribuído pela lei a certos documentos.",
+        autor: "Rufino Larraud"
+      },
+      {
+        texto: "A mediação notarial favorece a comunicação das partes e a harmonização de seus interesses.",
+        autor: "Julia Siri García"
+      },
+      {
+        texto: "O que caracteriza o ato notarial é a fé pública nele impressa.",
+        autor: "Carlos Luiz Poisl"
+      },
+      {
+        texto: "Ser tabelião de notas exige responsabilidade, conhecimento e prudência.",
+        autor: "Zeno Veloso"
+      },
+      {
+        texto: "A função notarial se desdobra em faculdades diretiva, moldeadora e constatadora.",
+        autor: "José Castán Tobeñas"
+      },
+      {
+        texto: "O formulismo sem reflexão conduz a textos incongruentes, disparatados e extemporâneos.",
+        autor: "Francisco Martínez Segovia"
+      },
+      {
+        texto: "A função notarial é uma função antiprocessual.",
+        autor: "Francesco Carnelutti"
+      },
+      {
+        texto: "A fé pública confere sentido à função e à instituição notarial.",
+        autor: "Carlos Nicolás Gattari"
+      },
+      {
+        texto: "O tabelião imprime fé pública nas declarações de vontade e nos fatos juridicamente relevantes.",
+        autor: "Carlos Luiz Poisl"
+      },
+      {
+        texto: "O notário exerce função pública por delegação estatal da fé pública.",
+        autor: "Antônio Augusto Firmo da Silva"
+      },
+      {
+        texto: "A ata notarial testemunha fatos presenciados pelo notário e lhes dá forma documental.",
+        autor: "Antônio Albergaria Pereira"
+      },
+      {
+        texto: "Para o notário devem vir os atos consensuais.",
+        autor: "Zeno Veloso"
+      },
+      {
+        texto: "O notariado auxilia a administração da justiça ao prevenir litígios.",
+        autor: "União Internacional do Notariado"
+      },
+      {
+        texto: "A fé pública reúne confiança, poder e qualidade.",
+        autor: "Rufino Larraud"
+      },
+      {
+        texto: "A técnica notarial deve adequar-se aos fins que serve na vida jurídica contemporânea.",
+        autor: "Julia Siri García"
+      },
+      {
+        texto: "Ciência, consciência e experiência sustentam a função notarial.",
+        autor: "José González Palomino"
+      },
+      {
+        texto: "O notário é conselheiro, assessor jurídico e avenidor das partes.",
+        autor: "José Castán Tobeñas"
+      },
+      {
+        texto: "A fórmula deve ser escolhida como norma de experiência, não repetida por inércia.",
+        autor: "Francisco Martínez Segovia"
+      },
+      {
+        texto: "O notário atua antes do conflito. O juiz atua depois dele.",
+        autor: "Francesco Carnelutti"
+      },
+      {
+        texto: "O ato notarial depende da fé pública para dar forma autêntica à vontade.",
+        autor: "Carlos Nicolás Gattari"
+      },
+      {
+        texto: "Ser tabelião exige conhecimento do universo da ciência do direito.",
+        autor: "Carlos Luiz Poisl"
+      },
+      {
+        texto: "Fé pública é garantia estatal de certeza e verdade sobre fatos, situações e interesses.",
+        autor: "Antônio Augusto Firmo da Silva"
+      },
+      {
+        texto: "A escritura pública formaliza declarações de vontade. A ata notarial documenta fatos.",
+        autor: "Antônio Albergaria Pereira"
+      },
+      {
+        texto: "O notário deve estudar cada caso como caso único.",
+        autor: "Zeno Veloso"
+      },
+      {
+        texto: "O notário confere autenticidade aos documentos que prepara.",
+        autor: "União Internacional do Notariado"
+      },
+      {
+        texto: "O notário impõe qualidade fehaciente ao instrumento do qual é autor.",
+        autor: "Rufino Larraud"
+      },
+      {
+        texto: "A ars notariae transformou a prática documental em técnica jurídica.",
+        autor: "Rolandino de’ Passaggeri"
+      },
+      {
+        texto: "O documento fez o notário. Hoje, o notário faz o documento.",
+        autor: "Rafael Núñez Lagos"
+      },
+      {
+        texto: "O documento eletrônico não elimina os princípios da função notarial.",
+        autor: "Julia Siri García"
+      },
+      {
+        texto: "O notariado é uma criação social, antes de ser criação das normas.",
+        autor: "José González Palomino"
+      },
+      {
+        texto: "O notário instrui os interessados sobre possibilidades legais, requisitos e consequências.",
+        autor: "José Castán Tobeñas"
+      },
+      {
+        texto: "A autenticação é elemento próprio e distintivo da função notarial.",
+        autor: "Francisco Martínez Segovia"
+      },
+      {
+        texto: "A intervenção notarial reduz a necessidade de intervenção judicial.",
+        autor: "Francesco Carnelutti"
+      },
+      {
+        texto: "O instrumento público é o lugar geométrico da função notarial.",
+        autor: "Enrique Giménez-Arnau"
+      },
+      {
+        texto: "O ato notarial recebe a vontade, qualifica o negócio e lhe dá forma jurídica.",
+        autor: "Doutrina notarial latina"
+      },
+      {
+        texto: "A fé pública proporciona certeza e segurança ao documento notarial.",
+        autor: "Carlos Nicolás Gattari"
+      },
+      {
+        texto: "O notariado brasileiro precisa ser instituição aparelhada para o exercício de sua função.",
+        autor: "Carlos Luiz Poisl"
+      },
+      {
+        texto: "O notariado de tipo latino combina função pública e exercício profissional.",
+        autor: "Antônio Augusto Firmo da Silva"
+      },
+      {
+        texto: "A fé pública notarial exige cuidado técnico no poder de certificar.",
+        autor: "Antônio Albergaria Pereira"
+      },
+      {
+        texto: "O tabelião deve ajudar a transformar dissenso inicial em consenso jurídico.",
+        autor: "Zeno Veloso"
+      },
+      {
+        texto: "O conselho notarial reconduz os fatos a fórmulas legais e justas.",
+        autor: "Vallet de Goytisolo"
+      },
+      {
+        texto: "A autenticidade do ato notarial se apoia na assinatura, na data e no conteúdo do documento.",
+        autor: "União Internacional do Notariado"
+      },
+      {
+        texto: "Na vida do notário, há poesia e verdade.",
+        autor: "Salvatore Satta"
+      },
+      {
+        texto: "A função notarial começa pela compreensão do propósito econômico ou moral dos interessados.",
+        autor: "Rufino Larraud"
+      },
+      {
+        texto: "A arte notarial exige forma, ordem e prudência documental.",
+        autor: "Rolandino de’ Passaggeri"
+      },
+      {
+        texto: "O notário não está super partes. Está extra partes.",
+        autor: "Renato Giacobbe, difundido por Vallet de Goytisolo"
+      },
+      {
+        texto: "A escritura pública transforma a vontade em forma jurídica documentada.",
+        autor: "Rafael Núñez Lagos"
+      },
+      {
+        texto: "A ata notarial exige técnica própria de constatação, narrativa e documentação.",
+        autor: "Julia Siri García"
+      },
+      {
+        texto: "O direito não tolera a carência de formas.",
+        autor: "José González Palomino"
+      },
+      {
+        texto: "O notário qualifica a natureza e a legalidade do ato pretendido.",
+        autor: "José Castán Tobeñas"
+      },
+      {
+        texto: "O documento notarial é prova antilitigiosa por excelência.",
+        autor: "Joaquín Costa"
+      },
+      {
+        texto: "A fé pública dá valor jurídico ao documento e ao seu conteúdo.",
+        autor: "Francisco Martínez Segovia"
+      },
+      {
+        texto: "O notário documenta a normalidade jurídica. O juiz decide a patologia jurídica.",
+        autor: "Francesco Carnelutti"
+      },
+      {
+        texto: "O instrumento público prova fatos, dá forma a atos e assegura efeitos jurídicos.",
+        autor: "Enrique Giménez-Arnau"
+      },
+      {
+        texto: "A função notarial é técnica, pública e preventiva.",
+        autor: "Doutrina notarial latina"
+      },
+      {
+        texto: "A fé pública qualifica o documento, mas não dispensa o juízo jurídico do tabelião.",
+        autor: "Doutrina notarial brasileira"
+      },
+      {
+        texto: "O notário é o agente próprio para dar fé pública a determinados instrumentos.",
+        autor: "Carlos Nicolás Gattari"
+      },
+      {
+        texto: "A escritura pública dá certeza, tranquilidade e segurança às negociações imobiliárias.",
+        autor: "Carlos Luiz Poisl"
+      },
+      {
+        texto: "O bom desempenho notarial recomenda sólida formação jurídica.",
+        autor: "Antônio Augusto Firmo da Silva"
+      },
+      {
+        texto: "O notariado brasileiro exige consciência institucional para preservar sua função.",
+        autor: "Antônio Albergaria Pereira"
+      }
+    ];
+
+    const quoteTextElement = document.getElementById("quoteText");
+    const quoteAuthorElement = document.getElementById("quoteAuthor");
+    let quoteIndex = 0;
+    let letterIndex = 0;
+    let deleting = false;
+
+    function typeQuote() {
+      if (!quoteTextElement || !quoteAuthorElement) return;
+
+      const item = frasesNotariais[quoteIndex];
+      const fullText = item.texto;
+
+      if (!deleting) {
+        letterIndex += 1;
+        quoteTextElement.textContent = fullText.slice(0, letterIndex);
+        quoteAuthorElement.textContent = letterIndex === fullText.length ? item.autor : "";
+
+        if (letterIndex === fullText.length) {
+          deleting = true;
+          window.setTimeout(typeQuote, 2600);
+          return;
+        }
+
+        window.setTimeout(typeQuote, 34);
+        return;
+      }
+
+      letterIndex -= 1;
+      quoteTextElement.textContent = fullText.slice(0, letterIndex);
+      quoteAuthorElement.textContent = "";
+
+      if (letterIndex === 0) {
+        deleting = false;
+        quoteIndex = (quoteIndex + 1) % frasesNotariais.length;
+        window.setTimeout(typeQuote, 360);
+        return;
+      }
+
+      window.setTimeout(typeQuote, 12);
+    }
+
+    typeQuote();
+  </script>
+</body>
+</html>
