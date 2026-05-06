@@ -254,28 +254,95 @@ const Quote = (p) => React.createElement(Icon, { ...p },
 // Marcador discreto de visitas
 // =====================================================================
 function VisitMarker() {
-    const [contadorUrl, setContadorUrl] = useState('');
+    const [contador, setContador] = useState({
+        carregando: true,
+        valor: null,
+        fallbackUrl: ''
+    });
+
     useEffect(() => {
         if (typeof window === 'undefined')
             return;
-        const host = window.location.hostname || 'localhost';
-        const path = (window.location.pathname || '/').replace(/\/$/, '') || '/';
-        const pagina = `${host}${path}`;
-        const url = `https://hits.sh/${encodeURI(pagina)}.svg?label=visitas&color=94a3b8&labelColor=f5f5f4&style=flat-square`;
-        setContadorUrl(url);
+
+        let cancelado = false;
+
+        const fallbackHits = () => {
+            const pagina = 'portalnotarial.com.br/competencia-e-notariado';
+            return `https://hits.sh/${encodeURI(pagina)}.svg?label=visitas&color=94a3b8&labelColor=f5f5f4&style=flat-square`;
+        };
+
+        const registrarVisitaGlobal = async () => {
+            try {
+                const namespace = 'portalnotarial.com.br';
+                const chave = 'competencia-e-notariado';
+                const url = `https://api.countapi.xyz/hit/${encodeURIComponent(namespace)}/${encodeURIComponent(chave)}`;
+                const resposta = await fetch(url, { cache: 'no-store' });
+
+                if (!resposta.ok) {
+                    throw new Error('contador indisponível');
+                }
+
+                const dados = await resposta.json();
+
+                if (!cancelado && typeof dados.value === 'number') {
+                    setContador({
+                        carregando: false,
+                        valor: dados.value,
+                        fallbackUrl: ''
+                    });
+                    return;
+                }
+
+                throw new Error('resposta inválida do contador');
+            } catch (erro) {
+                if (!cancelado) {
+                    setContador({
+                        carregando: false,
+                        valor: null,
+                        fallbackUrl: fallbackHits()
+                    });
+                }
+            }
+        };
+
+        registrarVisitaGlobal();
+
+        return () => {
+            cancelado = true;
+        };
     }, []);
-    if (!contadorUrl)
-        return null;
-    return (React.createElement("span", { className: "no-print", style: {
-            display: 'inline-flex',
-            alignItems: 'center',
-            minHeight: '18px',
-            opacity: 0.48,
-            filter: 'grayscale(1)',
-            transition: 'opacity 0.2s ease'
-        }, onMouseEnter: (event) => { event.currentTarget.style.opacity = '0.78'; }, onMouseLeave: (event) => { event.currentTarget.style.opacity = '0.48'; }, title: "Marcador discreto de visitas", "aria-label": "Marcador discreto de visitas" },
-        React.createElement("img", { src: contadorUrl, alt: "visitas", loading: "lazy", referrerPolicy: "no-referrer-when-downgrade", onError: (event) => { event.currentTarget.style.display = 'none'; }, style: { height: '18px', width: 'auto' } })));
+
+    const estilo = {
+        display: 'inline-flex',
+        alignItems: 'center',
+        minHeight: '18px',
+        opacity: 0.48,
+        filter: 'grayscale(1)',
+        transition: 'opacity 0.2s ease',
+        fontSize: '11px',
+        lineHeight: '18px',
+        color: '#64748b',
+        whiteSpace: 'nowrap'
+    };
+
+    if (contador.carregando) {
+        return React.createElement("span", { className: "no-print", style: estilo, title: "Marcador discreto de visitas", "aria-label": "Marcador discreto de visitas" }, "visitas");
+    }
+
+    if (contador.valor !== null) {
+        return React.createElement("span", { className: "no-print", style: estilo, title: "Marcador discreto de visitas", "aria-label": "Marcador discreto de visitas", onMouseEnter: (event) => { event.currentTarget.style.opacity = '0.78'; }, onMouseLeave: (event) => { event.currentTarget.style.opacity = '0.48'; } },
+            "visitas ",
+            contador.valor);
+    }
+
+    if (contador.fallbackUrl) {
+        return React.createElement("span", { className: "no-print", style: estilo, title: "Marcador discreto de visitas", "aria-label": "Marcador discreto de visitas", onMouseEnter: (event) => { event.currentTarget.style.opacity = '0.78'; }, onMouseLeave: (event) => { event.currentTarget.style.opacity = '0.48'; } },
+            React.createElement("img", { src: contador.fallbackUrl, alt: "visitas", loading: "lazy", referrerPolicy: "no-referrer-when-downgrade", onError: (event) => { event.currentTarget.style.display = 'none'; }, style: { height: '18px', width: 'auto' } }));
+    }
+
+    return React.createElement("span", { className: "no-print", style: estilo, title: "Marcador discreto de visitas", "aria-label": "Marcador discreto de visitas" }, "visitas");
 }
+
 // =====================================================================
 // Lógica jurídica
 // =====================================================================
