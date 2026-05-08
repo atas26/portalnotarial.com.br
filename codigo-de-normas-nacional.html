@@ -1192,8 +1192,14 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
 
     function countTermOccurrences(hay, term) {
       if (!term) return 0;
-      const re = new RegExp('(^|\\s)' + escapeRegExp(term) + '(?=\\s|$)', 'g');
+      const re = new RegExp('(^|[^a-z0-9])' + escapeRegExp(term) + '(?=[^a-z0-9]|$)', 'g');
       return (hay.match(re) || []).length;
+    }
+
+    function hasTerm(hay, term) {
+      if (!term) return false;
+      const re = new RegExp('(^|[^a-z0-9])' + escapeRegExp(term) + '(?=[^a-z0-9]|$)');
+      return re.test(hay);
     }
 
     function recordSearchText(record) {
@@ -1241,38 +1247,37 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
 
       let matchedTerms = 0;
       for (const term of plan.strongTerms) {
-        const inNumber = number.includes(term);
-        const inChapter = chapter.includes(term);
-        const inTheme = themes.includes(term);
-        const occurrences = countTermOccurrences(hay, term) || (hay.includes(term) ? 1 : 0);
+        const inNumber = hasTerm(number, term) || number.includes(term);
+        const inChapter = hasTerm(chapter, term);
+        const inTheme = hasTerm(themes, term);
+        const occurrences = countTermOccurrences(hay, term);
         if (occurrences > 0 || inNumber || inChapter || inTheme) {
           matchedTerms += 1;
           if (inNumber) score += 220;
           if (inChapter) score += 80;
           if (inTheme) score += 55;
-          score += Math.min(occurrences, 12) * 12;
+          score += 40 + Math.min(occurrences, 12) * 12;
         }
       }
 
       let matchedRequired = 0;
       for (const term of (plan.requiredTerms || plan.strongTerms)) {
-        const occurrences = countTermOccurrences(hay, term) || (hay.includes(term) ? 1 : 0);
-        if (occurrences > 0 || number.includes(term) || chapter.includes(term) || themes.includes(term)) matchedRequired += 1;
+        const occurrences = countTermOccurrences(hay, term);
+        if (occurrences > 0 || hasTerm(number, term) || hasTerm(chapter, term) || hasTerm(themes, term)) matchedRequired += 1;
       }
       const requiredTotal = (plan.requiredTerms || plan.strongTerms).length;
       const coverage = requiredTotal ? matchedRequired / requiredTotal : 0;
       if (requiredTotal > 1) {
-        if (coverage === 1) score += 220;
-        else if (coverage >= 0.70) score += 100;
-        else if (phraseHits === 0) score = 0;
-        else score -= 60;
+        if (coverage === 1) score += 260;
+        else if (coverage >= 0.70) score += 150;
+        else if (coverage >= 0.40) score += 55;
       }
 
       if (phraseHits > 0) score += 80 + bestPhraseSize * 25;
+      if (score === 0 && matchedTerms === 0 && phraseHits === 0) return 0;
 
-      // Consulta inteligente: evita que uma busca composta vire apenas um OR amplo.
-      // Ex.: "ata notarial" prioriza a expressão; "digital ata notarial usucapião"
-      // considera a expressão "ata notarial" e exige cobertura relevante dos demais termos.
+      // Busca composta: cada termo digitado passa a participar do resultado.
+      // Registros com mais termos encontrados continuam aparecendo antes dos demais.
       return score;
     }
 
@@ -1326,23 +1331,71 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
     }
 
     function highlight(text, q) {
-      let out = escapeHtml(text);
-      if (!q) return out;
+      const raw = String(text || '');
+      if (!q) return escapeHtml(raw);
       const plan = buildSearchPlan(q);
-      const phrases = uniqueList([plan.fullPhrase, ...plan.phrases])
-        .filter(p => p && p.length > 2)
-        .sort((a, b) => b.length - a.length);
+      const candidates = uniqueList([plan.fullPhrase, ...plan.phrases, ...plan.strongTerms])
+        .filter(item => item && (item.length > 1 || /\d/.test(item)))
+        .sort((a, b) => b.length - a.length)
+        .slice(0, 30);
 
-      for (const phrase of phrases.slice(0, 10)) {
-        const re = new RegExp('(' + escapeRegExp(phrase) + ')', 'gi');
-        out = out.replace(re, '<mark>$1</mark>');
+      const normalizedChars = [];
+      const indexMap = [];
+      for (let i = 0; i < raw.length; i++) {
+        let normalizedChar = raw[i]
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[º°]/g, '')
+          .toLowerCase();
+        if (/\s/.test(normalizedChar)) normalizedChar = ' ';
+        for (const ch of normalizedChar) {
+          normalizedChars.push(ch);
+          indexMap.push(i);
+        }
+      }
+      const normalizedText = normalizedChars.join('');
+      const ranges = [];
+
+      function addRange(startNorm, endNorm) {
+        if (startNorm < 0 || endNorm <= startNorm || typeof indexMap[startNorm] === 'undefined' || typeof indexMap[endNorm - 1] === 'undefined') return;
+        const start = indexMap[startNorm];
+        const end = indexMap[endNorm - 1] + 1;
+        if (ranges.some(r => start < r.end && end > r.start)) return;
+        ranges.push({ start, end });
       }
 
-      const terms = plan.strongTerms.filter(t => t.length > 1).sort((a, b) => b.length - a.length);
-      for (const term of terms.slice(0, 10)) {
-        const re = new RegExp('(' + escapeRegExp(term) + ')', 'gi');
-        out = out.replace(re, '<mark>$1</mark>');
+      for (const candidate of candidates) {
+        const parts = normalize(candidate).split(' ').filter(Boolean);
+        if (!parts.length) continue;
+        let re;
+        if (parts.length > 1) {
+          re = new RegExp(parts.map(escapeRegExp).join('[\\s\\.,;:/()\\[\\]º°ª\\-]+'), 'g');
+        } else {
+          re = new RegExp('(^|[^a-z0-9])(' + escapeRegExp(parts[0]) + ')(?=[^a-z0-9]|$)', 'g');
+        }
+        let match;
+        while ((match = re.exec(normalizedText)) !== null) {
+          if (parts.length > 1) {
+            addRange(match.index, match.index + match[0].length);
+          } else {
+            const prefixSize = match[1] ? match[1].length : 0;
+            addRange(match.index + prefixSize, match.index + prefixSize + match[2].length);
+          }
+          if (match.index === re.lastIndex) re.lastIndex++;
+        }
       }
+
+      if (!ranges.length) return escapeHtml(raw);
+      ranges.sort((a, b) => a.start - b.start || b.end - a.end);
+      let out = '';
+      let cursor = 0;
+      for (const range of ranges) {
+        if (range.start < cursor) continue;
+        out += escapeHtml(raw.slice(cursor, range.start));
+        out += '<mark>' + escapeHtml(raw.slice(range.start, range.end)) + '</mark>';
+        cursor = range.end;
+      }
+      out += escapeHtml(raw.slice(cursor));
       return out;
     }
 
