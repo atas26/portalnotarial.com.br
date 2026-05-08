@@ -282,6 +282,11 @@
     .tag.gray { background: #f1f5f9; color: #475569; }
     .snippet { color: #334155; font-size: 15px; white-space: pre-line; margin: 10px 0 0; }
     mark { background: #fef08a; padding: 0 .14em; }
+    mark.search-mark { border-radius: 4px; padding: 0 .16em; }
+    mark.search-mark-0 { background: #fef08a; }
+    mark.search-mark-1 { background: #bbf7d0; }
+    mark.search-mark-2 { background: #bfdbfe; }
+    mark.search-mark-3 { background: #fecaca; }
     details { margin-top: 14px; border-top: 1px solid var(--line-soft); padding-top: 12px; }
     summary { cursor: pointer; color: var(--primary); font-weight: 700; font-size: 13px; }
     .full-text { margin-top: 12px; white-space: pre-line; color: #1e293b; font-size: 14px; line-height: 1.72; }
@@ -472,6 +477,10 @@
 
           <label style="display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin:4px 0 14px;">
             <input id="exactMode" type="checkbox" /> Expressão exata
+          </label>
+
+          <label style="display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin:4px 0 14px;">
+            <input id="similarMode" type="checkbox" /> Buscar termos semelhantes
           </label>
 
           <h3 style="margin-top:20px">Índice</h3>
@@ -803,6 +812,7 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       area: 'todos',
       type: 'todos',
       exact: false,
+      similar: false,
       sort: 'relevancia',
       loadedAt: null
     };
@@ -1139,15 +1149,82 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
     }
 
     const SEARCH_STOPWORDS = new Set([
-      'a','o','as','os','um','uma','uns','umas','de','da','do','das','dos','e','ou','em','no','na','nos','nas','por','para','com','sem','ao','aos','à','às','que','se','sua','seu','suas','seus','dos','das','art','artigo'
+      'a','o','as','os','um','uma','uns','umas','de','da','do','das','dos','e','ou','em','no','na','nos','nas','por','para','com','sem','ao','aos','à','às','que','se','sua','seu','suas','seus','dos','das','art','artigo','n','nr','nº','no'
     ]);
 
-    function tokenizeSearch(text) {
-      const normalized = normalize(text)
-        .replace(/\b(art)\s*[.]?\s*(\d+)/g, 'art $2')
+    function normalizeSearch(text) {
+      return normalize(text)
+        .replace(/\b(art|artigo)\s*[.]?\s*(\d+)/g, 'art $2')
         .replace(/[^a-z0-9\s-]/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
+    }
+
+    function uniqueList(values) {
+      return Array.from(new Set(values.filter(Boolean)));
+    }
+
+    const SIMILAR_TERMS = {
+      menor: ['menores'],
+      menores: ['menor'],
+      maior: ['maiores'],
+      maiores: ['maior'],
+      tabelionato: ['tabelionatos'],
+      tabelionatos: ['tabelionato'],
+      tabeliao: ['tabeliaes'],
+      tabeliaes: ['tabeliao'],
+      notario: ['notarios'],
+      notarios: ['notario'],
+      registrador: ['registradores'],
+      registradores: ['registrador'],
+      oficial: ['oficiais'],
+      oficiais: ['oficial'],
+      serventia: ['serventias'],
+      serventias: ['serventia'],
+      cartorio: ['cartorios'],
+      cartorios: ['cartorio'],
+      escritura: ['escrituras'],
+      escrituras: ['escritura'],
+      inventario: ['inventarios'],
+      inventarios: ['inventario'],
+      testamento: ['testamentos'],
+      testamentos: ['testamento'],
+      procuracao: ['procuracoes'],
+      procuracoes: ['procuracao'],
+      certidao: ['certidoes'],
+      certidoes: ['certidao'],
+      imovel: ['imoveis'],
+      imoveis: ['imovel'],
+      matricula: ['matriculas'],
+      matriculas: ['matricula'],
+      ata: ['atas'],
+      atas: ['ata'],
+      registro: ['registros'],
+      registros: ['registro'],
+      anexo: ['anexos'],
+      anexos: ['anexo'],
+      documento: ['documentos'],
+      documentos: ['documento'],
+      parte: ['partes'],
+      partes: ['parte'],
+      usuario: ['usuarios'],
+      usuarios: ['usuario'],
+      delegacao: ['delegacoes'],
+      delegacoes: ['delegacao'],
+      comunicacao: ['comunicacoes'],
+      comunicacoes: ['comunicacao'],
+      alienacao: ['alienacoes'],
+      alienacoes: ['alienacao'],
+      filiacao: ['filiacoes'],
+      filiacoes: ['filiacao'],
+      mediacao: ['mediacoes'],
+      mediacoes: ['mediacao'],
+      conciliacao: ['conciliacoes'],
+      conciliacoes: ['conciliacao']
+    };
+
+    function tokenizeSearch(text) {
+      const normalized = normalizeSearch(text);
       if (!normalized) return [];
       return uniqueList(normalized.split(' ')
         .map(term => term.trim())
@@ -1155,27 +1232,44 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
         .filter(term => !SEARCH_STOPWORDS.has(term) || /\d/.test(term)));
     }
 
-    function uniqueList(values) {
-      return Array.from(new Set(values.filter(Boolean)));
+    function expandSimilarTerm(term) {
+      const variants = new Set([term]);
+      (SIMILAR_TERMS[term] || []).forEach(v => variants.add(v));
+
+      if (!/\d/.test(term) && term.length > 2) {
+        if (term.endsWith('r')) variants.add(term + 'es');
+        else if (term.endsWith('l')) variants.add(term.slice(0, -1) + 'is');
+        else if (term.endsWith('m')) variants.add(term.slice(0, -1) + 'ns');
+        else if (!term.endsWith('s')) variants.add(term + 's');
+
+        if (term.endsWith('es') && term.length > 4) variants.add(term.slice(0, -2));
+        if (term.endsWith('is') && term.length > 4) variants.add(term.slice(0, -2) + 'l');
+        if (term.endsWith('ns') && term.length > 4) variants.add(term.slice(0, -2) + 'm');
+        if (term.endsWith('s') && term.length > 4) variants.add(term.slice(0, -1));
+      }
+
+      return uniqueList(Array.from(variants).map(normalizeSearch));
     }
 
     function buildSearchPlan(query) {
       const original = String(query || '').trim();
-      const normalized = normalize(original)
-        .replace(/\b(art)\s*[.]?\s*(\d+)/g, 'art $2')
-        .replace(/[^a-z0-9\s-]/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
+      const normalized = normalizeSearch(original);
       const terms = tokenizeSearch(original);
+      const termGroups = terms.map(term => state.similar ? expandSimilarTerm(term) : [term]);
+      const highlightTerms = uniqueList(termGroups.flat());
       return {
         raw: original,
         normalized,
         terms,
-        strongTerms: terms,
-        requiredTerms: terms,
-        phrases: normalized ? [normalized] : [],
+        termGroups,
+        highlightTerms,
         fullPhrase: normalized
       };
+    }
+
+    function containsSearchTerm(hay, term) {
+      if (!hay || !term) return false;
+      return hay.includes(term);
     }
 
     function countTermOccurrences(hay, term) {
@@ -1189,24 +1283,31 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       return count;
     }
 
-    function recordSearchText(record) {
-      return normalize([
-        record.numero,
-        record.capitulo || '',
-        record.texto,
-        (record.areas || []).join(' '),
-        (record.temas || []).join(' ')
-      ].join(' '));
-    }
-
     function recordSearchFields(record) {
       return {
-        number: normalize(record.numero),
-        chapter: normalize(record.capitulo || ''),
-        text: normalize(record.texto),
-        areas: normalize((record.areas || []).join(' ')),
-        themes: normalize((record.temas || []).join(' '))
+        number: normalizeSearch(record.numero),
+        chapter: normalizeSearch(record.capitulo || ''),
+        text: normalizeSearch(record.texto),
+        areas: normalizeSearch((record.areas || []).join(' ')),
+        themes: normalizeSearch((record.temas || []).join(' '))
       };
+    }
+
+    function recordSearchText(record) {
+      const fields = recordSearchFields(record);
+      return [fields.number, fields.chapter, fields.text, fields.areas, fields.themes].join(' ');
+    }
+
+    function matchedVariantInField(field, group) {
+      return group.find(term => containsSearchTerm(field, term)) || '';
+    }
+
+    function matchedVariantInRecord(fields, group) {
+      return matchedVariantInField(fields.number, group)
+        || matchedVariantInField(fields.chapter, group)
+        || matchedVariantInField(fields.areas, group)
+        || matchedVariantInField(fields.themes, group)
+        || matchedVariantInField(fields.text, group);
     }
 
     function scoreRecord(record, q) {
@@ -1220,26 +1321,32 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
         return hay.includes(plan.normalized) ? 100000 : 0;
       }
 
-      if (!plan.requiredTerms.length) return 1;
+      if (!plan.termGroups.length) return 1;
 
-      // Regra principal: cada novo termo digitado refina o resultado.
-      // Ex.: "inventário" -> contém inventário.
-      // Ex.: "inventário menor" -> contém inventário e menor.
-      // Ex.: "inventário menor tabelionato" -> contém os três termos.
-      const allTermsFound = plan.requiredTerms.every(term => hay.includes(term));
-      if (!allTermsFound) return 0;
+      const matchedTerms = [];
+      for (const group of plan.termGroups) {
+        const matched = matchedVariantInRecord(fields, group);
+        if (!matched) return 0;
+        matchedTerms.push(matched);
+      }
 
       let score = 0;
-      if (plan.fullPhrase && hay.includes(plan.fullPhrase)) score += 5000;
+      if (plan.fullPhrase && hay.includes(plan.fullPhrase)) score += 8000;
 
-      for (const term of plan.requiredTerms) {
-        if (fields.number.includes(term)) score += 1200;
-        if (fields.chapter.includes(term)) score += 700;
-        if (fields.areas.includes(term)) score += 550;
-        if (fields.themes.includes(term)) score += 500;
-        if (fields.text.includes(term)) score += 180;
-        score += Math.min(countTermOccurrences(hay, term), 20) * 20;
+      for (const term of matchedTerms) {
+        if (containsSearchTerm(fields.number, term)) score += 1600;
+        if (containsSearchTerm(fields.chapter, term)) score += 900;
+        if (containsSearchTerm(fields.areas, term)) score += 700;
+        if (containsSearchTerm(fields.themes, term)) score += 650;
+        if (containsSearchTerm(fields.text, term)) score += 300;
+        score += Math.min(countTermOccurrences(hay, term), 25) * 25;
       }
+
+      score += matchedTerms.length * 2000;
+      record.__searchMatchedTerms = matchedTerms.length;
+      record.__searchRequiredTerms = plan.termGroups.length;
+      record.__searchAllTerms = matchedTerms.length === plan.termGroups.length;
+      record.__searchHighlightTerms = plan.highlightTerms;
 
       return score;
     }
@@ -1247,7 +1354,11 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
     function searchRecords() {
       const q = state.query;
       const hasQuery = Boolean(String(q || '').trim());
-      let rows = state.articles.map(rec => ({ ...rec, score: scoreRecord(rec, q) }));
+      let rows = state.articles.map(rec => {
+        const row = { ...rec };
+        row.score = scoreRecord(row, q);
+        return row;
+      });
 
       if (hasQuery) rows = rows.filter(rec => rec.score > 0);
       if (state.area !== 'todos') rows = rows.filter(rec => rec.areas.includes(state.area));
@@ -1265,11 +1376,15 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       if (!q) return raw.slice(0, limit) + (raw.length > limit ? '...' : '');
 
       const plan = buildSearchPlan(q);
-      const normRaw = normalize(raw);
+      const normRaw = normalizeSearch(raw);
       let pos = -1;
-      for (const term of plan.requiredTerms) {
-        const p = normRaw.indexOf(term);
-        if (p >= 0 && (pos < 0 || p < pos)) pos = p;
+
+      if (plan.fullPhrase) pos = normRaw.indexOf(plan.fullPhrase);
+      if (pos < 0) {
+        for (const term of plan.highlightTerms) {
+          const p = normRaw.indexOf(term);
+          if (p >= 0 && (pos < 0 || p < pos)) pos = p;
+        }
       }
 
       let start = pos > 180 ? pos - 180 : 0;
@@ -1289,19 +1404,19 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
         c: '[cçCÇ]',
         n: '[nñNÑ]'
       };
-      return normalize(term).split('').map(ch => groups[ch] || escapeRegExp(ch)).join('');
+      return normalizeSearch(term).split('').map(ch => groups[ch] || escapeRegExp(ch)).join('');
     }
 
     function highlight(text, q) {
       let out = escapeHtml(text);
       const plan = buildSearchPlan(q);
-      if (!plan.requiredTerms.length) return out;
+      if (!plan.highlightTerms.length) return out;
 
-      const terms = [...plan.requiredTerms]
+      const terms = [...plan.highlightTerms]
         .filter(t => t.length > 1 || /\d/.test(t))
         .sort((a, b) => b.length - a.length);
 
-      terms.slice(0, 12).forEach((term, index) => {
+      terms.slice(0, 16).forEach((term, index) => {
         const re = new RegExp('(' + accentInsensitivePattern(term) + ')', 'gi');
         out = out.replace(re, '<mark class="search-mark search-mark-' + (index % 4) + '">$1</mark>');
       });
@@ -1328,7 +1443,7 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       const q = state.query;
       container.innerHTML = state.results.slice(0, 120).map(rec => {
         const capitulo = rec.capitulo || rec.areas[0] || 'Capítulo não identificado';
-        const tags = `<span class="tag teal">${escapeHtml(capitulo)}</span>`;
+        const tags = `<span class="tag teal">${highlight(capitulo, q)}</span>`;
         return `
           <article id="${rec.id}" class="result-card" data-id="${rec.id}">
             <div class="result-top">
@@ -1488,6 +1603,7 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       on('#filterType', 'change', e => { state.type = e.target.value; renderResults(); });
       on('#sortMode', 'change', e => { state.sort = e.target.value; renderResults(); });
       on('#exactMode', 'change', e => { state.exact = e.target.checked; renderResults(); });
+      on('#similarMode', 'change', e => { state.similar = e.target.checked; renderResults(); });
 
       on('#chips', 'click', e => {
         const chip = e.target.closest('[data-chip]');
