@@ -1216,29 +1216,56 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       ].join(' '));
     }
 
-    function scoreRecord(record, q) {
-      const plan = buildSearchPlan(q);
-      if (!plan.normalized) return 1;
-
+    function getSearchHitData(record, plan) {
       const hay = recordSearchText(record);
       const number = normalize(record.numero);
       const chapter = normalize(record.capitulo || '');
       const themes = normalize([...(record.areas || []), ...(record.temas || [])].join(' '));
+      const terms = plan.requiredTerms || plan.strongTerms || [];
+
+      const hits = terms.map(term => {
+        const inNumber = hasTerm(number, term) || number.includes(term);
+        const inChapter = hasTerm(chapter, term);
+        const inTheme = hasTerm(themes, term);
+        const occurrences = countTermOccurrences(hay, term);
+        const found = inNumber || inChapter || inTheme || occurrences > 0;
+        return { term, found, inNumber, inChapter, inTheme, occurrences };
+      });
+
+      return {
+        hay,
+        number,
+        chapter,
+        themes,
+        terms,
+        hits,
+        matchedCount: hits.filter(hit => hit.found).length,
+        allTermsFound: hits.every(hit => hit.found),
+        firstTermFound: hits.length ? hits[0].found : true
+      };
+    }
+
+    function scoreRecord(record, q, mode = 'strict') {
+      const plan = buildSearchPlan(q);
+      if (!plan.normalized) return 1;
+
+      const hitData = getSearchHitData(record, plan);
+      const { hay, number, chapter, themes, terms, hits } = hitData;
 
       if (state.exact) {
         const exactHit = hay.includes(plan.normalized) || plan.phrases.some(phrase => hay.includes(phrase));
         return exactHit ? 1000 + (number.includes(plan.normalized) ? 300 : 0) : 0;
       }
 
-      const requiredTerms = plan.requiredTerms || plan.strongTerms || [];
-      for (const term of requiredTerms) {
-        const found = hasTerm(hay, term) || hasTerm(number, term) || number.includes(term) || hasTerm(chapter, term) || hasTerm(themes, term);
-        if (!found) return 0;
-      }
+      if (mode === 'strict' && !hitData.allTermsFound) return 0;
+      if (mode === 'fallback' && !hitData.firstTermFound) return 0;
 
       let score = 0;
       let phraseHits = 0;
       let bestPhraseSize = 0;
+
+      if (hitData.allTermsFound) score += 900 + terms.length * 120;
+      else score += hitData.matchedCount * 220;
 
       if (plan.fullPhrase && hay.includes(plan.fullPhrase)) {
         score += 420 + Math.min(plan.terms.length * 30, 180);
@@ -1255,18 +1282,15 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
         }
       }
 
-      for (const term of requiredTerms) {
-        const inNumber = hasTerm(number, term) || number.includes(term);
-        const inChapter = hasTerm(chapter, term);
-        const inTheme = hasTerm(themes, term);
-        const occurrences = countTermOccurrences(hay, term);
-        if (inNumber) score += 220;
-        if (inChapter) score += 80;
-        if (inTheme) score += 55;
-        score += 40 + Math.min(occurrences, 12) * 12;
+      for (const hit of hits) {
+        if (!hit.found) continue;
+        if (hit.inNumber) score += 220;
+        if (hit.inChapter) score += 80;
+        if (hit.inTheme) score += 55;
+        score += 40 + Math.min(hit.occurrences, 12) * 12;
       }
 
-      if (requiredTerms.length > 1) score += 260 + requiredTerms.length * 40;
+      if (terms.length > 1 && hitData.allTermsFound) score += 260 + terms.length * 40;
       if (phraseHits > 0) score += 80 + bestPhraseSize * 25;
 
       return score;
@@ -1275,15 +1299,22 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
     function searchRecords() {
       const q = state.query;
       const hasQuery = Boolean(String(q || '').trim());
-      let rows = state.articles.map(rec => ({ ...rec, score: scoreRecord(rec, q) }));
+      let base = state.articles.slice();
 
-      if (hasQuery) rows = rows.filter(rec => rec.score > 0);
-      if (state.area !== 'todos') rows = rows.filter(rec => rec.areas.includes(state.area));
-      if (state.type !== 'todos') rows = rows.filter(rec => rec.tipo === state.type);
+      if (state.area !== 'todos') base = base.filter(rec => rec.areas.includes(state.area));
+      if (state.type !== 'todos') base = base.filter(rec => rec.tipo === state.type);
 
-      // Busca inteligente: quando há termo digitado, a ordenação principal passa a
-      // ser por relevância. Isso evita que a busca por "ata notarial" traga antes
-      // artigos antigos apenas por estarem no começo da norma.
+      let rows;
+      if (hasQuery) {
+        rows = base.map(rec => ({ ...rec, score: scoreRecord(rec, q, 'strict') })).filter(rec => rec.score > 0);
+
+        if (!rows.length && !state.exact) {
+          rows = base.map(rec => ({ ...rec, score: scoreRecord(rec, q, 'fallback') })).filter(rec => rec.score > 0);
+        }
+      } else {
+        rows = base.map(rec => ({ ...rec, score: 1 }));
+      }
+
       if (hasQuery) rows.sort((a,b) => b.score - a.score || a.ordem - b.ordem);
       else if (state.sort === 'numero') rows.sort((a,b) => a.ordem - b.ordem);
       else rows.sort((a,b) => a.ordem - b.ordem);
