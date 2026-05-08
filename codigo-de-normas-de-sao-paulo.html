@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="pt-BR">
@@ -278,6 +279,11 @@
     .tag.gray { background: #f1f5f9; color: #475569; }
     .snippet { color: #334155; font-size: 15px; white-space: pre-line; margin: 10px 0 0; }
     mark { background: #fef08a; padding: 0 .14em; }
+    mark.search-mark { border-radius: 4px; padding: 0 .16em; }
+    mark.search-mark-0 { background: #fef08a; }
+    mark.search-mark-1 { background: #bbf7d0; }
+    mark.search-mark-2 { background: #bfdbfe; }
+    mark.search-mark-3 { background: #fecaca; }
     details { margin-top: 14px; border-top: 1px solid var(--line-soft); padding-top: 12px; }
     summary { cursor: pointer; color: var(--primary); font-weight: 700; font-size: 13px; }
     .full-text { margin-top: 12px; white-space: pre-line; color: #1e293b; font-size: 14px; line-height: 1.72; }
@@ -484,6 +490,9 @@
 <label style="display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin:4px 0 14px;">
 <input id="exactMode" type="checkbox"/> Expressão exata
           </label>
+<label style="display:flex; gap:8px; align-items:center; font-size:13px; color:var(--muted); margin:4px 0 14px;">
+<input id="similarMode" type="checkbox"/> Buscar termos semelhantes
+          </label>
 <h3 style="margin-top:20px">Busca inteligente</h3>
 <p class="help">A busca aceita mais de um termo. Para consultas compostas, combine expressões como “ata notarial usucapião”, “alienação fiduciária intimação” ou “emolumentos recibo”.</p>
 </div>
@@ -620,6 +629,7 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       area: 'todos',
       type: 'todos',
       exact: false,
+      similar: false,
       sort: 'numero',
       focusId: null,
       loadedAt: null
@@ -988,184 +998,204 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
     }
 
     const SEARCH_STOPWORDS = new Set([
-      'a','o','as','os','um','uma','uns','umas','de','da','do','das','dos','e','ou','em','no','na','nos','nas','por','para','com','sem','ao','aos','à','às','que','se','sua','seu','suas','seus','art','artigo','cap','capitulo','capítulo'
+      'a','o','as','os','um','uma','uns','umas','de','da','do','das','dos','e','ou','em','no','na','nos','nas','por','para','com','sem','ao','aos','à','às','que','se','sua','seu','suas','seus','dos','das','art','artigo','n','nr','nº','no'
     ]);
 
-    function tokenizeSearch(text) {
-      const normalized = normalize(text)
-        .replace(/[^a-z0-9\s.-]/g, ' ')
-        .replace(/\b(art|artigo|item|cap|capitulo)\s*[.]?\s*(\d+)/g, '$1 $2')
+    function normalizeSearch(text) {
+      return normalize(text)
+        .replace(/\b(art|artigo)\s*[.]?\s*(\d+)/g, 'art $2')
+        .replace(/[^a-z0-9\s-]/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
-      return normalized ? normalized.split(' ').filter(Boolean) : [];
     }
 
     function uniqueList(values) {
       return Array.from(new Set(values.filter(Boolean)));
     }
 
-    function termVariants(term) {
-      const value = normalize(term);
-      const variants = new Set([value]);
-      if (!value || value.length < 3) return Array.from(variants);
+    const SIMILAR_TERMS = {
+      menor: ['menores'],
+      menores: ['menor'],
+      maior: ['maiores'],
+      maiores: ['maior'],
+      tabelionato: ['tabelionatos'],
+      tabelionatos: ['tabelionato'],
+      tabeliao: ['tabeliaes'],
+      tabeliaes: ['tabeliao'],
+      notario: ['notarios'],
+      notarios: ['notario'],
+      registrador: ['registradores'],
+      registradores: ['registrador'],
+      oficial: ['oficiais'],
+      oficiais: ['oficial'],
+      serventia: ['serventias'],
+      serventias: ['serventia'],
+      cartorio: ['cartorios'],
+      cartorios: ['cartorio'],
+      escritura: ['escrituras'],
+      escrituras: ['escritura'],
+      inventario: ['inventarios'],
+      inventarios: ['inventario'],
+      testamento: ['testamentos'],
+      testamentos: ['testamento'],
+      procuracao: ['procuracoes'],
+      procuracoes: ['procuracao'],
+      certidao: ['certidoes'],
+      certidoes: ['certidao'],
+      imovel: ['imoveis'],
+      imoveis: ['imovel'],
+      matricula: ['matriculas'],
+      matriculas: ['matricula'],
+      ata: ['atas'],
+      atas: ['ata'],
+      registro: ['registros'],
+      registros: ['registro'],
+      anexo: ['anexos'],
+      anexos: ['anexo'],
+      documento: ['documentos'],
+      documentos: ['documento'],
+      parte: ['partes'],
+      partes: ['parte'],
+      usuario: ['usuarios'],
+      usuarios: ['usuario'],
+      delegacao: ['delegacoes'],
+      delegacoes: ['delegacao'],
+      comunicacao: ['comunicacoes'],
+      comunicacoes: ['comunicacao'],
+      alienacao: ['alienacoes'],
+      alienacoes: ['alienacao'],
+      filiacao: ['filiacoes'],
+      filiacoes: ['filiacao'],
+      mediacao: ['mediacoes'],
+      mediacoes: ['mediacao'],
+      conciliacao: ['conciliacoes'],
+      conciliacoes: ['conciliacao']
+    };
 
-      if (value.endsWith('s') && value.length > 3) variants.add(value.slice(0, -1));
-      if (value.endsWith('ao')) variants.add(value.slice(0, -2) + 'oes');
-      if (value.endsWith('oes')) variants.add(value.slice(0, -3) + 'ao');
-      if (value.endsWith('l')) variants.add(value.slice(0, -1) + 'is');
-      if (value.endsWith('is') && value.length > 3) variants.add(value.slice(0, -2) + 'l');
-      if (value.endsWith('ico')) variants.add(value.slice(0, -3) + 'icos');
-      if (value.endsWith('ica')) variants.add(value.slice(0, -3) + 'icas');
-
-      return Array.from(variants).filter(v => v && v.length > 1);
+    function tokenizeSearch(text) {
+      const normalized = normalizeSearch(text);
+      if (!normalized) return [];
+      return uniqueList(normalized.split(' ')
+        .map(term => term.trim())
+        .filter(term => term && (term.length > 1 || /\d/.test(term)))
+        .filter(term => !SEARCH_STOPWORDS.has(term) || /\d/.test(term)));
     }
 
-    function variantRegex(variant) {
-      return new RegExp('(^|[^a-z0-9])' + escapeRegExp(variant) + '(?=[^a-z0-9]|$)', 'g');
-    }
+    function expandSimilarTerm(term) {
+      const variants = new Set([term]);
+      (SIMILAR_TERMS[term] || []).forEach(v => variants.add(v));
 
-    function includesVariant(hay, term) {
-      return termVariants(term).some(variant => {
-        if (variant.length <= 4 || /\d/.test(variant)) return variantRegex(variant).test(hay);
-        return hay.includes(variant);
-      });
-    }
+      if (!/\d/.test(term) && term.length > 2) {
+        if (term.endsWith('r')) variants.add(term + 'es');
+        else if (term.endsWith('l')) variants.add(term.slice(0, -1) + 'is');
+        else if (term.endsWith('m')) variants.add(term.slice(0, -1) + 'ns');
+        else if (!term.endsWith('s')) variants.add(term + 's');
 
-    function countVariantOccurrences(hay, term) {
-      let total = 0;
-      for (const variant of termVariants(term)) {
-        const matches = hay.match(variantRegex(variant));
-        total += matches ? matches.length : 0;
+        if (term.endsWith('es') && term.length > 4) variants.add(term.slice(0, -2));
+        if (term.endsWith('is') && term.length > 4) variants.add(term.slice(0, -2) + 'l');
+        if (term.endsWith('ns') && term.length > 4) variants.add(term.slice(0, -2) + 'm');
+        if (term.endsWith('s') && term.length > 4) variants.add(term.slice(0, -1));
       }
-      return total;
+
+      return uniqueList(Array.from(variants).map(normalizeSearch));
     }
 
     function buildSearchPlan(query) {
       const original = String(query || '').trim();
-      const normalized = normalize(original);
-      const quoted = [];
-      original.replace(/[“”\"]([^“”\"]+)[“”\"]/g, (_, phrase) => {
-        const p = normalize(phrase);
-        if (p) quoted.push(p);
-        return _;
-      });
-
-      const terms = tokenizeSearch(original).filter(term => term.length > 1 || /\d/.test(term));
-      const strongTerms = terms.filter(term => !SEARCH_STOPWORDS.has(term) || /\d/.test(term));
-      const baseTerms = strongTerms.length ? strongTerms : terms;
-      const phrases = [];
-
-      for (let size = Math.min(5, terms.length); size >= 2; size--) {
-        for (let i = 0; i <= terms.length - size; i++) {
-          const slice = terms.slice(i, i + size);
-          const useful = slice.some(term => !SEARCH_STOPWORDS.has(term) || /\d/.test(term));
-          if (useful) phrases.push(slice.join(' '));
-        }
-      }
-
-      const softTerms = new Set(['digital','digitais','eletronico','eletronica','eletronicos','eletronicas','online','remoto','remota','virtual','virtuais']);
-      const requiredTerms = baseTerms.length > 2 ? baseTerms.filter(term => !softTerms.has(term)) : baseTerms;
-
+      const normalized = normalizeSearch(original);
+      const terms = tokenizeSearch(original);
+      const termGroups = terms.map(term => state.similar ? expandSimilarTerm(term) : [term]);
+      const highlightTerms = uniqueList(termGroups.flat());
       return {
         raw: original,
         normalized,
-        terms: uniqueList(terms),
-        strongTerms: uniqueList(baseTerms),
-        requiredTerms: uniqueList(requiredTerms.length ? requiredTerms : baseTerms),
-        phrases: uniqueList([...quoted, ...phrases]),
+        terms,
+        termGroups,
+        highlightTerms,
         fullPhrase: normalized
       };
     }
 
+    function containsSearchTerm(hay, term) {
+      if (!hay || !term) return false;
+      return hay.includes(term);
+    }
+
     function countTermOccurrences(hay, term) {
-      return countVariantOccurrences(hay, term);
+      if (!hay || !term) return 0;
+      let count = 0;
+      let pos = hay.indexOf(term);
+      while (pos !== -1) {
+        count += 1;
+        pos = hay.indexOf(term, pos + Math.max(term.length, 1));
+      }
+      return count;
+    }
+
+    function recordSearchFields(record) {
+      return {
+        number: normalizeSearch(record.numero),
+        chapter: normalizeSearch(record.capitulo || ''),
+        text: normalizeSearch(record.texto),
+        areas: normalizeSearch((record.areas || []).join(' ')),
+        themes: normalizeSearch((record.temas || []).join(' '))
+      };
     }
 
     function recordSearchText(record) {
-      return normalize([
-        record.numero,
-        record.capitulo || '',
-        record.secao || '',
-        record.texto,
-        (record.areas || []).join(' '),
-        (record.temas || []).join(' ')
-      ].join(' '));
+      const fields = recordSearchFields(record);
+      return [fields.number, fields.chapter, fields.text, fields.areas, fields.themes].join(' ');
+    }
+
+    function matchedVariantInField(field, group) {
+      return group.find(term => containsSearchTerm(field, term)) || '';
+    }
+
+    function matchedVariantInRecord(fields, group) {
+      return matchedVariantInField(fields.number, group)
+        || matchedVariantInField(fields.chapter, group)
+        || matchedVariantInField(fields.areas, group)
+        || matchedVariantInField(fields.themes, group)
+        || matchedVariantInField(fields.text, group);
     }
 
     function scoreRecord(record, q) {
       const plan = buildSearchPlan(q);
       if (!plan.normalized) return 1;
 
-      const hay = recordSearchText(record);
-      const number = normalize(record.numero);
-      const chapter = normalize(record.capitulo || '');
-      const section = normalize(record.secao || '');
-      const themes = normalize([...(record.areas || []), ...(record.temas || [])].join(' '));
+      const fields = recordSearchFields(record);
+      const hay = [fields.number, fields.chapter, fields.text, fields.areas, fields.themes].join(' ');
 
       if (state.exact) {
-        const exactHit = hay.includes(plan.normalized) || plan.phrases.some(phrase => hay.includes(phrase));
-        return exactHit ? 1000 + (number.includes(plan.normalized) ? 300 : 0) : 0;
+        return hay.includes(plan.normalized) ? 100000 : 0;
+      }
+
+      if (!plan.termGroups.length) return 1;
+
+      const matchedTerms = [];
+      for (const group of plan.termGroups) {
+        const matched = matchedVariantInRecord(fields, group);
+        if (!matched) return 0;
+        matchedTerms.push(matched);
       }
 
       let score = 0;
-      let phraseHits = 0;
-      let bestPhraseSize = 0;
-      const fullPhraseHit = Boolean(plan.fullPhrase && hay.includes(plan.fullPhrase));
+      if (plan.fullPhrase && hay.includes(plan.fullPhrase)) score += 8000;
 
-      if (fullPhraseHit) {
-        score += 520 + Math.min(plan.terms.length * 35, 210);
+      for (const term of matchedTerms) {
+        if (containsSearchTerm(fields.number, term)) score += 1600;
+        if (containsSearchTerm(fields.chapter, term)) score += 900;
+        if (containsSearchTerm(fields.areas, term)) score += 700;
+        if (containsSearchTerm(fields.themes, term)) score += 650;
+        if (containsSearchTerm(fields.text, term)) score += 300;
+        score += Math.min(countTermOccurrences(hay, term), 25) * 25;
       }
 
-      for (const phrase of plan.phrases) {
-        if (!phrase || phrase === plan.fullPhrase) continue;
-        if (hay.includes(phrase)) {
-          const size = phrase.split(' ').length;
-          phraseHits += 1;
-          bestPhraseSize = Math.max(bestPhraseSize, size);
-          score += 150 + (size * 45);
-          if (chapter.includes(phrase) || section.includes(phrase) || themes.includes(phrase)) score += 85;
-        }
-      }
-
-      let matchedTerms = 0;
-      for (const term of plan.strongTerms) {
-        const inNumber = includesVariant(number, term);
-        const inChapter = includesVariant(chapter, term);
-        const inSection = includesVariant(section, term);
-        const inTheme = includesVariant(themes, term);
-        const occurrences = countVariantOccurrences(hay, term) || (includesVariant(hay, term) ? 1 : 0);
-        if (occurrences > 0 || inNumber || inChapter || inSection || inTheme) {
-          matchedTerms += 1;
-          if (inNumber) score += 240;
-          if (inChapter) score += 90;
-          if (inSection) score += 65;
-          if (inTheme) score += 60;
-          score += Math.min(occurrences, 14) * 14;
-        }
-      }
-
-      let matchedRequired = 0;
-      for (const term of (plan.requiredTerms || plan.strongTerms)) {
-        if (countVariantOccurrences(hay, term) || includesVariant(number, term) || includesVariant(chapter, term) || includesVariant(section, term) || includesVariant(themes, term)) {
-          matchedRequired += 1;
-        }
-      }
-
-      if (phraseHits > 0) score += 100 + bestPhraseSize * 30;
-      if (matchedTerms > 1) score += matchedTerms * 18;
-
-      const requiredTotal = (plan.requiredTerms || plan.strongTerms).length;
-      const coverage = requiredTotal ? matchedRequired / requiredTotal : 0;
-
-      if (requiredTotal > 1) {
-        const phraseWithContext = (fullPhraseHit || phraseHits > 0) && coverage >= 0.5;
-        const enoughCoverage = coverage === 1 || (requiredTotal >= 4 && coverage >= 0.75);
-
-        if (coverage === 1) score += 260;
-        else if (phraseWithContext) score += 95;
-        else if (enoughCoverage) score += 90;
-        else score = 0;
-      }
+      score += matchedTerms.length * 2000;
+      record.__searchMatchedTerms = matchedTerms.length;
+      record.__searchRequiredTerms = plan.termGroups.length;
+      record.__searchAllTerms = matchedTerms.length === plan.termGroups.length;
+      record.__searchHighlightTerms = plan.highlightTerms;
 
       return score;
     }
@@ -1173,16 +1203,19 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
     function searchRecords() {
       const q = state.query;
       const hasQuery = Boolean(String(q || '').trim());
-      let rows = state.articles.map(rec => ({ ...rec, score: scoreRecord(rec, q) }));
+      let rows = state.articles.map(rec => {
+        const row = { ...rec };
+        row.score = scoreRecord(row, q);
+        return row;
+      });
 
       if (hasQuery) rows = rows.filter(rec => rec.score > 0);
       if (state.area !== 'todos') rows = rows.filter(rec => rec.areas.includes(state.area));
       if (state.type !== 'todos') rows = rows.filter(rec => rec.tipo === state.type);
 
-      // Por padrão, a busca é apresentada na ordem crescente dos capítulos.
-      // A opção de relevância permanece disponível para uso manual.
-      if (hasQuery && state.sort === 'relevancia') rows.sort((a, b) => b.score - a.score || compareNormativeOrder(a, b));
-      else rows.sort(compareNormativeOrder);
+      if (hasQuery) rows.sort((a,b) => b.score - a.score || a.ordem - b.ordem);
+      else if (state.sort === 'numero') rows.sort((a,b) => a.ordem - b.ordem);
+      else rows.sort((a,b) => a.ordem - b.ordem);
 
       return rows;
     }
@@ -1192,19 +1225,12 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       if (!q) return raw.slice(0, limit) + (raw.length > limit ? '...' : '');
 
       const plan = buildSearchPlan(q);
-      const normRaw = normalize(raw);
-      let pos = plan.fullPhrase ? normRaw.indexOf(plan.fullPhrase) : -1;
+      const normRaw = normalizeSearch(raw);
+      let pos = -1;
 
+      if (plan.fullPhrase) pos = normRaw.indexOf(plan.fullPhrase);
       if (pos < 0) {
-        const orderedPhrases = [...plan.phrases].sort((a, b) => b.length - a.length);
-        for (const phrase of orderedPhrases) {
-          const p = normRaw.indexOf(phrase);
-          if (p >= 0 && (pos < 0 || p < pos)) pos = p;
-        }
-      }
-
-      if (pos < 0) {
-        for (const term of plan.strongTerms) {
+        for (const term of plan.highlightTerms) {
           const p = normRaw.indexOf(term);
           if (p >= 0 && (pos < 0 || p < pos)) pos = p;
         }
@@ -1217,27 +1243,35 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       return snippet;
     }
 
-    function highlight(text, q) {
-      let out = escapeHtml(text);
-      if (!q) return out;
-      const plan = buildSearchPlan(q);
-      const phrases = uniqueList([plan.fullPhrase, ...plan.phrases])
-        .filter(p => p && p.length > 2)
-        .sort((a, b) => b.length - a.length);
-
-      for (const phrase of phrases.slice(0, 10)) {
-        const re = new RegExp('(' + escapeRegExp(phrase) + ')', 'gi');
-        out = out.replace(re, '<mark>$1</mark>');
-      }
-
-      const terms = plan.strongTerms.filter(t => t.length > 1).sort((a, b) => b.length - a.length);
-      for (const term of terms.slice(0, 10)) {
-        const re = new RegExp('(' + escapeRegExp(term) + ')', 'gi');
-        out = out.replace(re, '<mark>$1</mark>');
-      }
-      return out;
+    function accentInsensitivePattern(term) {
+      const groups = {
+        a: '[aáàâãäåAÁÀÂÃÄÅ]',
+        e: '[eéèêëEÉÈÊË]',
+        i: '[iíìîïIÍÌÎÏ]',
+        o: '[oóòôõöOÓÒÔÕÖ]',
+        u: '[uúùûüUÚÙÛÜ]',
+        c: '[cçCÇ]',
+        n: '[nñNÑ]'
+      };
+      return normalizeSearch(term).split('').map(ch => groups[ch] || escapeRegExp(ch)).join('');
     }
 
+    function highlight(text, q) {
+      let out = escapeHtml(text);
+      const plan = buildSearchPlan(q);
+      if (!plan.highlightTerms.length) return out;
+
+      const terms = [...plan.highlightTerms]
+        .filter(t => t.length > 1 || /\d/.test(t))
+        .sort((a, b) => b.length - a.length);
+
+      terms.slice(0, 16).forEach((term, index) => {
+        const re = new RegExp('(' + accentInsensitivePattern(term) + ')', 'gi');
+        out = out.replace(re, '<mark class="search-mark search-mark-' + (index % 4) + '">$1</mark>');
+      });
+
+      return out;
+    }
 
     function formatFootnoteRefs(html) {
       return String(html || '').replace(/\[(\d{4})\]/g, '<sup class="footnote-ref">$1</sup>');
@@ -1515,6 +1549,7 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       on('#filterType', 'change', e => { state.type = e.target.value; state.focusId = null; renderResults(); });
       on('#sortMode', 'change', e => { state.sort = e.target.value; state.focusId = null; renderResults(); });
       on('#exactMode', 'change', e => { state.exact = e.target.checked; state.focusId = null; renderResults(); });
+      on('#similarMode', 'change', e => { state.similar = e.target.checked; state.focusId = null; renderResults(); });
 
       on('#chips', 'click', e => {
         const chip = e.target.closest('[data-chip]');
