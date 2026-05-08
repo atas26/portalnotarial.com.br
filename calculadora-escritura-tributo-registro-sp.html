@@ -427,13 +427,21 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,
                 <input type="radio" name="tipoTributo" value="itcmd" />
                 <span><strong>Não onerosa</strong><small>ITCMD estadual</small></span>
               </label>
+              <label class="radio-card">
+                <input type="radio" name="tipoTributo" value="itbi_isento" />
+                <span><strong>Isenção de ITBI</strong><small>Tributo isento</small></span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="tipoTributo" value="itcmd_isento" />
+                <span><strong>Isenção de ITCMD</strong><small>Tributo isento</small></span>
+              </label>
             </div>
           </div>
 
           <div class="form-field" id="campoAliquotaITBI">
             <label for="aliquotaITBI">Alíquota do ITBI municipal</label>
             <input id="aliquotaITBI" inputmode="decimal" autocomplete="off" placeholder="Ex.: 3" />
-            <span class="hint">Preencha apenas o número. Exemplo: 3 para 3%.</span>
+            <span class="hint">Preencha apenas o número. Exemplo: 3, caso a alíquota seja 3%.</span>
           </div>
 
           <div class="form-field hidden" id="campoAliquotaITCMD">
@@ -686,10 +694,21 @@ function calcular(rolar = true){
     criterioTributo = `ITCMD estadual: ${formatPercentual(aliquota)}`;
   }
 
+  if (tipo === 'itbi_isento') {
+    tributo = 0;
+    criterioTributo = 'ITBI isento';
+  }
+
+  if (tipo === 'itcmd_isento') {
+    tributo = 0;
+    criterioTributo = 'ITCMD isento';
+  }
+
+  const tributoIsento = tipo === 'itbi_isento' || tipo === 'itcmd_isento';
   const total = escritura + tributo + registro;
 
   ultimoResultado = {
-    valorBase, escritura, tributo, registro, total,
+    valorBase, escritura, tributo, registro, total, tributoIsento,
     tipo, criterioTributo,
     criterioEscritura: `Tabela de escritura: ${faixaEscritura.rotulo}`,
     criterioRegistro: `Tabela de registro: ${faixaRegistro.rotulo}`
@@ -702,7 +721,7 @@ function calcular(rolar = true){
 function renderResultado(r){
   el('valorResultado').textContent = formatMoeda(r.valorBase);
   el('escrituraResultado').textContent = formatMoeda(r.escritura);
-  el('tributoResultado').textContent = formatMoeda(r.tributo);
+  el('tributoResultado').textContent = r.tributoIsento ? 'Isento' : formatMoeda(r.tributo);
   el('registroResultado').textContent = formatMoeda(r.registro);
   el('totalResultado').textContent = formatMoeda(r.total);
   el('totalLinhaResultado').textContent = formatMoeda(r.total);
@@ -746,7 +765,7 @@ async function copiarResultado(){
     'Calculadora de escritura, tributo e registro',
     `Valor base: ${formatMoeda(r.valorBase)}`,
     `Escritura: ${formatMoeda(r.escritura)} (${r.criterioEscritura})`,
-    `Tributo: ${formatMoeda(r.tributo)} (${r.criterioTributo})`,
+    `Tributo: ${r.tributoIsento ? 'Isento' : formatMoeda(r.tributo)} (${r.criterioTributo})`,
     `Registro: ${formatMoeda(r.registro)} (${r.criterioRegistro})`,
     `Total estimado: ${formatMoeda(r.total)}`,
     'Observação: valores meramente estimativos.'
