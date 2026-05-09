@@ -458,7 +458,7 @@
 </div>
 </div>
 <div class="pn-note">Para uso formal, confira a versão vigente publicada pelos canais oficiais do Tribunal de Justiça de São Paulo e da Corregedoria Geral da Justiça.</div>
-<span class="pn-meta">Última atualização indicada na base automatizada: aguardando carregamento.</span>
+<span class="pn-meta">Base atualizada automaticamente em: aguardando carregamento.</span>
 </section>
 
 <section class="layout">
@@ -1772,7 +1772,7 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       const dateLabel = formatBaseDate(payload.updatedAt) || '-';
       const source = payload.source || DATA_URL;
       document.querySelectorAll('.pn-meta').forEach(el => {
-        el.textContent = `Última atualização indicada na base automatizada: ${dateLabel}${total ? ' · ' + total + ' itens' : ''}.`;
+        el.textContent = `Base atualizada automaticamente em: ${dateLabel}.`;
       });
       const footerInfo = document.querySelector('.footer-row > span:first-child');
       if (footerInfo) {
