@@ -537,7 +537,7 @@
 </main>
 <footer class="footer">
 <div class="wrap footer-row">
-<span>Ferramenta de estudo e consulta. Não substitui a conferência da redação oficial vigente. Base carregada automaticamente de dados/normas-sp.json.</span>
+<span>Base atualizada automaticamente: aguardando carregamento.</span>
 <span class="footer-support">
         Projeto apoiado por <a href="https://escriturapublica.substack.com/" rel="noopener noreferrer" target="_blank">Escritura Pública</a>
 <span aria-label="Marcador discreto de visitas" class="visit-marker" id="visitMarker" title="Marcador discreto de visitas"><span class="visit-fallback">visitas</span></span>
@@ -552,7 +552,7 @@
     const DATA_URL = 'dados/normas-sp.json';
     const BASE_LABEL = 'Normas da Corregedoria de São Paulo';
     const DEFAULT_BASE_DATE = 'base extraída do PDF oficial do TJSP';
-    const FOOTER_BASE_TEXT = 'Ferramenta de estudo e consulta. Não substitui a conferência da redação oficial vigente. Base carregada automaticamente de dados/normas-sp.json.';
+    const FOOTER_BASE_TEXT = 'Base atualizada automaticamente:';
     const CORS_PROXY_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(OFFICIAL_PAGE_URL);
     const STORAGE_KEY = 'prov149_artigos_v6_hierarquia';
     const FAV_KEY = 'normas_sp_favoritos_v1_estudo';
@@ -1776,7 +1776,7 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       });
       const footerInfo = document.querySelector('.footer-row > span:first-child');
       if (footerInfo) {
-        footerInfo.textContent = `${FOOTER_BASE_TEXT} Última carga: ${dateLabel}${total ? ' · ' + total + ' itens' : ''}.`;
+        footerInfo.textContent = `${FOOTER_BASE_TEXT} ${dateLabel}.`;
       }
       const updated = $('#statUpdated');
       if (updated) updated.textContent = dateLabel;
