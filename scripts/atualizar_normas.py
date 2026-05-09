@@ -16,15 +16,16 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_OWNER = os.getenv("GITHUB_OWNER", "atas26")
 GITHUB_REPO = os.getenv("GITHUB_REPO", "ferramentas-notariais")
 GITHUB_BRANCH = os.getenv("GITHUB_BRANCH", "main")
+PARSER_VERSION = "cnj-hierarchy-v2"
 
 TJSP_URL = os.getenv(
     "TJSP_URL",
-    "https://api.tjsp.jus.br/Handlers/Handler/FileFetch.ashx?codigo=179577"
+    "https://api.tjsp.jus.br/Handlers/Handler/FileFetch.ashx?codigo=179577",
 )
 
 CNJ_PAGE_URL = os.getenv(
     "CNJ_PAGE_URL",
-    "https://atos.cnj.jus.br/atos/detalhar/5243"
+    "https://atos.cnj.jus.br/atos/detalhar/5243",
 )
 
 HEADERS = {
@@ -47,8 +48,9 @@ def baixar_arquivo(url):
 
 def descobrir_pdf_compilado_cnj():
     print("Procurando o PDF de Texto Compilado do CNJ...")
-    html = requests.get(CNJ_PAGE_URL, headers=HEADERS, timeout=120).text
-    soup = BeautifulSoup(html, "html.parser")
+    resposta = requests.get(CNJ_PAGE_URL, headers=HEADERS, timeout=120)
+    resposta.raise_for_status()
+    soup = BeautifulSoup(resposta.text, "html.parser")
 
     for link in soup.find_all("a"):
         texto = link.get_text(" ", strip=True)
@@ -57,6 +59,13 @@ def descobrir_pdf_compilado_cnj():
         if "Texto Compilado" in texto and href:
             pdf_url = urljoin(CNJ_PAGE_URL, href)
             print(f"PDF compilado localizado: {pdf_url}")
+            return pdf_url
+
+    for link in soup.find_all("a"):
+        href = link.get("href", "")
+        if href.lower().endswith(".pdf"):
+            pdf_url = urljoin(CNJ_PAGE_URL, href)
+            print(f"PDF localizado por extensão: {pdf_url}")
             return pdf_url
 
     raise RuntimeError("Não foi possível localizar o link Texto Compilado na página do CNJ.")
@@ -104,7 +113,7 @@ def parece_nota_sp(linha):
     return bool(
         re.match(
             r"^\d{1,4}\s+(Prov\.|Provs\.|L\.|Lei|LC|DL|D\.|CJE|RITJ|Proc\.|Com\.|Res\.|Art\.)",
-            linha
+            linha,
         )
     )
 
@@ -115,6 +124,7 @@ def formatar_paragrafos(linhas):
 
     inicios = (
         "§",
+        "Parágrafo único",
         "I ",
         "II ",
         "III ",
@@ -127,6 +137,9 @@ def formatar_paragrafos(linhas):
         "X ",
         "XI ",
         "XII ",
+        "XIII ",
+        "XIV ",
+        "XV ",
         "a)",
         "b)",
         "c)",
@@ -342,13 +355,93 @@ def ordem_artigo(numero):
     return base
 
 
+def eh_linha_de_hierarquia_cnj(linha):
+    return bool(
+        re.match(r"^PARTE\s+", linha, re.I)
+        or re.match(r"^LIVRO\s+[IVXLCDM]+\b", linha, re.I)
+        or re.match(r"^T[ÍI]TULO\s+[IVXLCDM]+\b", linha, re.I)
+        or re.match(r"^CAP[ÍI]TULO\s+[IVXLCDM]+\b", linha, re.I)
+        or re.match(r"^Seç[ãa]o\s+[IVXLCDM]+\b", linha, re.I)
+        or re.match(r"^Subseç[ãa]o\s+[IVXLCDM]+\b", linha, re.I)
+    )
+
+
+def eh_titulo_descritivo_cnj(linha):
+    if not linha:
+        return False
+    if re.match(r"^Art\.\s*\d+", linha):
+        return False
+    if eh_linha_de_hierarquia_cnj(linha):
+        return False
+    if re.match(r"^\d+$", linha):
+        return False
+    if len(linha) > 120:
+        return False
+    return True
+
+
+def combinar_heading(numero, titulo):
+    numero = str(numero or "").strip()
+    titulo = str(titulo or "").strip()
+    if numero and titulo:
+        return f"{numero} - {titulo}"
+    return numero or titulo
+
+
+def estrutura_cnj(h):
+    linhas = []
+
+    def add(text, tipo):
+        text = str(text or "").strip()
+        if text:
+            linhas.append({"text": text, "type": tipo})
+
+    add(h.get("parte"), "upper")
+    add(h.get("livro"), "upper")
+    add(h.get("livroTitulo"), "title")
+    add(h.get("titulo"), "upper")
+    add(h.get("tituloTitulo"), "title")
+    add(h.get("capituloNumero"), "upper")
+    add(h.get("capituloTitulo"), "title")
+    add(h.get("secao"), "section")
+    add(h.get("secaoTitulo"), "section-title")
+    add(h.get("subsecao"), "section")
+    add(h.get("subsecaoTitulo"), "section-title")
+    return linhas
+
+
 def parse_cnj(texto):
     print("Organizando Código Nacional de Normas...")
 
     artigos = []
-    capitulo_atual = ""
     artigo_atual = None
     iniciar = False
+    pendente = None
+
+    h = {
+        "parte": "",
+        "livro": "",
+        "livroTitulo": "",
+        "titulo": "",
+        "tituloTitulo": "",
+        "capituloNumero": "",
+        "capituloTitulo": "",
+        "secao": "",
+        "secaoTitulo": "",
+        "subsecao": "",
+        "subsecaoTitulo": "",
+    }
+
+    def fechar_artigo():
+        nonlocal artigo_atual
+        if artigo_atual is None:
+            return
+        artigo_atual["texto"] = formatar_paragrafos(artigo_atual.pop("_linhas"))
+        artigo_atual["areas"] = classificar_area_cnj(
+            artigo_atual["texto"] + " " + " ".join(x.get("text", "") for x in artigo_atual.get("estrutura", []))
+        )
+        artigos.append(artigo_atual)
+        artigo_atual = None
 
     for bruto in texto.splitlines():
         linha = limpar_linha(bruto)
@@ -356,48 +449,145 @@ def parse_cnj(texto):
         if not linha:
             continue
 
-        if "CÓDIGO NACIONAL DE NORMAS" in linha.upper():
-            iniciar = True
-
         if not iniciar:
+            if re.match(r"^PARTE\s+GERAL\b", linha, re.I):
+                iniciar = True
+            else:
+                continue
+
+        if re.match(r"^PARTE\s+", linha, re.I):
+            fechar_artigo()
+            h.update({
+                "parte": linha.upper(),
+                "livro": "",
+                "livroTitulo": "",
+                "titulo": "",
+                "tituloTitulo": "",
+                "capituloNumero": "",
+                "capituloTitulo": "",
+                "secao": "",
+                "secaoTitulo": "",
+                "subsecao": "",
+                "subsecaoTitulo": "",
+            })
+            pendente = None
             continue
 
-        if re.match(r"^CAPÍTULO\s+[IVXLCDM]+", linha, re.I):
-            capitulo_atual = linha.title()
+        m = re.match(r"^(LIVRO\s+[IVXLCDM]+)\b\s*(.*)$", linha, re.I)
+        if m:
+            fechar_artigo()
+            h["livro"] = m.group(1).upper()
+            h["livroTitulo"] = m.group(2).strip().upper()
+            h["titulo"] = ""
+            h["tituloTitulo"] = ""
+            h["capituloNumero"] = ""
+            h["capituloTitulo"] = ""
+            h["secao"] = ""
+            h["secaoTitulo"] = ""
+            h["subsecao"] = ""
+            h["subsecaoTitulo"] = ""
+            pendente = "livro" if not h["livroTitulo"] else None
+            continue
+
+        m = re.match(r"^(T[ÍI]TULO\s+[IVXLCDM]+)\b\s*(.*)$", linha, re.I)
+        if m:
+            fechar_artigo()
+            h["titulo"] = m.group(1).upper().replace("TITULO", "TÍTULO")
+            h["tituloTitulo"] = m.group(2).strip().upper()
+            h["capituloNumero"] = ""
+            h["capituloTitulo"] = ""
+            h["secao"] = ""
+            h["secaoTitulo"] = ""
+            h["subsecao"] = ""
+            h["subsecaoTitulo"] = ""
+            pendente = "titulo" if not h["tituloTitulo"] else None
+            continue
+
+        m = re.match(r"^(CAP[ÍI]TULO\s+[IVXLCDM]+)\b\s*(.*)$", linha, re.I)
+        if m:
+            fechar_artigo()
+            h["capituloNumero"] = m.group(1).upper().replace("CAPITULO", "CAPÍTULO")
+            h["capituloTitulo"] = m.group(2).strip().upper()
+            h["secao"] = ""
+            h["secaoTitulo"] = ""
+            h["subsecao"] = ""
+            h["subsecaoTitulo"] = ""
+            pendente = "capitulo" if not h["capituloTitulo"] else None
+            continue
+
+        m = re.match(r"^(Seç[ãa]o\s+[IVXLCDM]+)\b\s*(.*)$", linha, re.I)
+        if m:
+            fechar_artigo()
+            h["secao"] = m.group(1).replace("secao", "Seção").replace("Seçao", "Seção")
+            h["secaoTitulo"] = m.group(2).strip()
+            h["subsecao"] = ""
+            h["subsecaoTitulo"] = ""
+            pendente = "secao" if not h["secaoTitulo"] else None
+            continue
+
+        m = re.match(r"^(Subseç[ãa]o\s+[IVXLCDM]+)\b\s*(.*)$", linha, re.I)
+        if m:
+            fechar_artigo()
+            h["subsecao"] = m.group(1).replace("subsecao", "Subseção").replace("Subseçao", "Subseção")
+            h["subsecaoTitulo"] = m.group(2).strip()
+            pendente = "subsecao" if not h["subsecaoTitulo"] else None
+            continue
+
+        if pendente and eh_titulo_descritivo_cnj(linha):
+            if pendente == "livro":
+                h["livroTitulo"] = linha.upper()
+            elif pendente == "titulo":
+                h["tituloTitulo"] = linha.upper()
+            elif pendente == "capitulo":
+                h["capituloTitulo"] = linha.upper()
+            elif pendente == "secao":
+                h["secaoTitulo"] = linha
+            elif pendente == "subsecao":
+                h["subsecaoTitulo"] = linha
+            pendente = None
             continue
 
         achou_artigo = re.match(r"^Art\.\s*(\d+[A-Z]?)(?:\.|º|\.º)?\s*(.*)", linha)
 
         if achou_artigo:
-            if artigo_atual is not None:
-                artigo_atual["texto"] = formatar_paragrafos(artigo_atual.pop("_linhas"))
-                artigo_atual["areas"] = classificar_area_cnj(artigo_atual["texto"] + " " + artigo_atual.get("capitulo", ""))
-                artigos.append(artigo_atual)
+            fechar_artigo()
 
             numero = achou_artigo.group(1)
             ordem = ordem_artigo(numero)
+            capitulo = combinar_heading(h.get("capituloNumero"), h.get("capituloTitulo")) or "Código Nacional de Normas"
 
             artigo_atual = {
                 "id": f"cnj-art-{numero.lower()}",
                 "numero": f"Art. {numero}",
                 "ordem": ordem,
                 "tipo": "artigo",
-                "capitulo": capitulo_atual or "Código Nacional de Normas",
-                "secao": "",
+                "capitulo": capitulo,
+                "secao": h.get("secao", ""),
                 "areas": [],
                 "temas": [],
                 "norma": True,
                 "notas": [],
+                "parte": h.get("parte", ""),
+                "livro": h.get("livro", ""),
+                "livroTitulo": h.get("livroTitulo", ""),
+                "titulo": h.get("titulo", ""),
+                "tituloTitulo": h.get("tituloTitulo", ""),
+                "capituloNumero": h.get("capituloNumero", ""),
+                "capituloTitulo": h.get("capituloTitulo", ""),
+                "secaoTitulo": h.get("secaoTitulo", ""),
+                "subsecao": h.get("subsecao", ""),
+                "subsecaoTitulo": h.get("subsecaoTitulo", ""),
+                "estrutura": estrutura_cnj(h),
                 "_linhas": [linha],
             }
 
         elif artigo_atual is not None:
             artigo_atual["_linhas"].append(linha)
 
-    if artigo_atual is not None:
-        artigo_atual["texto"] = formatar_paragrafos(artigo_atual.pop("_linhas"))
-        artigo_atual["areas"] = classificar_area_cnj(artigo_atual["texto"] + " " + artigo_atual.get("capitulo", ""))
-        artigos.append(artigo_atual)
+    fechar_artigo()
+
+    if artigos and artigos[0]["texto"].lower().startswith("art. 1.º fica aprovado"):
+        artigos = [a for a in artigos if not a["texto"].lower().startswith("art. 1.º fica aprovado")]
 
     return artigos
 
@@ -446,7 +636,7 @@ def github_put_file(path, content_bytes, message, existing_sha=None):
     return resposta.json()
 
 
-def json_antigo_tem_mesmo_hash(path, novo_hash):
+def json_antigo_tem_mesmo_hash(path, novo_hash, parser_version=None):
     existente = github_get_file(path)
 
     if not existente:
@@ -455,14 +645,14 @@ def json_antigo_tem_mesmo_hash(path, novo_hash):
     try:
         conteudo = base64.b64decode(existente["content"]).decode("utf-8")
         payload = json.loads(conteudo)
-        return payload.get("sha256") == novo_hash, existente["sha"]
+        return payload.get("sha256") == novo_hash and (not parser_version or payload.get("parserVersion") == parser_version), existente["sha"]
     except Exception:
         return False, existente["sha"]
 
 
-def atualizar_base(nome, source_url, target_path, pdf_bytes, artigos):
+def atualizar_base(nome, source_url, target_path, pdf_bytes, artigos, parser_version=None):
     sha256 = hashlib.sha256(pdf_bytes).hexdigest()
-    mesmo_hash, file_sha = json_antigo_tem_mesmo_hash(target_path, sha256)
+    mesmo_hash, file_sha = json_antigo_tem_mesmo_hash(target_path, sha256, parser_version)
 
     if mesmo_hash:
         print(f"{nome}: sem alteração. Nenhum commit será feito.")
@@ -476,6 +666,7 @@ def atualizar_base(nome, source_url, target_path, pdf_bytes, artigos):
         "updatedAt": datetime.now(timezone.utc).isoformat(),
         "sha256": sha256,
         "totalItems": len(artigos),
+        "parserVersion": parser_version or "default",
         "articles": artigos,
     }
 
@@ -506,6 +697,7 @@ def main():
         "dados/normas-sp.json",
         pdf_sp,
         artigos_sp,
+        parser_version="sp-default",
     )
 
     cnj_pdf_url = descobrir_pdf_compilado_cnj()
@@ -513,12 +705,14 @@ def main():
     texto_cnj = extrair_texto_pdf(pdf_cnj)
     artigos_cnj = parse_cnj(texto_cnj)
 
+    # O parserVersion permite republicar o JSON quando o formato da extração muda, mesmo se o PDF não mudou.
     atualizar_base(
         "Código Nacional de Normas",
         cnj_pdf_url,
         "dados/normas-nacional.json",
         pdf_cnj,
         artigos_cnj,
+        parser_version=PARSER_VERSION,
     )
 
     print("Rotina concluída.")
