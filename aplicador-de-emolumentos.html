@@ -50,7 +50,7 @@
       border:1px solid rgba(216,222,233,.8);
       border-radius:28px;
       box-shadow:var(--shadow);
-      padding:26px;
+      padding:32px 28px 30px;
       display:grid;
       grid-template-columns:1fr;
       gap:22px;
@@ -81,23 +81,25 @@
     }
 
     .lead{
-      margin:16px 0 0;
+      margin:20px 0 0;
       max-width:none;
       width:100%;
       color:#334155;
       font-size:18px;
+      line-height:1.7;
     }
 
     .scope{
-      margin:14px 0 0;
+      margin:18px 0 0;
       max-width:none;
       width:100%;
       color:#475569;
       font-size:14px;
+      line-height:1.65;
       background:#f8fafc;
       border:1px solid #e2e8f0;
       border-radius:14px;
-      padding:10px 12px;
+      padding:14px 16px;
     }
 
     .hero-card{
@@ -174,6 +176,10 @@
       border:1px solid var(--line);
       border-radius:var(--radius);
       box-shadow:0 12px 36px rgba(15,23,42,.06);
+    }
+
+    #resultadoPanel{
+      scroll-margin-top:18px;
     }
 
     .panel-head{
@@ -531,6 +537,75 @@
       margin-bottom:0;
     }
 
+    .bloco-como-utilizar {
+      margin-top: 22px;
+      background: rgba(255,255,255,.86);
+      border: 1px solid rgba(216,222,233,.8);
+      border-radius: 28px;
+      padding: 32px 28px 30px;
+      box-shadow: var(--shadow);
+    }
+
+    .bloco-como-utilizar h2 {
+      margin: 0 0 14px;
+      font-size: 30px;
+      line-height: 1.15;
+      color: #0f172a;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .bloco-como-utilizar .intro {
+      margin: 0 0 12px;
+      font-size: 16px;
+      line-height: 1.7;
+      color: #334155;
+    }
+
+    .bloco-como-utilizar .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .bloco-como-utilizar .card {
+      border: 1px solid #d9dde3;
+      border-radius: 18px;
+      padding: 22px 22px 20px;
+      background: #fff;
+    }
+
+    .bloco-como-utilizar .card h3 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .bloco-como-utilizar .card p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.7;
+      color: #475569;
+    }
+
+    .bloco-como-utilizar .alerta {
+      margin-top: 20px;
+      background: #f8fafc;
+      border-left: 4px solid #2563eb;
+      padding: 16px 18px;
+      color: #334155;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .bloco-como-utilizar .atualizacao {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #64748b;
+    }
+
     .sr-only{
       position:absolute;
       width:1px;
@@ -588,6 +663,10 @@
       .two,.actions{
         grid-template-columns:1fr;
       }
+      .bloco-como-utilizar .cards {
+        grid-template-columns: 1fr;
+      }
+
       table{
         min-width:720px;
       }
@@ -619,7 +698,7 @@
           <div class="eyebrow">Aplicador da Tabela de Custas e Emolumentos Extrajudicial - Tabelionato de Notas (Capital)</div>
           <h1 id="titulo">Aplicador inteligente da tabela de emolumentos - São Paulo</h1>
           <p class="lead">
-            Selecione o ato, informe os valores necessários e obtenha o enquadramento emolumentar, com base aplicada, percentual, total estimado e fundamentos.
+            Selecione o ato, informe os valores necessários e obtenha o enquadramento provável, com memória de cálculo, base aplicada, percentual, total estimado e fundamentos.
           </p>
           <p class="scope">
             Os valores correspondem à Tabela I do Tabelionato de Notas da capital do Estado de São Paulo para 2026, com ISS de 2%. Em município com alíquota diversa, o total bruto deve ser recalculado.
@@ -628,6 +707,50 @@
       </section>
     </div>
   </header>
+
+
+  <section class="wrap bloco-como-utilizar">
+    <h2>Como utilizar a ferramenta</h2>
+
+    <p class="intro">
+      A página foi desenvolvida para facilitar a triagem inicial do ato notarial e estimar, de forma prática, o enquadramento provável na Tabela de Custas e Emolumentos Extrajudicial do Tabelionato de Notas.
+    </p>
+
+    <p class="intro">
+      Para obter o resultado, selecione o tipo de ato, informe os valores solicitados e confira a memória de cálculo gerada pela ferramenta.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h3>1. Escolha o ato</h3>
+        <p>
+          Use o campo de busca ou a lista de atos para selecionar a hipótese aplicável, como compra e venda, doação, inventário, ata notarial, procuração, testamento, garantia ou outro ato disponível.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>2. Informe as bases</h3>
+        <p>
+          Preencha os valores pedidos pela ferramenta, como valor do negócio, valor venal, base de ITBI, valor da dívida, valor da partilha ou quantidade de atos, conforme o caso.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>3. Confira o enquadramento</h3>
+        <p>
+          O resultado indicará a composição dos atos, a base adotada, a faixa ou item da tabela, o percentual aplicado, o total estimado, os fundamentos e as observações técnicas.
+        </p>
+      </div>
+    </div>
+
+    <div class="alerta">
+      Antes de utilizar o resultado em atendimento, orçamento ou ato formal, confirme a tabela vigente, a legislação aplicável, a natureza jurídica da operação e as particularidades do caso concreto.
+    </div>
+
+    <div class="atualizacao">
+      Última atualização da ferramenta: 11/05/2026.
+    </div>
+  </section>
 
   <main>
     <div class="wrap grid">
@@ -1638,7 +1761,7 @@
       const partes = calcularPartes(regra, valores);
       renderResultado(regra, partes);
       setTimeout(() => {
-        $("statusRegra").scrollIntoView({behavior:"smooth", block:"start"});
+        $("resultadoPanel").scrollIntoView({behavior:"smooth", block:"start"});
       }, 0);
     });
 
