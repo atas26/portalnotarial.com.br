@@ -7,6 +7,7 @@
   <title>Calculadora de escritura, tributo e registro | Portal Notarial</title>
   <meta name="description" content="Calculadora estimativa de escritura pública, tributo e registro imobiliário no Estado de São Paulo, com base no valor informado pelo usuário." />
   <meta name="robots" content="index, follow" />
+  <meta name="google-adsense-account" content="ca-pub-1578115877344777" />
   <link rel="canonical" href="https://portalnotarial.com.br/calculadora-escritura-tributo-registro-sp.html" />
   <meta property="og:locale" content="pt_BR" />
   <meta property="og:type" content="website" />
@@ -368,6 +369,41 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,
 }
 </style>
 
+
+<style>
+/* Ajustes editoriais e institucionais para reforçar utilidade, navegação e contexto da ferramenta. */
+html{scroll-padding-top:24px;}
+.pn-hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;}
+.pn-hero-actions .btn{text-decoration:none;}
+.pn-section{background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:26px 28px;margin:26px 0;color:#172033;box-shadow:0 1px 2px rgba(15,23,42,.04);}
+.pn-section.compact{margin-top:22px;}
+.pn-section .eyebrow-mini{display:block;margin:0 0 10px;color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;}
+.pn-section h2{margin:0 0 12px;font-family:'Fraunces','Georgia',serif;font-size:clamp(1.8rem,2.7vw,2.55rem);line-height:1.12;font-weight:400;letter-spacing:-.03em;color:#0f172a;}
+.pn-section p{margin:0 0 14px;color:#475569;font-size:15px;line-height:1.68;}
+.pn-section p:last-child{margin-bottom:0;}
+.pn-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px;}
+.pn-card{border:1px solid #e7e5e4;background:#fafaf9;border-radius:12px;padding:16px;min-height:140px;}
+.pn-card h3{margin:0 0 8px;font-size:14px;line-height:1.35;font-weight:700;color:#0f172a;}
+.pn-card p{margin:0;font-size:13px;line-height:1.62;color:#475569;}
+.pn-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px;counter-reset:steps;}
+.pn-step{border:1px solid #e5e7eb;background:#fbfcfe;border-radius:12px;padding:16px;counter-increment:steps;}
+.pn-step::before{content:counter(steps);display:inline-grid;place-items:center;width:28px;height:28px;margin-bottom:10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:13px;}
+.pn-step h3{margin:0 0 8px;font-size:14px;color:#0f172a;}
+.pn-step p{margin:0;font-size:13px;line-height:1.62;color:#475569;}
+.pn-note{margin-top:16px;border-left:3px solid rgb(0,118,255);background:#f8fafc;padding:13px 14px;color:#334155;font-size:13px;line-height:1.6;}
+.pn-faq{display:grid;gap:10px;margin-top:18px;}
+.pn-faq details{border:1px solid #e5e7eb;border-radius:12px;background:#fff;overflow:hidden;}
+.pn-faq summary{cursor:pointer;padding:14px 16px;font-weight:700;color:#0f172a;list-style:none;}
+.pn-faq summary::-webkit-details-marker{display:none;}
+.pn-faq details[open] summary{border-bottom:1px solid #e5e7eb;background:#f8fafc;}
+.pn-faq .answer{padding:14px 16px;color:#475569;font-size:14px;line-height:1.62;}
+.pn-footer-links{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:12px;}
+.pn-footer-links a{color:var(--accent);font-weight:600;}
+@media (max-width:980px){.pn-card-grid,.pn-steps{grid-template-columns:1fr 1fr;}}
+@media (max-width:620px){.pn-section{padding:20px;margin:22px 0;}.pn-card-grid,.pn-steps{grid-template-columns:1fr;}.pn-hero-actions{flex-direction:column;}.pn-hero-actions .btn{justify-content:center;}}
+@media print{.pn-hero-actions,.pn-section.faq-block{display:none!important}.pn-section{box-shadow:none;break-inside:avoid;}}
+</style>
+
 </head>
 <body>
 <main class="page" id="inicio">
@@ -376,30 +412,48 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,
       <span class="eyebrow">Valor estimado - Estado de São Paulo</span>
       <h1 id="titulo-principal">Calculadora de escritura, tributo e registro</h1>
       <p class="lead">Informe o valor base, selecione a natureza do ato e preencha a alíquota aplicável. Na opção onerosa, use a alíquota municipal do ITBI. Na opção não onerosa, use a alíquota estadual do ITCMD.</p>
+      <div class="pn-hero-actions">
+        <a class="btn btn-primary" href="#calculadora">Ir para a ferramenta</a>
+        <a class="btn btn-secondary" href="#como-usar">Como usar</a>
+        <a class="btn btn-secondary" href="#faq">FAQ</a>
+      </div>
     </div>
   </section>
 
-
-  <section class="pn-editorial" aria-labelledby="sobre-ferramenta">
-    <h2 id="sobre-ferramenta">Como interpretar a estimativa</h2>
-    <p>A calculadora estima valores de escritura pública, tributo e registro imobiliário a partir do valor base informado e da natureza da transmissão selecionada. O cálculo auxilia a primeira conferência, mas não substitui orçamento oficial nem análise do caso concreto.</p>
-    <div class="pn-info-grid">
-      <div class="pn-info-card">
+  <section class="pn-section" id="informacoes" aria-labelledby="informacoes-titulo">
+    <span class="eyebrow-mini">Informações</span>
+    <h2 id="informacoes-titulo">Informações sobre a calculadora</h2>
+    <p>A calculadora organiza uma estimativa inicial de escritura pública, tributo e registro imobiliário no Estado de São Paulo. A página foi pensada para simulação prévia, conferência de cenário e orientação operacional antes da solicitação formal do ato.</p>
+    <div class="pn-card-grid">
+      <article class="pn-card">
+        <h3>O que a ferramenta faz</h3>
+        <p>Calcula uma estimativa com base no valor informado pelo usuário, nas faixas de escritura e registro configuradas na página e no tributo selecionado.</p>
+      </article>
+      <article class="pn-card">
         <h3>Quando usar</h3>
-        <p>Use a ferramenta para simular atos com valor declarado e comparar o impacto estimado de escritura, tributo e registro sobre o valor base.</p>
-      </div>
-      <div class="pn-info-card">
-        <h3>Base de cálculo</h3>
-        <p>A página usa faixas de emolumentos configuradas no próprio código e alíquota tributária informada ou selecionada pelo usuário.</p>
-      </div>
-      <div class="pn-info-card">
-        <h3>Limites do resultado</h3>
-        <p>A estimativa não inclui documentos, certidões, averbações, exigências registrais, diligências, diferenças fiscais ou hipóteses específicas de isenção.</p>
-      </div>
+        <p>Use em compra e venda, doação, partilha, transmissão onerosa ou não onerosa e outras situações em que seja útil estimar custos principais do ato.</p>
+      </article>
+      <article class="pn-card">
+        <h3>Como interpretar o resultado</h3>
+        <p>O total soma escritura, tributo e registro. Cada parcela deve ser conferida com a tabela vigente, a legislação tributária e o enquadramento real do caso.</p>
+      </article>
+      <article class="pn-card">
+        <h3>Critérios e fontes</h3>
+        <p>A página usa valores configurados no próprio código para tabelas de emolumentos, a alíquota informada pelo usuário e parâmetros gerais de cálculo.</p>
+      </article>
+      <article class="pn-card">
+        <h3>Limites da ferramenta</h3>
+        <p>A estimativa não inclui certidões, averbações, diligências, exigências registrais, diferenças fiscais, isenções condicionadas ou análise jurídica do título.</p>
+      </article>
+      <article class="pn-card">
+        <h3>Uso responsável</h3>
+        <p>Antes de usar o resultado em atendimento, orçamento ou ato formal, confirme município, tabela vigente, natureza da operação e documentos apresentados.</p>
+      </article>
     </div>
-    <div class="pn-note">Antes de utilizar o resultado em ato formal, confira a tabela vigente, a legislação tributária aplicável, o município competente e as exigências da serventia envolvida.</div>
+    <div class="pn-note">O resultado tem finalidade informativa. Não substitui orçamento oficial da serventia, conferência tributária, qualificação registral ou orientação jurídica no caso concreto.</div>
     <span class="pn-meta">Última atualização da ferramenta: 04/05/2026.</span>
   </section>
+
 
   <section class="grid" id="calculadora">
     <div>
@@ -470,8 +524,80 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,
     </aside>
   </section>
 
+
+  <section class="pn-section compact" id="como-usar" aria-labelledby="como-usar-titulo">
+    <span class="eyebrow-mini">Como usar</span>
+    <h2 id="como-usar-titulo">Como usar a calculadora</h2>
+    <p>Preencha os campos na ordem apresentada. O cálculo depende do valor base, da natureza da transmissão e da alíquota indicada para o tributo.</p>
+    <div class="pn-steps">
+      <article class="pn-step">
+        <h3>Informe o valor base</h3>
+        <p>Use o maior valor aplicável entre valor do negócio, valor fiscal, valor venal ou outra referência exigida para o ato.</p>
+      </article>
+      <article class="pn-step">
+        <h3>Escolha a natureza</h3>
+        <p>Selecione transmissão onerosa para ITBI ou não onerosa para ITCMD, conforme a operação pretendida.</p>
+      </article>
+      <article class="pn-step">
+        <h3>Confira a alíquota</h3>
+        <p>No ITBI, informe a alíquota municipal. No ITCMD, a página mantém o campo com 4%, conforme parâmetro estadual usado na ferramenta.</p>
+      </article>
+      <article class="pn-step">
+        <h3>Leia o resultado</h3>
+        <p>Verifique escritura, tributo, registro e total. Use os botões para copiar ou imprimir a simulação.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="pn-section compact" id="criterios-fontes" aria-labelledby="criterios-fontes-titulo">
+    <span class="eyebrow-mini">Critérios e fontes</span>
+    <h2 id="criterios-fontes-titulo">Critérios, fontes e limites</h2>
+    <p>A estimativa de escritura e registro usa as faixas cadastradas no código da ferramenta. O tributo é calculado pela alíquota informada ou selecionada pelo usuário. O resultado parte dos dados inseridos na tela e não verifica automaticamente certidões, documentos, isenções, imunidades, avaliações fiscais ou exigências do registro imobiliário.</p>
+    <p>O usuário deve conferir a tabela vigente, a legislação aplicável, o município competente para o ITBI, a incidência de ITCMD, a existência de benefício fiscal e a natureza real da transmissão. Em caso concreto, a conferência deve ser feita pela serventia competente ou por profissional habilitado.</p>
+  </section>
+
+  <section class="pn-section compact faq-block" id="faq" aria-labelledby="faq-titulo">
+    <span class="eyebrow-mini">FAQ</span>
+    <h2 id="faq-titulo">Perguntas frequentes</h2>
+    <div class="pn-faq">
+      <details>
+        <summary>A calculadora substitui orçamento oficial?</summary>
+        <div class="answer">Não. A calculadora apresenta uma estimativa. O orçamento oficial depende da conferência do ato, dos documentos, da tabela vigente, da natureza jurídica da operação e das exigências aplicáveis.</div>
+      </details>
+      <details>
+        <summary>Qual valor devo informar?</summary>
+        <div class="answer">Em regra, informe o maior valor aplicável ao caso, como valor do negócio, valor venal, valor fiscal ou outra base exigida. A escolha da base depende do ato e da legislação aplicável.</div>
+      </details>
+      <details>
+        <summary>O ITBI é sempre calculado pela mesma alíquota?</summary>
+        <div class="answer">Não. O ITBI é municipal. A alíquota e a base efetiva devem ser confirmadas no município competente antes de usar o resultado em ato formal.</div>
+      </details>
+      <details>
+        <summary>O ITCMD pode ter isenção ou regra específica?</summary>
+        <div class="answer">Sim. A ferramenta não verifica automaticamente hipóteses de isenção, imunidade, redução, exigência documental ou regra específica. A conferência fiscal deve ser feita no caso concreto.</div>
+      </details>
+      <details>
+        <summary>O registro imobiliário pode exigir outros valores?</summary>
+        <div class="answer">Sim. Podem existir averbações, prenotações, exigências, atos complementares ou situações registrais específicas que não entram na estimativa básica da página.</div>
+      </details>
+      <details>
+        <summary>Como informar erro ou sugerir ajuste?</summary>
+        <div class="answer">Use a página de contato do Portal Notarial e indique a ferramenta, o dado divergente e, quando possível, a fonte oficial de conferência.</div>
+      </details>
+    </div>
+  </section>
+
+
   <footer class="footer">
     <span>Projeto apoiado por Escritura Pública - <a href="https://escriturapublica.substack.com" target="_blank" rel="noopener noreferrer">https://escriturapublica.substack.com</a> | Atesta - <a href="https://www.atesta.com.br" target="_blank" rel="noopener noreferrer">https://www.atesta.com.br</a></span>
+    <nav class="pn-footer-links" aria-label="Links institucionais">
+      <a href="https://portalnotarial.com.br/">Home</a>
+      <a href="https://portalnotarial.com.br/sobre.html">Sobre</a>
+      <a href="https://portalnotarial.com.br/contato.html">Contato</a>
+      <a href="https://portalnotarial.com.br/politica-de-privacidade.html">Política de privacidade</a>
+      <a href="https://portalnotarial.com.br/termos-de-uso.html">Termos de uso</a>
+      <a href="https://portalnotarial.com.br/aviso-legal.html">Aviso legal</a>
+    </nav>
   </footer>
 </main>
 
