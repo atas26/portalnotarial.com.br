@@ -234,15 +234,15 @@
     }
 
     .hero-content {
-      max-width: 780px;
+      max-width: 600px;
     }
 
     h1 {
       margin: 0;
-      max-width: 780px;
-      font-size: clamp(54px, 8vw, 118px);
-      line-height: 0.92;
-      letter-spacing: -0.075em;
+      max-width: 600px;
+      font-size: clamp(42px, 5.6vw, 84px);
+      line-height: 0.94;
+      letter-spacing: -0.06em;
       font-weight: 800;
     }
 
@@ -280,7 +280,7 @@
     }
 
     .quote-text {
-      min-height: 42px;
+      min-height: 0;
       color: var(--texto-suave);
       font-size: clamp(17px, 1.8vw, 25px);
       line-height: 1.45;
@@ -289,7 +289,7 @@
 
     .quote-author {
       min-height: 18px;
-      margin-top: 10px;
+      margin-top: 2px;
       color: var(--texto-fraco);
       font-size: 13px;
       line-height: 1.4;
@@ -318,7 +318,7 @@
 
     .hero-grid {
       display: grid;
-      grid-template-columns: minmax(0, 780px) minmax(320px, 1fr);
+      grid-template-columns: minmax(0, 600px) minmax(360px, 1fr);
       align-items: center;
       gap: 56px;
     }
@@ -1225,7 +1225,7 @@
 
     @media (max-width: 1180px) {
       .hero-grid {
-        grid-template-columns: minmax(0, 760px) minmax(280px, 1fr);
+        grid-template-columns: minmax(0, 540px) minmax(320px, 1fr);
         gap: 34px;
       }
 
@@ -1325,59 +1325,617 @@
             </p>
           </section>
 
-          <div class="workspace-visual" aria-hidden="true">
-            <span class="visual-orbit orbit-one"></span>
-            <span class="visual-orbit orbit-two"></span>
-            <span class="visual-orbit orbit-three"></span>
+          <!-- ANIMAÇÃO PORTAL NOTARIAL — VERSÃO DARK -->
+          <style>
+            .pn-portal-motion {
+              --pn-blue: rgb(11, 95, 255);
+              --pn-blue-soft: rgb(96, 152, 255);
+              --pn-surface: rgba(255, 255, 255, 0.04);
+              --pn-surface-strong: rgba(255, 255, 255, 0.07);
+              --pn-text: #f8fafc;
+              --pn-muted: rgba(248, 250, 252, 0.62);
+              --pn-line: rgba(255, 255, 255, 0.12);
+              --pn-line-soft: rgba(255, 255, 255, 0.06);
 
-            <svg class="visual-lines" viewBox="0 0 560 430" preserveAspectRatio="none">
-              <path d="M102 96 C 208 74, 242 148, 280 214 C 325 154, 398 98, 490 104" />
-              <path d="M104 328 C 188 262, 222 238, 280 214 C 342 240, 398 284, 486 326" />
-              <path d="M92 238 C 160 218, 208 214, 280 214 C 356 214, 416 212, 488 214" />
+              position: relative;
+              width: min(100%, 720px);
+              height: 440px;
+              margin: 0 auto;
+              overflow: hidden;
+              border-radius: 30px;
+              background:
+                radial-gradient(circle at 50% 8%, rgba(11, 95, 255, 0.22), transparent 32%),
+                radial-gradient(circle at 85% 80%, rgba(11, 95, 255, 0.10), transparent 40%),
+                linear-gradient(180deg, #0a1d31 0%, #071323 100%);
+              font-family: Arial, Helvetica, sans-serif;
+              isolation: isolate;
+              border: 1px solid rgba(255, 255, 255, 0.06);
+            }
+
+            .pn-portal-motion::before {
+              content: "";
+              position: absolute;
+              inset: 0;
+              z-index: 0;
+              background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+              background-size: 42px 42px;
+              pointer-events: none;
+              mask-image: radial-gradient(circle at 50% 40%, black 40%, transparent 80%);
+            }
+
+            .pn-portal-motion * {
+              box-sizing: border-box;
+            }
+
+            .pn-connection-lines {
+              position: absolute;
+              inset: 0;
+              z-index: 2;
+              width: 100%;
+              height: 100%;
+              pointer-events: none;
+              overflow: visible;
+            }
+
+            .pn-line-path {
+              fill: none;
+              stroke: var(--pn-blue-soft);
+              stroke-width: 1.5;
+              stroke-linecap: round;
+              stroke-dasharray: 5 8;
+              opacity: 0.45;
+              animation: pnLineFlow 4.8s linear infinite;
+            }
+
+            .pn-line-path-soft {
+              opacity: 0.22;
+              stroke-width: 1.2;
+            }
+
+            .pn-line-node {
+              fill: #071323;
+              stroke: var(--pn-blue-soft);
+              stroke-width: 1.5;
+              opacity: 0.9;
+              animation: pnNodePulse 3.6s ease-in-out infinite;
+            }
+
+            .pn-flow-dot {
+              fill: var(--pn-blue-soft);
+              opacity: 0.95;
+              filter: drop-shadow(0 0 4px rgba(96, 152, 255, 0.7));
+            }
+
+            .pn-portal-star {
+              position: absolute;
+              top: 26px;
+              left: 50%;
+              z-index: 8;
+              width: 38px;
+              height: 38px;
+              transform: translateX(-50%);
+              border-radius: 50%;
+              background: var(--pn-blue);
+              display: grid;
+              place-items: center;
+              box-shadow:
+                0 0 0 6px rgba(11, 95, 255, 0.12),
+                0 0 28px rgba(11, 95, 255, 0.55),
+                0 12px 28px rgba(11, 95, 255, 0.35);
+              animation: pnStarPulseActive 2.8s ease-in-out infinite;
+            }
+
+            .pn-portal-star svg {
+              width: 20px;
+              height: 20px;
+              fill: #ffffff;
+            }
+
+            .pn-orbit {
+              position: absolute;
+              top: 70px;
+              left: 112px;
+              z-index: 1;
+              width: 410px;
+              height: 410px;
+              border: 1px solid rgba(96, 152, 255, 0.14);
+              border-radius: 999px;
+              animation: pnOrbitActive 5.5s ease-in-out infinite;
+            }
+
+            .pn-orbit-small {
+              top: 128px;
+              left: 172px;
+              width: 285px;
+              height: 285px;
+              border-color: rgba(96, 152, 255, 0.10);
+              opacity: 0.7;
+              animation: pnOrbitActive 4.6s ease-in-out infinite reverse;
+            }
+
+            .pn-main-card {
+              position: absolute;
+              top: 98px;
+              left: 112px;
+              z-index: 5;
+              width: 305px;
+              height: 320px;
+              padding: 22px 16px 16px;
+              border: 1px solid var(--pn-line);
+              border-radius: 18px;
+              background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+              backdrop-filter: blur(14px);
+              -webkit-backdrop-filter: blur(14px);
+              box-shadow:
+                0 22px 54px rgba(0, 0, 0, 0.45),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+              overflow: hidden;
+              animation: pnCardFloatActive 4.8s ease-in-out infinite;
+            }
+
+            .pn-card-title {
+              margin: 0 0 18px 0;
+              padding-left: 0;
+              max-width: 265px;
+              font-size: 18px;
+              line-height: 1.26;
+              font-weight: 700;
+              letter-spacing: -0.02em;
+              color: var(--pn-blue-soft);
+            }
+
+            .pn-tool-row {
+              position: relative;
+              height: 52px;
+              margin-top: 10px;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 0 14px;
+              border-radius: 14px;
+              background: rgba(11, 95, 255, 0.16);
+              border: 1px solid rgba(96, 152, 255, 0.18);
+              overflow: hidden;
+              animation: pnRowMoveActive 4.6s ease-in-out infinite;
+            }
+
+            .pn-tool-row:nth-of-type(2) {
+              opacity: 0.62;
+              width: 226px;
+              animation-delay: 0.45s;
+            }
+
+            .pn-tool-row:nth-of-type(3) {
+              opacity: 0.38;
+              width: 176px;
+              animation-delay: 0.9s;
+            }
+
+            .pn-tool-icon {
+              flex: 0 0 30px;
+              width: 30px;
+              height: 30px;
+              border-radius: 10px;
+              background: rgba(255, 255, 255, 0.96);
+              display: grid;
+              place-items: center;
+              color: var(--pn-blue);
+              font-size: 14px;
+              font-weight: 700;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            }
+
+            .pn-tool-copy strong {
+              display: block;
+              font-size: 12.5px;
+              line-height: 1.15;
+              color: var(--pn-text);
+            }
+
+            .pn-tool-copy small {
+              display: block;
+              margin-top: 3px;
+              font-size: 11px;
+              line-height: 1.15;
+              color: var(--pn-muted);
+            }
+
+            .pn-side-badge {
+              position: absolute;
+              z-index: 7;
+              width: 48px;
+              height: 48px;
+              border-radius: 50%;
+              background: rgba(10, 29, 49, 0.85);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              display: grid;
+              place-items: center;
+              border: 1px solid rgba(96, 152, 255, 0.28);
+              box-shadow:
+                0 12px 28px rgba(0, 0, 0, 0.45),
+                0 0 18px rgba(11, 95, 255, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.10);
+              color: var(--pn-blue-soft);
+              font-size: 22px;
+              font-weight: 700;
+              animation: pnBadgeFloatActive 4.2s ease-in-out infinite;
+            }
+
+            .pn-badge-left {
+              top: 108px;
+              left: 62px;
+            }
+
+            .pn-badge-doc {
+              top: 252px;
+              left: 96px;
+              width: 36px;
+              height: 36px;
+              font-size: 18px;
+              animation-delay: 0.4s;
+            }
+
+            .pn-badge-bottom {
+              top: 384px;
+              left: 260px;
+              width: 34px;
+              height: 34px;
+              font-size: 14px;
+              animation-delay: 0.8s;
+            }
+
+            .pn-avatar {
+              position: absolute;
+              top: 160px;
+              left: 455px;
+              z-index: 7;
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              background:
+                radial-gradient(circle at 50% 35%, #c98d67 0 10%, transparent 11%),
+                radial-gradient(circle at 50% 68%, var(--pn-blue) 0 25%, transparent 26%),
+                linear-gradient(180deg, #1a2f4a, #0f1f33);
+              border: 1px solid rgba(96, 152, 255, 0.22);
+              box-shadow:
+                0 14px 34px rgba(0, 0, 0, 0.45),
+                0 0 18px rgba(11, 95, 255, 0.20);
+              animation: pnAvatarFloatActive 4.6s ease-in-out infinite;
+            }
+
+            .pn-avatar::before {
+              content: "";
+              position: absolute;
+              top: 12px;
+              left: 15px;
+              width: 20px;
+              height: 14px;
+              border-radius: 50% 50% 42% 42%;
+              background: #7d4836;
+            }
+
+            .pn-avatar::after {
+              content: "";
+              position: absolute;
+              left: 13px;
+              bottom: 7px;
+              width: 24px;
+              height: 18px;
+              border-radius: 14px 14px 7px 7px;
+              background: var(--pn-blue);
+            }
+
+            .pn-tool-cloud {
+              position: absolute;
+              top: 114px;
+              right: 42px;
+              z-index: 3;
+              width: 180px;
+              display: grid;
+              gap: 10px;
+              animation: pnCloudFloatActive 5s ease-in-out infinite;
+            }
+
+            .pn-cloud-pill {
+              height: 38px;
+              display: flex;
+              align-items: center;
+              gap: 9px;
+              padding: 0 12px;
+              border: 1px solid rgba(96, 152, 255, 0.20);
+              border-radius: 999px;
+              background: rgba(10, 29, 49, 0.75);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              box-shadow:
+                0 10px 24px rgba(0, 0, 0, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.06);
+              font-size: 12px;
+              color: var(--pn-text);
+              opacity: 0.92;
+              animation: pnPillPulseActive 4.4s ease-in-out infinite;
+            }
+
+            .pn-cloud-pill:nth-child(2) {
+              margin-left: 22px;
+              animation-delay: 0.6s;
+            }
+
+            .pn-cloud-pill:nth-child(3) {
+              margin-left: 6px;
+              animation-delay: 1.2s;
+            }
+
+            .pn-cloud-dot {
+              width: 8px;
+              height: 8px;
+              border-radius: 50%;
+              background: var(--pn-blue-soft);
+              box-shadow: 0 0 8px rgba(96, 152, 255, 0.7);
+            }
+
+            .pn-pause {
+              position: absolute;
+              right: 24px;
+              bottom: 16px;
+              z-index: 12;
+              width: 48px;
+              height: 48px;
+              border: 0;
+              border-radius: 50%;
+              background: #0a1d31;
+              cursor: pointer;
+              box-shadow:
+                0 10px 26px rgba(0, 0, 0, 0.55),
+                0 0 22px rgba(11, 95, 255, 0.28);
+            }
+
+            .pn-pause::before {
+              content: "";
+              position: absolute;
+              inset: 0;
+              border-radius: 50%;
+              background: conic-gradient(var(--pn-blue-soft) 0deg 100deg, rgba(96, 152, 255, 0.18) 100deg 360deg);
+              animation: pnRingActive 3.8s linear infinite;
+            }
+
+            .pn-pause::after {
+              content: "";
+              position: absolute;
+              inset: 4px;
+              border-radius: 50%;
+              background: #0a1d31;
+            }
+
+            .pn-pause-icon {
+              position: relative;
+              z-index: 2;
+              width: 14px;
+              height: 16px;
+              margin: 16px auto 0;
+              display: flex;
+              justify-content: center;
+              gap: 4px;
+            }
+
+            .pn-pause-icon span {
+              display: block;
+              width: 4px;
+              height: 16px;
+              border-radius: 2px;
+              background: var(--pn-blue-soft);
+            }
+
+            .pn-portal-motion.is-paused *,
+            .pn-portal-motion.is-paused .pn-orbit,
+            .pn-portal-motion.is-paused .pn-pause::before {
+              animation-play-state: paused !important;
+            }
+
+            .pn-portal-motion.is-paused .pn-pause-icon {
+              width: 0;
+              height: 0;
+              margin-top: 14px;
+              border-left: 14px solid var(--pn-blue-soft);
+              border-top: 9px solid transparent;
+              border-bottom: 9px solid transparent;
+            }
+
+            .pn-portal-motion.is-paused .pn-pause-icon span {
+              display: none;
+            }
+
+            @keyframes pnLineFlow {
+              to { stroke-dashoffset: -26; }
+            }
+
+            @keyframes pnNodePulse {
+              0%, 100% { r: 3.5; opacity: 0.65; }
+              50% { r: 5; opacity: 1; }
+            }
+
+            @keyframes pnStarPulseActive {
+              0%, 100% { transform: translateX(-50%) scale(1); }
+              50% { transform: translateX(-50%) scale(1.16); }
+            }
+
+            @keyframes pnOrbitActive {
+              0%, 100% { transform: scale(1); opacity: 0.78; }
+              50% { transform: scale(1.08); opacity: 0.28; }
+            }
+
+            @keyframes pnCardFloatActive {
+              0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+              50% { transform: translate3d(0, -18px, 0) rotate(-0.6deg); }
+            }
+
+            @keyframes pnRowMoveActive {
+              0%, 100% { transform: translate3d(0, 0, 0); }
+              50% { transform: translate3d(18px, -4px, 0); }
+            }
+
+            @keyframes pnBadgeFloatActive {
+              0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+              50% { transform: translate3d(8px, -18px, 0) scale(1.05); }
+            }
+
+            @keyframes pnAvatarFloatActive {
+              0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+              50% { transform: translate3d(-14px, -18px, 0) scale(1.04); }
+            }
+
+            @keyframes pnCloudFloatActive {
+              0%, 100% { transform: translate3d(0, 0, 0); }
+              50% { transform: translate3d(-18px, -14px, 0); }
+            }
+
+            @keyframes pnPillPulseActive {
+              0%, 100% { opacity: 0.85; transform: translateX(0); }
+              50% { opacity: 1; transform: translateX(-14px); }
+            }
+
+            @keyframes pnRingActive {
+              to { transform: rotate(360deg); }
+            }
+
+            @media (max-width: 720px) {
+              .pn-portal-motion { height: 410px; border-radius: 24px; }
+              .pn-connection-lines { opacity: 0.72; }
+              .pn-line-cloud, .pn-node-cloud, .pn-dot-cloud { display: none; }
+              .pn-orbit { left: 50%; top: 70px; width: 340px; height: 340px; margin-left: -170px; }
+              .pn-orbit-small { left: 50%; top: 126px; width: 240px; height: 240px; margin-left: -120px; }
+              .pn-main-card { left: 50%; top: 96px; width: 290px; margin-left: -145px; }
+              .pn-badge-left { left: calc(50% - 188px); }
+              .pn-badge-doc { left: calc(50% - 146px); }
+              .pn-badge-bottom { left: calc(50% + 10px); top: 384px; }
+              .pn-avatar { left: calc(50% + 142px); width: 44px; height: 44px; }
+              .pn-tool-cloud { display: none; }
+              .pn-pause { right: 16px; bottom: 12px; }
+            }
+
+            @media (max-width: 430px) {
+              .pn-portal-motion { height: 395px; }
+              .pn-main-card { width: 272px; height: 318px; margin-left: -136px; }
+              .pn-card-title { font-size: 17px; }
+              .pn-badge-left { left: calc(50% - 158px); }
+              .pn-badge-doc { left: calc(50% - 124px); }
+              .pn-avatar { left: calc(50% + 116px); }
+            }
+          </style>
+
+          <div class="pn-portal-motion" aria-label="Animação visual do Portal Notarial">
+            <div class="pn-orbit"></div>
+            <div class="pn-orbit pn-orbit-small"></div>
+
+            <svg class="pn-connection-lines" viewBox="0 0 720 440" aria-hidden="true">
+              <path id="pnPathPen" class="pn-line-path" d="M110 132 C132 124, 146 118, 166 118"></path>
+              <path id="pnPathAt" class="pn-line-path" d="M118 270 C144 256, 164 247, 190 246"></path>
+              <path id="pnPathCheck" class="pn-line-path pn-line-path-soft" d="M276 402 C298 390, 312 371, 326 346"></path>
+              <path id="pnPathAvatar" class="pn-line-path" d="M397 180 C420 176, 439 174, 458 178"></path>
+              <path id="pnPathCloud" class="pn-line-path pn-line-path-soft pn-line-cloud" d="M396 136 C452 104, 520 108, 584 136"></path>
+              <path id="pnPathCloudTwo" class="pn-line-path pn-line-path-soft pn-line-cloud" d="M398 244 C460 232, 510 232, 582 248"></path>
+
+              <circle class="pn-line-node" cx="110" cy="132" r="4"></circle>
+              <circle class="pn-line-node" cx="166" cy="118" r="4"></circle>
+              <circle class="pn-line-node" cx="118" cy="270" r="4"></circle>
+              <circle class="pn-line-node" cx="190" cy="246" r="4"></circle>
+              <circle class="pn-line-node" cx="326" cy="346" r="4"></circle>
+              <circle class="pn-line-node" cx="458" cy="178" r="4"></circle>
+              <circle class="pn-line-node pn-node-cloud" cx="584" cy="136" r="4"></circle>
+              <circle class="pn-line-node pn-node-cloud" cx="582" cy="248" r="4"></circle>
+
+              <circle class="pn-flow-dot" r="3">
+                <animateMotion dur="3.2s" repeatCount="indefinite">
+                  <mpath href="#pnPathPen"></mpath>
+                </animateMotion>
+              </circle>
+
+              <circle class="pn-flow-dot" r="3">
+                <animateMotion dur="3.6s" begin="0.4s" repeatCount="indefinite">
+                  <mpath href="#pnPathAt"></mpath>
+                </animateMotion>
+              </circle>
+
+              <circle class="pn-flow-dot" r="3">
+                <animateMotion dur="4s" begin="0.8s" repeatCount="indefinite">
+                  <mpath href="#pnPathAvatar"></mpath>
+                </animateMotion>
+              </circle>
+
+              <circle class="pn-flow-dot pn-dot-cloud" r="3">
+                <animateMotion dur="4.2s" begin="1s" repeatCount="indefinite">
+                  <mpath href="#pnPathCloud"></mpath>
+                </animateMotion>
+              </circle>
+
+              <circle class="pn-flow-dot pn-dot-cloud" r="3">
+                <animateMotion dur="4.4s" begin="1.3s" repeatCount="indefinite">
+                  <mpath href="#pnPathCloudTwo"></mpath>
+                </animateMotion>
+              </circle>
             </svg>
 
-            <div class="visual-core">
-              <span>Ferramentas</span>
-              <span>notariais online</span>
+            <div class="pn-portal-star" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2.5c.8 4.8 3.7 7.7 8.5 8.5-4.8.8-7.7 3.7-8.5 8.5-.8-4.8-3.7-7.7-8.5-8.5 4.8-.8 7.7-3.7 8.5-8.5Z"></path>
+              </svg>
             </div>
 
-            <div class="tool-node node-triagem">
-              <strong>Triagem</strong>
-              <span>documentos e informações</span>
+            <div class="pn-side-badge pn-badge-left" aria-hidden="true">✒</div>
+            <div class="pn-side-badge pn-badge-doc" aria-hidden="true">@</div>
+            <div class="pn-side-badge pn-badge-bottom" aria-hidden="true">✓</div>
+
+            <div class="pn-main-card">
+              <p class="pn-card-title">
+                Ferramentas notariais online, colaborativas e gratuitas, para uso no dia a dia.
+              </p>
+
+              <div class="pn-tool-row">
+                <div class="pn-tool-icon">1</div>
+                <div class="pn-tool-copy">
+                  <strong>Triagem Notarial</strong>
+                  <small>documentos e informações do ato</small>
+                </div>
+              </div>
+
+              <div class="pn-tool-row">
+                <div class="pn-tool-icon">2</div>
+                <div class="pn-tool-copy">
+                  <strong>Emolumentos</strong>
+                  <small>enquadramento do ato</small>
+                </div>
+              </div>
+
+              <div class="pn-tool-row">
+                <div class="pn-tool-icon">3</div>
+                <div class="pn-tool-copy">
+                  <strong>Normas</strong>
+                  <small>consulta orientada</small>
+                </div>
+              </div>
             </div>
 
-            <div class="tool-node node-emolumentos">
-              <strong>Emolumentos</strong>
-              <span>enquadramento do ato</span>
-            </div>
+            <div class="pn-avatar" aria-hidden="true"></div>
 
-            <div class="tool-node node-validacao">
-              <strong>Validação</strong>
-              <span>PDF, hash e assinatura</span>
-            </div>
+            <div class="pn-tool-cloud" aria-hidden="true">
+              <div class="pn-cloud-pill">
+                <span class="pn-cloud-dot"></span>
+                Validação PDF
+              </div>
 
-            <div class="tool-node node-calculo">
-              <strong>Cálculos</strong>
-              <span>escritura e registro</span>
-            </div>
+              <div class="pn-cloud-pill">
+                <span class="pn-cloud-dot"></span>
+                Cálculos
+              </div>
 
-            <div class="tool-node node-normas">
-              <strong>Normas</strong>
-              <span>consulta orientada</span>
+              <div class="pn-cloud-pill">
+                <span class="pn-cloud-dot"></span>
+                Orçamento
+              </div>
             </div>
-
-            <div class="tool-node node-orcamento">
-              <strong>Orçamento</strong>
-              <span>estimativa do ato</span>
-            </div>
-
-            <span class="visual-pulse pulse-one"></span>
-            <span class="visual-pulse pulse-two"></span>
-            <span class="visual-pulse pulse-three"></span>
-            <span class="data-particle particle-one"></span>
-            <span class="data-particle particle-two"></span>
-            <span class="data-particle particle-three"></span>
-            <span class="data-particle particle-four"></span>
           </div>
         </div>
       </div>
