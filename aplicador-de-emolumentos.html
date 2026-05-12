@@ -6,6 +6,9 @@
   <title>Aplicador inteligente da tabela de emolumentos - São Paulo</title>
   <meta name="description" content="Ferramenta informativa para enquadramento de atos notariais na Tabela I do Estado de São Paulo, capital, com ISS de 2%.">
   <meta name="robots" content="index,follow">
+  <meta name="google-adsense-account" content="ca-pub-1578115877344777">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1578115877344777"
+     crossorigin="anonymous"></script>
   <style>
     :root{
       --bg:#f5f7fb;
@@ -606,6 +609,225 @@
       color: #64748b;
     }
 
+
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:20px;
+    }
+
+    .hero-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:42px;
+      padding:10px 14px;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:850;
+      text-decoration:none;
+      border:1px solid transparent;
+    }
+
+    .hero-link:hover{
+      text-decoration:none;
+      filter:brightness(.98);
+    }
+
+    .hero-link.primary-link{
+      background:var(--brand);
+      color:#fff;
+      box-shadow:0 12px 28px rgba(0,118,255,.22);
+    }
+
+    .hero-link.secondary-link{
+      background:#fff;
+      border-color:#cbd5e1;
+      color:#0f172a;
+    }
+
+    .adsense-section{
+      margin-top:22px;
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(216,222,233,.84);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:30px 28px;
+      scroll-margin-top:26px;
+    }
+
+    .section-kicker{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      background:var(--soft);
+      color:var(--brand-dark);
+      border-radius:999px;
+      padding:6px 12px;
+      font-size:12px;
+      font-weight:850;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      margin-bottom:14px;
+    }
+
+    .adsense-section h2{
+      margin:0 0 12px;
+      font-size:clamp(28px,3vw,42px);
+      line-height:1.08;
+      letter-spacing:-.035em;
+      color:#0f172a;
+    }
+
+    .adsense-section p{
+      color:#334155;
+      margin:0;
+      font-size:16px;
+      line-height:1.7;
+    }
+
+    .info-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+      margin-top:22px;
+    }
+
+    .info-card{
+      background:#fff;
+      border:1px solid #dbe3ef;
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .info-card h3{
+      margin:0 0 9px;
+      font-size:16px;
+      line-height:1.25;
+      color:#0f172a;
+      letter-spacing:-.01em;
+    }
+
+    .info-card p{
+      font-size:14px;
+      color:#475569;
+      line-height:1.65;
+    }
+
+    .use-steps{
+      margin:20px 0 0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:12px;
+    }
+
+    .use-steps li{
+      display:grid;
+      grid-template-columns:34px 1fr;
+      gap:12px;
+      align-items:start;
+      background:#fff;
+      border:1px solid #dbe3ef;
+      border-radius:16px;
+      padding:14px;
+      color:#475569;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .use-steps strong{
+      color:#0f172a;
+    }
+
+    .step-number{
+      width:34px;
+      height:34px;
+      display:grid;
+      place-items:center;
+      border-radius:12px;
+      background:var(--soft);
+      color:var(--brand-dark);
+      font-weight:900;
+    }
+
+    .source-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .source-box{
+      background:#fff;
+      border:1px solid #dbe3ef;
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .source-box h3{
+      margin:0 0 9px;
+      font-size:16px;
+      color:#0f172a;
+    }
+
+    .source-box ul{
+      margin:0;
+      padding-left:18px;
+      color:#475569;
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    .faq-list{
+      display:grid;
+      gap:10px;
+      margin-top:20px;
+    }
+
+    .faq-list details{
+      margin:0;
+      border:1px solid #dbe3ef;
+      border-radius:16px;
+      background:#fff;
+      overflow:hidden;
+    }
+
+    .faq-list summary{
+      padding:14px 16px;
+      background:#f8fafc;
+      color:#0f172a;
+      font-weight:850;
+      cursor:pointer;
+    }
+
+    .faq-list .faq-body{
+      padding:14px 16px;
+      color:#475569;
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    .institutional-nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px 16px;
+      margin-top:12px;
+      padding-top:12px;
+      border-top:1px solid #e2e8f0;
+    }
+
+    .institutional-nav a{
+      font-weight:800;
+      color:#0f172a;
+    }
+
+    #consulta-ferramenta{
+      scroll-margin-top:22px;
+    }
+
     .sr-only{
       position:absolute;
       width:1px;
@@ -663,7 +885,9 @@
       .two,.actions{
         grid-template-columns:1fr;
       }
-      .bloco-como-utilizar .cards {
+      .bloco-como-utilizar .cards,
+      .info-grid,
+      .source-grid {
         grid-template-columns: 1fr;
       }
 
@@ -677,7 +901,7 @@
 
     @media print{
       body{background:#fff}
-      header,.left-panel,.mini-actions,footer,.visit-counter{display:none}
+      header,.left-panel,.mini-actions,footer,.visit-counter,.adsense-section,.bloco-como-utilizar{display:none}
       .wrap{width:100%}
       .grid{display:block}
       .panel{box-shadow:none;border:0}
@@ -703,13 +927,40 @@
           <p class="scope">
             Os valores correspondem à Tabela I do Tabelionato de Notas da capital do Estado de São Paulo para 2026, com ISS de 2%. Em município com alíquota diversa, o total bruto deve ser recalculado.
           </p>
+          <div class="hero-actions" aria-label="Atalhos da página">
+            <a class="hero-link primary-link" href="#consulta-ferramenta">Ir para a ferramenta</a>
+            <a class="hero-link secondary-link" href="#criterios-fontes">Ver critérios e fontes</a>
+          </div>
         </div>
       </section>
     </div>
   </header>
 
 
-  <section class="wrap bloco-como-utilizar">
+  <section class="wrap adsense-section" id="informacoes-ferramenta" aria-labelledby="infoTitulo">
+    <div class="section-kicker">Informações</div>
+    <h2 id="infoTitulo">O que a ferramenta faz</h2>
+    <p>
+      O aplicador organiza hipóteses frequentes de atos notariais e estima o enquadramento provável na Tabela I de Custas e Emolumentos do Estado de São Paulo. A ferramenta calcula faixas, percentuais, atos principais, atos acessórios, reduções e observações cadastradas para apoiar a triagem inicial do atendimento.
+    </p>
+
+    <div class="info-grid">
+      <article class="info-card">
+        <h3>Quando usar</h3>
+        <p>Use antes de preparar orçamento, conferir composição de ato ou comparar hipóteses como compra e venda, doação, inventário, procuração, ata notarial, garantia, testamento, separação ou escritura sem valor declarado.</p>
+      </article>
+      <article class="info-card">
+        <h3>Como interpretar o resultado</h3>
+        <p>O valor indicado é estimativo. Confira a base usada, a faixa da tabela, o percentual aplicado, os fundamentos e as observações técnicas antes de usar o resultado em atendimento ou ato formal.</p>
+      </article>
+      <article class="info-card">
+        <h3>Limite operacional</h3>
+        <p>A ferramenta não substitui conferência jurídica, análise documental, verificação tributária, decisão do tabelião ou atualização normativa posterior à base utilizada.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap bloco-como-utilizar" id="como-usar">
     <h2>Como utilizar a ferramenta</h2>
 
     <p class="intro">
@@ -752,7 +1003,7 @@
     </div>
   </section>
 
-  <main>
+  <main id="consulta-ferramenta">
     <div class="wrap grid">
       <section class="panel left-panel">
         <div class="panel-head">
@@ -862,12 +1113,78 @@
     </div>
   </main>
 
+  <section class="wrap adsense-section" id="criterios-fontes" aria-labelledby="criteriosTitulo">
+    <div class="section-kicker">Critérios e fontes</div>
+    <h2 id="criteriosTitulo">Critérios utilizados no cálculo</h2>
+    <p>
+      A estimativa considera os dados informados pelo usuário, a hipótese de ato escolhida, a base de cálculo aplicável e os itens cadastrados da Tabela I. Em atos com valor declarado, a ferramenta compara as bases informadas e usa o critério de maior valor quando essa regra for aplicável à hipótese selecionada.
+    </p>
+
+    <div class="source-grid">
+      <article class="source-box">
+        <h3>Fontes indicadas</h3>
+        <ul>
+          <li>Lei Estadual nº 11.331/2002.</li>
+          <li>Texto consolidado pela Lei nº 18.009/2024.</li>
+          <li>Tabela I dos Tabelionatos de Notas do Estado de São Paulo.</li>
+          <li>Notas explicativas e enunciados notariais cadastrados na ferramenta.</li>
+        </ul>
+      </article>
+      <article class="source-box">
+        <h3>Limites da ferramenta</h3>
+        <ul>
+          <li>Não calcula tributos municipais, estaduais ou federais que não integrem a tabela notarial.</li>
+          <li>Não verifica isenção, gratuidade, dispensa, exigência fiscal ou mudança normativa posterior.</li>
+          <li>Não substitui a conferência do escrevente, do tabelião ou da serventia competente.</li>
+          <li>Não decide casos de dúvida, divergência interpretativa ou particularidade documental.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="wrap adsense-section" id="faq" aria-labelledby="faqTitulo">
+    <div class="section-kicker">FAQ</div>
+    <h2 id="faqTitulo">Perguntas frequentes</h2>
+
+    <div class="faq-list">
+      <details>
+        <summary>O resultado é orçamento oficial do cartório?</summary>
+        <div class="faq-body">Não. O resultado é uma estimativa técnica para triagem. O orçamento final depende da conferência da serventia, dos documentos apresentados, da natureza jurídica do ato e da tabela vigente na data da prática do ato.</div>
+      </details>
+      <details>
+        <summary>A ferramenta substitui a análise do tabelião?</summary>
+        <div class="faq-body">Não. A ferramenta organiza critérios de cálculo e fundamentos cadastrados, mas não substitui qualificação notarial, análise jurídica, conferência fiscal ou decisão do tabelião responsável.</div>
+      </details>
+      <details>
+        <summary>Por que preciso informar mais de uma base de valor?</summary>
+        <div class="faq-body">Alguns atos exigem comparação entre valor do negócio, valor venal, base de ITBI, valor da dívida, partilha ou outro parâmetro. A ferramenta usa os campos informados para aplicar a regra cadastrada para a hipótese selecionada.</div>
+      </details>
+      <details>
+        <summary>O ISS pode alterar o total?</summary>
+        <div class="faq-body">Sim. A página usa a referência da capital do Estado de São Paulo com ISS de 2%. Em município com alíquota diversa, o total bruto deve ser recalculado.</div>
+      </details>
+      <details>
+        <summary>Como informar erro ou sugerir nova hipótese?</summary>
+        <div class="faq-body">Use a página de contato do Portal Notarial. Informe o tipo de ato, a hipótese de cálculo, a fonte normativa e, se possível, o exemplo que motivou a sugestão.</div>
+      </details>
+    </div>
+  </section>
+
+
   <footer>
     <div class="wrap">
       <div class="src">
         <p>Base informativa. Lei Estadual nº 11.331 de 26 de dezembro de 2002, texto consolidado pela Lei nº 18.009 de 2024, Tabela I do Tabelionato de Notas da capital para 2026 com ISS de 2%, notas explicativas e enunciados notariais (CNB-SP).</p>
         <p>Uso recomendado. Triagem e conferência interna. O resultado não substitui a conferência caso a caso pelo escrevente ou tabelião.</p>
         <p>Projeto apoiado por <a href="https://escriturapublica.substack.com" target="_blank" rel="noopener">Escritura Pública</a> | <a href="https://www.atesta.com.br" target="_blank" rel="noopener">Atesta</a></p>
+        <nav class="institutional-nav" aria-label="Links institucionais">
+          <a href="https://portalnotarial.com.br/">Início</a>
+          <a href="https://portalnotarial.com.br/sobre.html">Sobre</a>
+          <a href="https://portalnotarial.com.br/contato.html">Contato</a>
+          <a href="https://portalnotarial.com.br/politica-de-privacidade.html">Privacidade</a>
+          <a href="https://portalnotarial.com.br/termos-de-uso.html">Termos</a>
+          <a href="https://portalnotarial.com.br/aviso-legal.html">Aviso legal</a>
+        </nav>
       </div>
     </div>
   </footer>
