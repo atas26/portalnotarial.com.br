@@ -23,6 +23,15 @@
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1578115877344777"
        crossorigin="anonymous"></script>
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TTD149ZWLC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TTD149ZWLC');
+  </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -259,7 +268,7 @@
     <p>A ferramenta é informativa e considera critérios do Código Nacional de Normas da Corregedoria Nacional de Justiça e da Lei nº 8.935/1994. O resultado não substitui a conferência da norma vigente, dos documentos apresentados e da análise do caso concreto pelo tabelião responsável.</p>
   </div>
 </noscript>
-<!-- Versão revisada: fluxo de escritura pública com pergunta sobre ato híbrido com imóvel, regra da mesma UF com adquirente/credor, tópico próprio de domiciliados no exterior, nota sobre comprovação de domicílio, dependências fixadas, fallback de carregamento e marcador de visitas discreto. -->
+<!-- Versão revisada: fluxo de escritura pública com pergunta sobre ato híbrido com imóvel, regra da mesma UF com adquirente/credor, tópico próprio de domiciliados no exterior, nota sobre comprovação de domicílio, dependências fixadas, fallback de carregamento. -->
 
 <script>
 const { useState, useEffect } = React;
@@ -340,122 +349,6 @@ const Plus = (p) => React.createElement(Icon, { ...p },
 const Quote = (p) => React.createElement(Icon, { ...p },
     React.createElement("path", { d: "M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2.75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1.008-1 1.031V20c0 1 0 1 1 1z" }),
     React.createElement("path", { d: "M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2.75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" }));
-// =====================================================================
-// Marcador discreto de visitas
-// =====================================================================
-function VisitMarker() {
-    const [contador, setContador] = useState({
-        carregando: true,
-        valor: null,
-        fallback: false
-    });
-
-    useEffect(() => {
-        if (typeof window === 'undefined')
-            return;
-
-        let cancelado = false;
-
-        function extrairNumero(dados) {
-            const candidatos = [
-                dados && dados.count,
-                dados && dados.value,
-                dados && dados.data,
-                dados && dados.data && dados.data.count,
-                dados && dados.data && dados.data.value,
-                dados && dados.Count,
-                dados && dados.Value
-            ];
-
-            for (const candidato of candidatos) {
-                const numero = Number(candidato);
-                if (Number.isFinite(numero)) {
-                    return numero;
-                }
-            }
-
-            return null;
-        }
-
-        async function registrarVisitaGlobal() {
-            try {
-                const namespace = 'portalnotarial';
-                const chave = 'competencia-e-notariado';
-                const url = `https://api.counterapi.dev/v1/${encodeURIComponent(namespace)}/${encodeURIComponent(chave)}/up`;
-
-                const resposta = await fetch(url, {
-                    method: 'GET',
-                    cache: 'no-store',
-                    mode: 'cors'
-                });
-
-                if (!resposta.ok) {
-                    throw new Error('contador indisponível');
-                }
-
-                const dados = await resposta.json();
-                const valor = extrairNumero(dados);
-
-                if (valor === null) {
-                    throw new Error('resposta inválida do contador');
-                }
-
-                if (!cancelado) {
-                    setContador({
-                        carregando: false,
-                        valor,
-                        fallback: false
-                    });
-                }
-            } catch (erro) {
-                if (!cancelado) {
-                    setContador({
-                        carregando: false,
-                        valor: null,
-                        fallback: true
-                    });
-                }
-            }
-        }
-
-        registrarVisitaGlobal();
-
-        return () => {
-            cancelado = true;
-        };
-    }, []);
-
-    const estilo = {
-        display: 'inline-flex',
-        alignItems: 'center',
-        minHeight: '18px',
-        opacity: 0.48,
-        filter: 'grayscale(1)',
-        transition: 'opacity 0.2s ease',
-        fontSize: '11px',
-        lineHeight: '18px',
-        color: '#64748b',
-        whiteSpace: 'nowrap'
-    };
-
-    const eventos = {
-        onMouseEnter: (event) => { event.currentTarget.style.opacity = '0.78'; },
-        onMouseLeave: (event) => { event.currentTarget.style.opacity = '0.48'; }
-    };
-
-    if (contador.carregando) {
-        return React.createElement("span", { className: "no-print", style: estilo, title: "Marcador discreto de visitas", "aria-label": "Marcador discreto de visitas", ...eventos }, "visitas");
-    }
-
-    if (contador.valor !== null) {
-        return React.createElement("span", { className: "no-print", style: estilo, title: "Marcador discreto de visitas", "aria-label": "Marcador discreto de visitas", ...eventos },
-            "visitas ",
-            contador.valor);
-    }
-
-    return React.createElement("span", { className: "no-print", style: estilo, title: "Marcador discreto de visitas", "aria-label": "Marcador discreto de visitas", ...eventos }, "visitas");
-}
-
 // =====================================================================
 // Lógica jurídica
 // =====================================================================
@@ -1035,8 +928,7 @@ function CompetenciaENotariado() {
                             "Apoio: ",
                             React.createElement("a", { href: "https://escriturapublica.substack.com", target: "_blank", rel: "noopener noreferrer", className: "text-orange-700 hover:text-orange-900 transition" }, "Escritura P\u00FAblica"),
                             " | ",
-                            React.createElement("a", { href: "https://www.atesta.com.br", target: "_blank", rel: "noopener noreferrer", className: "text-orange-700 hover:text-orange-900 transition" }, "Atesta")),
-                        React.createElement(VisitMarker, null)))))));
+                            React.createElement("a", { href: "https://www.atesta.com.br", target: "_blank", rel: "noopener noreferrer", className: "text-orange-700 hover:text-orange-900 transition" }, "Atesta"))))))));
 }
 const rootElement = document.getElementById('root');
 try {
