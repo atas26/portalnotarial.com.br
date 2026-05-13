@@ -10,6 +10,14 @@
 <meta name="google-adsense-account" content="ca-pub-1578115877344777"/>
 <link rel="canonical" href="https://portalnotarial.com.br/links-uteis.html"/>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1578115877344777" crossorigin="anonymous"></script>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TTD149ZWLC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TTD149ZWLC');
+</script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&amp;family=IBM+Plex+Sans:wght@300;400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
@@ -180,9 +188,6 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,
 .no-results.show{display:block}
 .footer{margin-top:24px;padding-top:18px;border-top:1px solid var(--stone-200);color:var(--slate-600);font-size:12px}
 .footer a{color:var(--accent)}
-.visit{position:fixed;right:14px;bottom:12px;z-index:40;opacity:.58;transition:opacity .2s ease;font-size:11px;color:var(--slate-600);background:rgba(255,255,255,.90);border:1px solid var(--stone-200);border-radius:4px;padding:4px 7px;line-height:1}
-.visit:hover{opacity:.9}
-.visit img{display:block;height:18px;width:auto;max-width:120px}
 .hidden{display:none!important}
 @media (max-width:980px){
   .grid{grid-template-columns:1fr}
@@ -218,7 +223,7 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,
 @media (max-width:980px){.pn-card-grid-2,.pn-process{grid-template-columns:1fr}}
 
 @media print{
-  .actions,.visit,.search-box{display:none!important}
+  .actions,.search-box{display:none!important}
   body{background:white}
   .page{padding:0}
   .hero,.grid{display:block}
@@ -464,9 +469,6 @@ input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,
 <span class="footer-note">Página de apoio operacional. Os serviços externos são administrados pelos respectivos órgãos e entidades responsáveis.</span>
 </footer>
 </main>
-<span class="visit" title="Visitas" aria-label="Marcador discreto de visitas">
-<span id="visitCounterText">Visitas: ...</span>
-</span>
 <script>
 const el = (id) => document.getElementById(id);
 const searchInput = el('searchInput');
@@ -636,35 +638,8 @@ function setupActions() {
   el('btnLimpar').addEventListener('click', clearFilters);
 }
 
-function setupCounter() {
-  const contador = el('visitCounterText');
-  if (!contador) return;
-
-  const namespace = 'portalnotarial';
-  const path = (window.location.pathname || '/links-uteis.html').replace(/\/$/, '') || '/links-uteis.html';
-  const nomeContador = path
-    .replace(/^\/+/, '')
-    .replace(/\.html$/i, '')
-    .replace(/[^a-z0-9_-]/gi, '-')
-    .toLowerCase();
-
-  fetch(`https://api.counterapi.dev/v1/${namespace}/${nomeContador}/up`, { cache: 'no-store' })
-    .then((resposta) => {
-      if (!resposta.ok) throw new Error('Falha ao consultar contador.');
-      return resposta.json();
-    })
-    .then((dados) => {
-      const total = Number(dados.count ?? dados.data ?? dados.value);
-      contador.textContent = Number.isFinite(total) ? `Visitas: ${total}` : 'Visitas: —';
-    })
-    .catch(() => {
-      contador.textContent = 'Visitas: —';
-    });
-}
-
 setupActions();
 setupBrokenLinkReports();
-setupCounter();
 applyFilter();
 </script>
 </body>
