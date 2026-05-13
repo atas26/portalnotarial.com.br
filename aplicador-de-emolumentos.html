@@ -9,6 +9,14 @@
   <meta name="google-adsense-account" content="ca-pub-1578115877344777">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1578115877344777"
      crossorigin="anonymous"></script>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TTD149ZWLC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TTD149ZWLC');
+  </script>
   <style>
     :root{
       --bg:#f5f7fb;
@@ -839,26 +847,6 @@
       border:0;
     }
 
-    .visit-counter{
-      position:fixed;
-      right:12px;
-      bottom:10px;
-      z-index:1000;
-      background:rgba(255,255,255,.86);
-      border:1px solid rgba(203,213,225,.9);
-      color:#64748b;
-      padding:6px 9px;
-      border-radius:999px;
-      font-size:12px;
-      line-height:1;
-      box-shadow:0 8px 20px rgba(15,23,42,.08);
-      backdrop-filter:blur(8px);
-    }
-
-    .visit-counter span{
-      font-weight:800;
-      color:#475569;
-    }
 
     .print-url{
       display:none;
@@ -901,7 +889,7 @@
 
     @media print{
       body{background:#fff}
-      header,.left-panel,.mini-actions,footer,.visit-counter,.adsense-section,.bloco-como-utilizar{display:none}
+      header,.left-panel,.mini-actions,footer,.adsense-section,.bloco-como-utilizar{display:none}
       .wrap{width:100%}
       .grid{display:block}
       .panel{box-shadow:none;border:0}
@@ -1189,7 +1177,6 @@
     </div>
   </footer>
 
-  <div class="visit-counter" id="visitCounter">Visitas: <span id="visitCount">0</span></div>
 
   <script>
     "use strict";
@@ -2095,36 +2082,10 @@
     });
 
 
-    function atualizarContadorVisitas(){
-      const contador = $("visitCount");
-      if(!contador) return;
-
-      const namespace = "portalnotarial";
-      const nomeContador = "aplicador-tabela-emolumentos-notas-capital";
-      const url = "https://api.counterapi.dev/v1/" + namespace + "/" + nomeContador + "/up";
-
-      fetch(url, {cache:"no-store"})
-        .then(resposta => {
-          if(!resposta.ok) throw new Error("Falha ao atualizar contador");
-          return resposta.json();
-        })
-        .then(dados => {
-          const valor = dados.count ?? dados.data ?? dados.value ?? dados?.counter?.count;
-          const numeroVisitas = Number(valor);
-          if(Number.isFinite(numeroVisitas)){
-            contador.textContent = numeroVisitas.toLocaleString("pt-BR");
-          }
-        })
-        .catch(() => {
-          contador.textContent = "0";
-        });
-    }
-
     $("gerarPdf").addEventListener("click", () => window.print());
     $("imprimir").addEventListener("click", () => window.print());
 
     popularSelect("");
-    atualizarContadorVisitas();
   </script>
 </body>
 </html>
