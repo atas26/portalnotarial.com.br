@@ -305,10 +305,6 @@
     .footer { border-top: 1px solid var(--line); padding: 22px 0 40px; color: var(--muted); font-size: 12px; }
     .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
     .footer-support { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .visit-marker { display: inline-flex; align-items: center; min-height: 18px; opacity: .62; filter: grayscale(1); transition: opacity .2s ease; vertical-align: middle; }
-    .visit-marker:hover { opacity: .78; }
-    .visit-marker img { height: 18px; width: auto; display: block; }
-    .visit-fallback { display:inline-flex; align-items:center; height:18px; padding:0 6px; border:1px solid var(--line-soft); border-radius:999px; color:var(--muted); background:var(--paper); font-size:11px; line-height:18px; }
     .toast { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%) translateY(20px); opacity: 0; pointer-events: none; background: #101828; color: #fff; padding: 12px 16px; border-radius: 999px; box-shadow: 0 20px 50px rgba(0,0,0,.20); transition: opacity .2s ease, transform .2s ease; z-index: 90; font-size: 13px; font-weight: 700; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
     .hidden { display: none !important; }
@@ -507,6 +503,15 @@
 }
 </style>
 
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TTD149ZWLC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TTD149ZWLC');
+  </script>
+
 </head>
 <body>
   <main class="wrap">
@@ -688,7 +693,6 @@
       <span>Base atualizada automaticamente.</span>
       <span class="footer-support">
         Projeto apoiado por <a href="https://escriturapublica.substack.com/" target="_blank" rel="noopener noreferrer">Escritura Pública</a> | <a href="https://www.atesta.com.br" target="_blank" rel="noopener noreferrer">Atesta</a>
-        <span id="visitMarker" class="visit-marker" title="Marcador discreto de visitas" aria-label="Marcador discreto de visitas"><span class="visit-fallback">visitas</span></span>
       </span>
       <nav class="footer-links" aria-label="Links institucionais">
         <a href="https://portalnotarial.com.br/">Home</a>
@@ -1759,41 +1763,6 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       renderAlteracoes();
     }
 
-    function setupVisitMarker() {
-      const marker = $('#visitMarker');
-      if (!marker) return;
-      marker.innerHTML = '';
-
-      let localCount = 1;
-      try {
-        const key = 'cnn_visit_marker_local_v1';
-        localCount = Number(localStorage.getItem(key) || '0') + 1;
-        localStorage.setItem(key, String(localCount));
-      } catch {}
-
-      const fallback = document.createElement('span');
-      fallback.className = 'visit-fallback';
-      fallback.textContent = `visitas ${localCount}`;
-      fallback.title = 'Contador local exibido quando o marcador externo não carrega.';
-      marker.appendChild(fallback);
-
-      const host = window.location.hostname || 'localhost';
-      const path = (window.location.pathname || '/').replace(/\/$/, '') || '/';
-      const pagina = `${host}${path}`;
-      const img = document.createElement('img');
-      img.src = `https://hits.sh/${encodeURIComponent(pagina)}.svg?label=visitas&color=94a3b8&labelColor=f5f5f4&style=flat-square`;
-      img.alt = 'visitas';
-      img.loading = 'lazy';
-      img.referrerPolicy = 'no-referrer-when-downgrade';
-      img.onload = () => {
-        marker.innerHTML = '';
-        marker.appendChild(img);
-      };
-      img.onerror = () => {
-        fallback.title = 'Marcador externo indisponível. Exibindo contador local deste navegador.';
-      };
-    }
-
     function getRecord(id) {
       return state.articles.find(a => a.id === id);
     }
@@ -1946,7 +1915,6 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       renderChips();
       renderAlteracoes();
       bindEvents();
-      setupVisitMarker();
       await loadEmbeddedData();
       renderAll();
       setTimeout(applyHashFocus, 200);
