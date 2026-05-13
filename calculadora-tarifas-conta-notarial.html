@@ -23,6 +23,14 @@
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1578115877344777"
        crossorigin="anonymous"></script>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TTD149ZWLC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TTD149ZWLC');
+  </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -240,24 +248,6 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,118,255,.08)}
   font-size:12px;
 }
 .footer a{color:var(--accent)}
-.visit{
-  position:fixed;
-  right:14px;
-  bottom:12px;
-  z-index:40;
-  opacity:.72;
-  transition:opacity .2s ease;
-  background:transparent;
-  border:0;
-  padding:0;
-}
-.visit:hover{opacity:.94}
-.visit img{
-  display:block;
-  height:20px;
-  width:auto;
-  border:0;
-}
 @media (max-width:980px){
   .grid{grid-template-columns:1fr}
   .form-grid{grid-template-columns:1fr}
@@ -265,7 +255,7 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,118,255,.08)}
   .lead{max-width:none}
 }
 @media print{
-  .actions,.visit{display:none!important}
+  .actions{display:none!important}
   body{background:white}
   .page{padding:0}
   .hero,.grid{display:block}
@@ -686,15 +676,6 @@ input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(0,118,255,.08)}
 
 </main>
 
-<span class="visit" title="Visitas" aria-label="Marcador discreto de visitas">
-  <img
-    id="visitCounterBadge"
-    alt="Visitas"
-    loading="lazy"
-    decoding="async"
-    data-src="https://visitor-badge.laobi.icu/badge?page_id=portal-notarial.calculadora-tarifas-conta-notarial&left_text=Visitas&left_color=64748b&right_color=94a3b8"
-  />
-</span>
 
 <script>
 // =====================================================================
@@ -735,26 +716,8 @@ el('btnLimpar').addEventListener('click', limpar);
 el('btnImprimir').addEventListener('click', () => window.print());
 el('btnCopiar').addEventListener('click', copiarResultado);
 
-configuraContador();
 calcular(false);
 
-function configuraContador(){
-  const badge = el('visitCounterBadge');
-  if (!badge) return;
-
-  const base = badge.dataset.src;
-  if (!base) return;
-
-  // Contador global por imagem SVG externa.
-  // Não usa localStorage, cookies, caminho da URL, domínio ou fetch.
-  // O page_id é fixo e, por isso, celular e computador consultam o mesmo contador.
-  const separador = base.includes('?') ? '&' : '?';
-  badge.src = `${base}${separador}cache=${Date.now()}`;
-  badge.onerror = () => {
-    const marcador = badge.closest('.visit');
-    if (marcador) marcador.style.display = 'none';
-  };
-}
 
 function mascaraMoeda(campo){
   const somenteNumeros = campo.value.replace(/\D/g, '');
