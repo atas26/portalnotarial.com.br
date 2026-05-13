@@ -558,24 +558,21 @@
 
             <div class="field">
               <label for="escrevente">Escrevente responsável</label>
-              <input id="escrevente" type="text" placeholder="Nome do escrevente" required />
+              <input id="escrevente" type="text" placeholder="Nome do escrevente" style="text-transform: uppercase;" required />
             </div>
           </div>
         </form>
       </div>
 
-      <div class="card">
-        <h2>3. Texto extraído da certidão</h2>
-        <textarea id="textoOCR" placeholder="O texto extraído da certidão aparecerá aqui para conferência."></textarea>
-      </div>
+      <textarea id="textoOCR" style="display: none;" aria-hidden="true"></textarea>
 
       <div class="card">
-        <h2>4. Prévia do ofício</h2>
+        <h2>3. Prévia do ofício</h2>
         <div class="preview" id="previewOficio">A prévia será gerada com os dados preenchidos.</div>
       </div>
 
       <div class="card full">
-        <h2>5. Gerar PDF final</h2>
+        <h2>4. Gerar PDF final</h2>
         <p class="small-note">
           O PDF final será montado nesta ordem: ofício, certidão de óbito e comunicado da Febraban.
         </p>
@@ -639,6 +636,7 @@
       inicializarCaixaAlta('orgaoAutorizado');
       inicializarCaixaAlta('autorizado');
       inicializarCaixaAlta('quemAssina');
+      inicializarCaixaAlta('escrevente');
       inicializarValidadorEmail('emailCartorio');
     }
 
@@ -1359,7 +1357,7 @@
         numeroOficio: getValor('numeroOficio'),
         anoOficio: getValor('anoOficio'),
         dataOficio: formatarDataBR(getValor('dataOficio')),
-        escrevente: getValor('escrevente'),
+        escrevente: getValor('escrevente').toUpperCase(),
         protocolo: getValor('protocolo'),
         banco: getBancoFinal(),
         agencia: getValor('agencia'),
@@ -1389,9 +1387,25 @@
       return valor || '[' + campo + ']';
     }
 
+    function gerarIniciaisEscrevente(nome) {
+      const palavrasIgnoradas = ['DA', 'DE', 'DO', 'DAS', 'DOS', 'E'];
+      return String(nome || '')
+        .toUpperCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^A-Z\s]/g, ' ')
+        .split(/\s+/)
+        .filter(function (parte) { return parte && !palavrasIgnoradas.includes(parte); })
+        .map(function (parte) { return parte.charAt(0); })
+        .join('')
+        .slice(0, 6);
+    }
+
     function montarEstruturaOficio(dados) {
       const numeroAno = valorOuCampo(dados.numeroOficio, 'Número') + '/' + valorOuCampo(dados.anoOficio, 'Ano');
       const protocolo = valorOuCampo(dados.protocolo, 'Protocolo');
+      const iniciaisEscrevente = gerarIniciaisEscrevente(dados.escrevente);
+      const protocoloComSufixo = protocolo + (iniciaisEscrevente ? ' - ' + iniciaisEscrevente : '') + ' - OFDS';
       const dataOficio = valorOuCampo(dados.dataOficio, 'DATA');
       const banco = valorOuCampo(dados.banco, 'BANCO');
       const agencia = valorOuCampo(dados.agencia, 'NÚMERO DA AGÊNCIA');
@@ -1412,7 +1426,7 @@
 
       return [
         { tipo: 'line', texto: 'Ofício nº ' + numeroAno },
-        { tipo: 'line', texto: 'Protocolo do ato: ' + protocolo + ' - OFDS' },
+        { tipo: 'line', texto: 'Protocolo do ato: ' + protocoloComSufixo },
         { tipo: 'rightLine', texto: 'São Paulo, ' + dataOficio },
         { tipo: 'space' },
         { tipo: 'lineBold', texto: banco },
@@ -1512,9 +1526,36 @@
       ids.previewOficio.innerHTML = montarHtmlOficio(dados);
     }
 
-    async function gerarPdfFinal() {
+    function validarCamposAntesDeGerar() {
       const form = document.getElementById('formOficio');
-      if (!form.reportValidity()) return;
+
+      ['orgaoFalecido', 'orgaoAutorizado', 'autorizado', 'quemAssina', 'escrevente'].forEach(function (id) {
+        const campo = document.getElementById(id);
+        if (campo) campo.value = campo.value.toUpperCase();
+      });
+
+      validarCampoCPF(document.getElementById('cpfFalecido'));
+      validarCampoCPF(document.getElementById('cpfAutorizado'));
+      validarCampoEmail(document.getElementById('emailCartorio'));
+
+      if (!form.reportValidity()) {
+        setStatus('Confira os campos obrigatórios antes de gerar o PDF final.');
+        return false;
+      }
+
+      if (!ids.certidaoPdf.files[0]) {
+        alert('Selecione a certidão de óbito em PDF antes de gerar o PDF final.');
+        ids.certidaoPdf.focus();
+        setStatus('Selecione a certidão de óbito em PDF antes de gerar o PDF final.');
+        return false;
+      }
+
+      atualizarPrevia();
+      return true;
+    }
+
+    async function gerarPdfFinal() {
+      if (!validarCamposAntesDeGerar()) return;
 
       const certidao = ids.certidaoPdf.files[0];
       if (!certidao) {
