@@ -6,13 +6,14 @@
 <title>Gerador de orçamento de atos notariais | Portal Notarial</title>
 <meta name="description" content="Gerador de orçamento estimativo de atos notariais, tributo e registro imobiliário no Estado de São Paulo, com base no valor informado pelo usuário." />
 <meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://portalnotarial.com.br/gerador-orcamento-atos-notariais.html" />
+<meta name="google-adsense-account" content="ca-pub-1578115877344777" />
+<link rel="canonical" href="https://portalnotarial.com.br/gerador-de-orcamentos-notariais.html" />
 <meta property="og:locale" content="pt_BR" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Portal Notarial" />
 <meta property="og:title" content="Gerador de orçamento de atos notariais | Portal Notarial" />
 <meta property="og:description" content="Gerador de orçamento estimativo de atos notariais, tributo e registro imobiliário no Estado de São Paulo, com base no valor informado pelo usuário." />
-<meta property="og:url" content="https://portalnotarial.com.br/gerador-orcamento-atos-notariais.html" />
+<meta property="og:url" content="https://portalnotarial.com.br/gerador-de-orcamentos-notariais.html" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Gerador de orçamento de atos notariais | Portal Notarial" />
 <meta name="twitter:description" content="Gerador de orçamento estimativo de atos notariais, tributo e registro imobiliário no Estado de São Paulo, com base no valor informado pelo usuário." />
@@ -225,6 +226,29 @@ tr:last-child td{border-bottom:none}
 .pn-info-card p{margin:0;font-size:13px;line-height:1.6;color:#475569}
 .pn-note{margin-top:16px;border-left:3px solid rgb(0,118,255);background:#f8fafc;padding:13px 14px;color:#334155;font-size:13px;line-height:1.6}
 .pn-meta{display:block;margin-top:12px;color:#64748b;font-size:12px;line-height:1.5}
+
+#gerador{scroll-margin-top:28px}
+.pn-hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.pn-hero-actions a{border:1px solid #d7dce3;border-radius:999px;padding:11px 16px;font-size:13px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform .15s ease,border-color .15s ease,background .15s ease,color .15s ease}
+.pn-hero-actions a:hover{transform:translateY(-1px);text-decoration:none;border-color:var(--accent);color:var(--accent)}
+.pn-hero-actions .pn-primary-link{background:var(--accent);border-color:var(--accent);color:#fff}
+.pn-hero-actions .pn-primary-link:hover{background:#005fce;border-color:#005fce;color:#fff}
+.pn-support-section{background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:24px;margin:26px 0 0;color:#172033;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.pn-support-section h2{margin:0 0 10px;font-family:'Fraunces','Georgia',serif;font-size:clamp(1.7rem,2.5vw,2.35rem);line-height:1.12;font-weight:400;letter-spacing:-.03em;color:#0f172a}
+.pn-support-section p{margin:0 0 14px;color:#475569;font-size:15px;line-height:1.68}
+.pn-steps{display:grid;gap:10px;margin:18px 0 0;padding:0;list-style:none;counter-reset:pn-step}
+.pn-steps li{counter-increment:pn-step;border:1px solid #e7e5e4;background:#fafaf9;border-radius:12px;padding:14px 16px 14px 48px;position:relative;color:#475569;font-size:14px;line-height:1.6}
+.pn-steps li::before{content:counter(pn-step);position:absolute;left:16px;top:15px;width:22px;height:22px;border-radius:999px;background:rgba(0,118,255,.1);color:rgb(0,118,255);display:grid;place-items:center;font-weight:800;font-size:12px}
+.pn-faq-list{display:grid;gap:10px;margin-top:18px}
+.pn-faq-list details{border:1px solid #e7e5e4;background:#fafaf9;border-radius:12px;padding:0;overflow:hidden}
+.pn-faq-list summary{cursor:pointer;padding:16px 18px;font-weight:700;color:#0f172a;list-style:none}
+.pn-faq-list summary::-webkit-details-marker{display:none}
+.pn-faq-list details p{padding:0 18px 16px;margin:0;color:#475569;font-size:14px;line-height:1.65}
+.footer{display:flex;flex-direction:column;gap:12px}
+.footer-links,.footer-support{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.footer-links a,.footer-support a{color:var(--accent)}
+.footer-small{display:block;color:var(--slate-600);font-size:12px;line-height:1.55}
+
 @media (max-width:980px){
   .grid{grid-template-columns:1fr}
   .result-card{position:static}
@@ -269,27 +293,44 @@ tr:last-child td{border-bottom:none}
       <span class="eyebrow">Valor estimado - Estado de São Paulo</span>
       <h1 id="titulo-principal">Gerador de orçamento de atos notariais</h1>
       <p class="lead">Preencha os dados do atendimento para gerar um orçamento estimativo com escritura, tributo, registro imobiliário e valores adicionais informados.</p>
+      <div class="pn-hero-actions" aria-label="Ações principais">
+        <a class="pn-primary-link" href="#gerador">Ir para a ferramenta</a>
+        <a href="https://portalnotarial.com.br/">Voltar à home</a>
+      </div>
     </div>
   </section>
 
   <section class="pn-editorial" aria-labelledby="sobre-ferramenta">
-    <h2 id="sobre-ferramenta">Como utilizar o gerador</h2>
-    <p>A página calcula a escritura pela tabela de Tabelionato de Notas, calcula o registro imobiliário quando selecionado e soma o tributo conforme a natureza informada. O campo de outros valores deve ser usado apenas para valores autorizados e externos ao cálculo principal.</p>
+    <h2 id="sobre-ferramenta">O que a ferramenta faz</h2>
+    <p>O gerador organiza dados básicos do atendimento e calcula uma estimativa de custo para ato notarial no Estado de São Paulo. O resultado pode incluir emolumentos de escritura, tributo, registro imobiliário e outros valores externos autorizados pelas partes.</p>
     <div class="pn-info-grid">
       <div class="pn-info-card">
-        <h3>Dados do atendimento</h3>
-        <p>Informe o escrevente responsável, o contato do escrevente, o cartório e o solicitante para que o orçamento seja gerado com os dados básicos do atendimento.</p>
+        <h3>Quando usar</h3>
+        <p>Use antes do atendimento ou durante a triagem do ato para apresentar uma estimativa inicial ao solicitante, com indicação dos principais componentes do orçamento.</p>
       </div>
       <div class="pn-info-card">
-        <h3>Base de cálculo</h3>
-        <p>Use o maior valor aplicável entre valor do negócio, valor venal de referência, valor fiscal ou outro critério exigido no caso concreto.</p>
+        <h3>Como usar</h3>
+        <p>Preencha os dados do escrevente, cartório, solicitante, natureza do ato, valor base, tipo de tributo, registro imobiliário e outros serviços autorizados.</p>
       </div>
       <div class="pn-info-card">
-        <h3>Resultado</h3>
-        <p>O orçamento é estimativo e depende de conferência da documentação, da tributação aplicável e de eventual exigência do registro imobiliário.</p>
+        <h3>Como interpretar</h3>
+        <p>O total exibido é estimativo. Cada linha mostra o componente aplicado no cálculo, incluindo escritura, tributo, registro e valores externos informados.</p>
+      </div>
+      <div class="pn-info-card">
+        <h3>Critérios e fontes</h3>
+        <p>O cálculo usa faixas internas de emolumentos para Tabelionato de Notas e Registro de Imóveis, alíquota informada para ITBI e alíquota fixa de 4% para ITCMD.</p>
+      </div>
+      <div class="pn-info-card">
+        <h3>Limites da ferramenta</h3>
+        <p>A página não substitui orçamento oficial, conferência fiscal, qualificação notarial, análise registral ou validação da documentação apresentada.</p>
+      </div>
+      <div class="pn-info-card">
+        <h3>Resultado exportável</h3>
+        <p>Após gerar o orçamento, é possível copiar, imprimir ou gerar PDF com os dados do atendimento e a composição estimada do valor.</p>
       </div>
     </div>
-    <div class="pn-note">A estimativa não substitui orçamento oficial, conferência fiscal, qualificação notarial, análise registral ou validação de documentos apresentados.</div>
+    <div class="pn-note">A estimativa depende dos dados informados pelo usuário. Para uso em atendimento real, confira a natureza do ato, a base de cálculo, a incidência tributária, a tabela vigente, a documentação apresentada e eventuais exigências do registro imobiliário.</div>
+    <span class="pn-meta">Última atualização da ferramenta: 04/05/2026.</span>
   </section>
 
   <section class="grid" id="gerador">
@@ -420,10 +461,69 @@ tr:last-child td{border-bottom:none}
     </div>
   </section>
 
+  <section class="pn-support-section" aria-labelledby="passo-a-passo">
+    <h2 id="passo-a-passo">Como usar o gerador</h2>
+    <p>O formulário foi pensado para uso operacional. O usuário informa os dados do atendimento, define a natureza do ato, indica o valor base e seleciona se haverá registro imobiliário.</p>
+    <ol class="pn-steps">
+      <li>Informe escrevente responsável, contato, cartório e solicitante.</li>
+      <li>Selecione a natureza do ato ou descreva o ato no campo próprio.</li>
+      <li>Informe o valor base de cálculo em reais.</li>
+      <li>Escolha a natureza do tributo e informe a alíquota do ITBI quando o ato for oneroso.</li>
+      <li>Indique se o registro imobiliário deve entrar no orçamento.</li>
+      <li>Inclua apenas valores externos previamente autorizados pelas partes no campo de outros serviços.</li>
+      <li>Clique em gerar orçamento e confira a composição antes de copiar, imprimir ou gerar PDF.</li>
+    </ol>
+  </section>
+
+  <section class="pn-support-section" aria-labelledby="criterios-fontes">
+    <h2 id="criterios-fontes">Critérios, fontes e cautelas de uso</h2>
+    <p>O gerador utiliza tabelas internas configuradas no próprio código da página para estimar escritura e registro imobiliário. O ITBI depende da alíquota municipal informada pelo usuário. O ITCMD aparece como 4%, conforme parâmetro configurado na ferramenta.</p>
+    <div class="pn-note">O valor base deve ser definido conforme o caso concreto. Em atos imobiliários, pode ser necessário comparar valor do negócio, valor venal, valor venal de referência, valor fiscal, base tributária ou outro critério exigido pela norma aplicável.</div>
+    <p>Os valores externos devem corresponder apenas a certidões, diligências ou despesas autorizadas, quando necessárias à prática do ato. A ferramenta não verifica isenção, imunidade, redução, acréscimo, gratuidade, incidência de atos acessórios ou peculiaridades da legislação municipal.</p>
+  </section>
+
+  <section class="pn-support-section" aria-labelledby="faq">
+    <h2 id="faq">Perguntas frequentes</h2>
+    <div class="pn-faq-list">
+      <details>
+        <summary>O orçamento gerado é oficial?</summary>
+        <p>Não. O resultado é uma estimativa gerada a partir dos dados informados pelo usuário e das tabelas internas da ferramenta. O orçamento final depende da conferência do caso concreto pelo tabelionato.</p>
+      </details>
+      <details>
+        <summary>Qual valor deve ser usado como base de cálculo?</summary>
+        <p>Use o valor exigido para o ato concreto. Pode ser necessário comparar valor do negócio, valor venal, valor venal de referência, valor fiscal ou outra base prevista na regra aplicável.</p>
+      </details>
+      <details>
+        <summary>A ferramenta calcula ITBI automaticamente?</summary>
+        <p>A ferramenta calcula o ITBI a partir da alíquota informada pelo usuário. A alíquota municipal e a base tributária devem ser conferidas na fonte oficial do município competente.</p>
+      </details>
+      <details>
+        <summary>A ferramenta considera isenção ou imunidade tributária?</summary>
+        <p>Não. Situações de isenção, imunidade, não incidência, redução ou exigência complementar precisam ser analisadas separadamente, com base na legislação aplicável e nos documentos do caso.</p>
+      </details>
+      <details>
+        <summary>O registro imobiliário sempre deve ser incluído?</summary>
+        <p>Não. O usuário deve selecionar se haverá registro imobiliário conforme a natureza do ato e a necessidade de ingresso do título no Registro de Imóveis.</p>
+      </details>
+      <details>
+        <summary>O PDF substitui orçamento formal do cartório?</summary>
+        <p>Não. O PDF serve como resumo da simulação feita na página. O orçamento formal depende de conferência do tabelionato e pode mudar após análise da documentação.</p>
+      </details>
+    </div>
+  </section>
+
   <section class="print-area" id="areaImpressao" aria-hidden="true"></section>
 
   <footer class="footer">
-    <span>Projeto apoiado por Escritura Pública - <a href="https://escriturapublica.substack.com" target="_blank" rel="noopener noreferrer">https://escriturapublica.substack.com</a> | Atesta - <a href="https://www.atesta.com.br" target="_blank" rel="noopener noreferrer">https://www.atesta.com.br</a></span>
+    <nav class="footer-links" aria-label="Links institucionais">
+      <a href="https://portalnotarial.com.br/sobre.html">Sobre</a>
+      <a href="https://portalnotarial.com.br/contato.html">Contato</a>
+      <a href="https://portalnotarial.com.br/politica-de-privacidade.html">Política de privacidade</a>
+      <a href="https://portalnotarial.com.br/termos-de-uso.html">Termos de uso</a>
+      <a href="https://portalnotarial.com.br/aviso-legal.html">Aviso legal</a>
+    </nav>
+    <span class="footer-support">Projeto apoiado por <a href="https://escriturapublica.substack.com" target="_blank" rel="noopener noreferrer">Escritura Pública</a> | <a href="https://www.atesta.com.br" target="_blank" rel="noopener noreferrer">Atesta</a></span>
+    <span class="footer-small">Portal Notarial. Ferramentas gratuitas de apoio à rotina notarial. O conteúdo não substitui fonte oficial, orçamento formal, qualificação notarial ou análise do caso concreto.</span>
   </footer>
 </main>
 
