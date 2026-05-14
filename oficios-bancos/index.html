@@ -11,7 +11,21 @@
   <script src="https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&display=swap');
+    @font-face {
+      font-family: 'Carlito';
+      src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Carlito';
+      src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
     :root {
       --azul: rgb(0, 118, 255);
       --azul-escuro: #0f172a;
@@ -329,47 +343,51 @@
       border-radius: 6px;
       padding: 4.5cm 2cm 2.5cm 2cm;
       font-family: Carlito, Calibri, "Segoe UI", Arial, sans-serif;
-      line-height: 1.4;
+      line-height: 1.15;
       color: #000000;
       font-size: 12pt;
+      letter-spacing: normal;
+      word-spacing: normal;
       box-shadow: 0 16px 36px rgba(15, 23, 42, 0.10);
     }
 
     .preview .oficio-line {
-      margin: 0 0 6px;
+      margin: 0 0 3pt;
     }
 
     .preview .oficio-right {
-      margin: 0 0 8px;
+      margin: 0 0 5pt;
       text-align: right;
     }
 
     .preview .oficio-space {
-      height: 12px;
+      height: 6pt;
     }
 
     .preview .oficio-assunto {
-      margin: 0 0 12px;
+      margin: 0 0 6pt;
       font-weight: 700;
     }
 
     .preview .oficio-section-title {
-      margin: 12px 0 6px;
+      margin: 8pt 0 4pt;
       font-weight: 700;
     }
 
     .preview .oficio-paragraph {
-      margin: 0 0 12px;
+      margin: 0 0 6pt;
       text-align: justify;
+      line-height: 1.15;
     }
 
     .preview .oficio-list-item {
-      margin: 0 0 8px 20px;
+      margin: 0 0 4pt 18pt;
       text-align: justify;
+      line-height: 1.15;
     }
 
     .preview .oficio-signature {
-      margin: 0 0 5px;
+      margin: 0 0 3pt;
       font-weight: 700;
       text-transform: uppercase;
       text-align: center;
@@ -380,7 +398,7 @@
     }
 
     .preview .oficio-validation {
-      margin: 0 0 4px;
+      margin: 0 0 3pt;
       text-align: center;
     }
 
@@ -418,6 +436,11 @@
 
 
     @media print {
+      @page {
+        size: A4;
+        margin: 4.5cm 2cm 2.5cm 2cm;
+      }
+
       body {
         background: #ffffff;
       }
@@ -431,39 +454,11 @@
         visibility: visible !important;
       }
 
-  
-
-    .template-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .template-status {
-      margin-top: 8px;
-      padding: 9px 11px;
-      border-radius: 10px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      color: #475569;
-      font-size: 12px;
-      line-height: 1.4;
-    }
-
-    .preview-panel {
-      display: none;
-    }
-
-    .preview-panel.is-visible {
-      display: block;
-    }
-
-    .preview {
+      .preview {
         position: absolute;
         left: 0;
         top: 0;
-        width: 100%;
+        width: 17cm;
         min-height: auto;
         border: 0;
         border-radius: 0;
@@ -471,6 +466,9 @@
         padding: 0;
         color: #000000;
         box-shadow: none;
+        font-family: Carlito, Calibri, Arial, sans-serif;
+        font-size: 12pt;
+        line-height: 1.15;
       }
 
       .preview .oficio-paragraph,
@@ -1937,24 +1935,34 @@
       const doc = iframe.contentDocument || iframe.contentWindow.document;
       doc.open();
       doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Imprimir ofício</title><style>' +
+        '@font-face{font-family:Carlito;src:url("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Regular.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}' +
+        '@font-face{font-family:Carlito;src:url("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Bold.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}' +
         '@page{size:A4;margin:4.5cm 2cm 2.5cm 2cm;}' +
-        'body{margin:0;font-family:Carlito,Calibri,"Segoe UI",Arial,sans-serif;font-size:12pt;line-height:1.4;color:#000;}' +
-        '.oficio-line{margin:0 0 6px;}' +
-        '.oficio-right{margin:0 0 8px;text-align:right;}' +
-        '.oficio-space{height:12px;}' +
-        '.oficio-paragraph{margin:0 0 12px;text-align:justify;}' +
-        '.oficio-list-item{margin:0 0 8px 20px;text-align:justify;}' +
-        '.oficio-signature{margin:0 0 5px;font-weight:700;text-transform:uppercase;text-align:center;}' +
+        'body{margin:0;font-family:Carlito,Calibri,Arial,sans-serif;font-size:12pt;line-height:1.15;color:#000;}' +
+        '.oficio-line{margin:0 0 3pt;}' +
+        '.oficio-right{margin:0 0 5pt;text-align:right;}' +
+        '.oficio-space{height:6pt;}' +
+        '.oficio-paragraph{margin:0 0 6pt;text-align:justify;line-height:1.15;}' +
+        '.oficio-list-item{margin:0 0 4pt 18pt;text-align:justify;line-height:1.15;}' +
+        '.oficio-signature{margin:0 0 3pt;font-weight:700;text-transform:uppercase;text-align:center;}' +
         '.oficio-bold{font-weight:700;}' +
         '</style></head><body>' + ids.previewOficio.innerHTML + '</body></html>');
       doc.close();
 
       iframe.onload = function () {
-        iframe.contentWindow.focus();
-        iframe.contentWindow.print();
-        window.setTimeout(function () {
-          iframe.remove();
-        }, 800);
+        const executarImpressao = function () {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+          window.setTimeout(function () {
+            iframe.remove();
+          }, 800);
+        };
+
+        if (iframe.contentDocument && iframe.contentDocument.fonts && iframe.contentDocument.fonts.ready) {
+          iframe.contentDocument.fonts.ready.then(executarImpressao).catch(executarImpressao);
+        } else {
+          window.setTimeout(executarImpressao, 300);
+        }
       };
     }
 
@@ -1977,6 +1985,7 @@
         const { PDFDocument, StandardFonts, rgb } = PDFLib;
         const pdfFinal = await PDFDocument.create();
         const fontesPdf = await carregarFontesDoOficio(pdfFinal, StandardFonts);
+        setStatus('Gerando PDF final. Fonte do ofício: ' + (fontesPdf.nome || 'padrão do PDF') + '.');
         const fonteNormal = fontesPdf.normal;
         const fonteNegrito = fontesPdf.negrito;
         const templateBytes = await obterTemplateCartorioBytes();
@@ -2035,11 +2044,12 @@
 
         return {
           normal: await pdf.embedFont(bytesRegular, { subset: true }),
-          negrito: await pdf.embedFont(bytesBold, { subset: true })
+          negrito: await pdf.embedFont(bytesBold, { subset: true }),
+          nome: 'Carlito incorporada'
         };
       } catch (erro) {
         console.warn('Fonte Carlito não carregada. Usando fonte padrão do PDF.', erro);
-        return { normal: fallbackNormal, negrito: fallbackNegrito };
+        return { normal: fallbackNormal, negrito: fallbackNegrito, nome: 'Helvetica fallback' };
       }
     }
 
@@ -2050,7 +2060,7 @@
       const margemInferior = 70.87;
       const margemSuperior = 127.56;
       const tamanho = 12;
-      const entrelinha = 15.5;
+      const entrelinha = 13.2;
       const larguraTexto = largura - margemLateral * 2;
       let page = pdf.addPage([largura, altura]);
       aplicarTemplateNaPagina(page);
@@ -2071,7 +2081,7 @@
 
       blocos.forEach(function (bloco) {
         if (bloco.tipo === 'space') {
-          y -= 9;
+          y -= 6;
           return;
         }
 
@@ -2085,11 +2095,11 @@
         const larguraDisponivel = larguraTexto - indent;
         const partes = bloco.partes || [{ texto: bloco.texto || '', bold: fonteBloco === fonteNegrito }];
         const linhas = quebrarPartesEmLinhas(partes, fonteNormal, fonteNegrito, tamanho, larguraDisponivel);
-        const espacoNecessario = Math.max(entrelinha, linhas.length * entrelinha + 10);
+        const espacoNecessario = Math.max(entrelinha, linhas.length * entrelinha + 4);
         novaPaginaSeNecessario(espacoNecessario);
 
         linhas.forEach(function (linha, indice) {
-          novaPaginaSeNecessario(entrelinha + 4);
+          novaPaginaSeNecessario(entrelinha + 2);
           const larguraLinhaAtual = larguraLinhaPartes(linha, fonteNormal, fonteNegrito, tamanho, fonteNormal.widthOfTextAtSize(' ', tamanho));
           const justificarLinha = justify && indice < linhas.length - 1 && linha.length > 3 && larguraLinhaAtual > larguraDisponivel * 0.68;
           if (right) {
@@ -2102,9 +2112,9 @@
           y -= entrelinha;
         });
 
-        if (isParagraph) y -= 6;
-        if (isListItem) y -= 3;
-        if (bloco.tipo === 'lineBold') y -= 3;
+        if (isParagraph) y -= 2;
+        if (isListItem) y -= 1;
+        if (bloco.tipo === 'lineBold') y -= 2;
       });
     }
 
@@ -2163,7 +2173,7 @@
       const quantidadeEspacos = palavras.length - 1;
       let larguraEspaco = fonteNormal.widthOfTextAtSize(' ', tamanho);
       if (justificar && quantidadeEspacos > 0) {
-        larguraEspaco = Math.max(larguraEspaco, (larguraTexto - larguraPalavras) / quantidadeEspacos);
+        larguraEspaco = Math.min(larguraEspaco * 2.4, Math.max(larguraEspaco, (larguraTexto - larguraPalavras) / quantidadeEspacos));
       }
 
       let cursorX = x;
