@@ -1545,7 +1545,7 @@
       const numeroAno = valorOuCampo(dados.numeroOficio, 'Número') + '/' + valorOuCampo(dados.anoOficio, 'Ano');
       const protocolo = valorOuCampo(dados.protocolo, 'Protocolo');
       const iniciaisEscrevente = gerarIniciaisEscrevente(dados.escrevente);
-      const protocoloComSufixo = protocolo + (iniciaisEscrevente ? ' - ' + iniciaisEscrevente : '') + ' - OFDS';
+      const protocoloComSufixo = protocolo + (iniciaisEscrevente ? ' - ' + iniciaisEscrevente : '');
       const dataOficio = valorOuCampo(dados.dataOficio, 'DATA');
       const banco = valorOuCampo(dados.banco, 'BANCO');
       const agencia = valorOuCampo(dados.agencia, 'NÚMERO DA AGÊNCIA');
@@ -1563,16 +1563,19 @@
       const cpfAutorizado = valorOuCampo(dados.cpfAutorizado, 'CPF');
       const quemAssina = valorOuCampo(dados.quemAssina, 'NOME DE QUEM ASSINA O OFÍCIO');
       const qualificacaoFuncional = valorOuCampo(dados.qualificacaoFuncional, 'QUALIFICAÇÃO FUNCIONAL');
+      const tabelionato = valorOuCampo(dados.tabelionato, 'TABELIONATO');
 
       return [
         { tipo: 'line', texto: 'Ofício nº ' + numeroAno },
         { tipo: 'line', texto: 'Protocolo interno: ' + protocoloComSufixo },
+        { tipo: 'line', texto: tabelionato },
         { tipo: 'rightLine', texto: 'São Paulo, ' + dataOficio },
         { tipo: 'space' },
         { tipo: 'lineBold', texto: banco },
         { tipo: 'lineBold', texto: 'A/C: Ilustríssimo(a) Gerente,' },
         { tipo: 'space' },
         { tipo: 'line', texto: 'Senhor(a) Gerente,' },
+        { tipo: 'space' },
         { tipo: 'paragraphRich', partes: [
           { texto: 'Fomos contratados para lavrar a ' },
           { texto: 'ESCRITURA DE INVENTÁRIO E PARTILHA DO ESPÓLIO DE ' + nomeFalecido + ',', bold: true },
@@ -1825,9 +1828,38 @@
       if (!edicaoManualOficio && !edicaoOficioAtiva) {
         atualizarPrevia(true);
       }
-      window.setTimeout(function () {
-        window.print();
-      }, 80);
+
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
+
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open();
+      doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Imprimir ofício</title><style>' +
+        '@page{size:A4;margin:5cm 2cm 2cm 2cm;}' +
+        'body{margin:0;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:12pt;line-height:1.45;color:#000;}' +
+        '.oficio-line{margin:0 0 6px;}' +
+        '.oficio-right{margin:0 0 8px;text-align:right;}' +
+        '.oficio-space{height:12px;}' +
+        '.oficio-paragraph{margin:0 0 12px;text-align:justify;}' +
+        '.oficio-list-item{margin:0 0 8px 20px;text-align:justify;}' +
+        '.oficio-signature{margin:0 0 5px;font-weight:700;text-transform:uppercase;text-align:center;}' +
+        '.oficio-bold{font-weight:700;}' +
+        '</style></head><body>' + ids.previewOficio.innerHTML + '</body></html>');
+      doc.close();
+
+      iframe.onload = function () {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        window.setTimeout(function () {
+          iframe.remove();
+        }, 800);
+      };
     }
 
     async function gerarPdfFinal() {
@@ -1878,17 +1910,19 @@
     function adicionarOficioAoPdf(pdf, blocos, fonteNormal, fonteNegrito, rgb) {
       const largura = 595.28;
       const altura = 841.89;
-      const margem = 55;
+      const margemLateral = 55;
+      const margemInferior = 55;
+      const margemSuperior = 141.73;
       const tamanho = 12;
       const entrelinha = 16;
-      const larguraTexto = largura - margem * 2;
+      const larguraTexto = largura - margemLateral * 2;
       let page = pdf.addPage([largura, altura]);
-      let y = altura - margem;
+      let y = altura - margemSuperior;
 
       function novaPaginaSeNecessario(espaco) {
-        if (y < margem + espaco) {
+        if (y < margemInferior + espaco) {
           page = pdf.addPage([largura, altura]);
-          y = altura - margem;
+          y = altura - margemSuperior;
         }
       }
 
@@ -1916,11 +1950,11 @@
           const larguraLinhaAtual = larguraLinhaPartes(linha, fonteNormal, fonteNegrito, tamanho, fonteNormal.widthOfTextAtSize(' ', tamanho));
           const justificarLinha = justify && indice < linhas.length - 1 && linha.length > 3 && larguraLinhaAtual > larguraDisponivel * 0.68;
           if (right) {
-            desenharLinhaPartesPdf(page, linha, margem + larguraTexto - larguraLinhaAtual, y, larguraTexto, fonteNormal, fonteNegrito, tamanho, rgb, false);
+            desenharLinhaPartesPdf(page, linha, margemLateral + larguraTexto - larguraLinhaAtual, y, larguraTexto, fonteNormal, fonteNegrito, tamanho, rgb, false);
           } else if (center) {
-            desenharLinhaPartesPdf(page, linha, margem + (larguraTexto - larguraLinhaAtual) / 2, y, larguraTexto, fonteNormal, fonteNegrito, tamanho, rgb, false);
+            desenharLinhaPartesPdf(page, linha, margemLateral + (larguraTexto - larguraLinhaAtual) / 2, y, larguraTexto, fonteNormal, fonteNegrito, tamanho, rgb, false);
           } else {
-            desenharLinhaPartesPdf(page, linha, margem + indent, y, larguraDisponivel, fonteNormal, fonteNegrito, tamanho, rgb, justificarLinha);
+            desenharLinhaPartesPdf(page, linha, margemLateral + indent, y, larguraDisponivel, fonteNormal, fonteNegrito, tamanho, rgb, justificarLinha);
           }
           y -= entrelinha;
         });
@@ -2096,7 +2130,8 @@
       });
 
       localStorage.setItem(CHAVE_DADOS_CARTORIO, JSON.stringify(dados));
-      setStatus('Dados do cartório salvos neste navegador. Eles serão preenchidos automaticamente nas próximas utilizações.');
+      setStatus('Dados salvos. Os dados do cartório serão preenchidos automaticamente nas próximas utilizações deste navegador.');
+      alert('Dados salvos neste navegador.');
     }
 
     function carregarDadosCartorioSalvos() {
