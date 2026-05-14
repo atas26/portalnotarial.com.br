@@ -8,8 +8,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&display=swap');
     :root {
       --azul: rgb(0, 118, 255);
       --azul-escuro: #0f172a;
@@ -309,6 +311,8 @@
 
     .preview-panel {
       display: none;
+      overflow-x: auto;
+      padding-bottom: 8px;
     }
 
     .preview-panel.is-visible {
@@ -316,15 +320,19 @@
     }
 
     .preview {
-      background: #f8fafc;
-      border: 1px dashed #cbd5e1;
-      border-radius: 14px;
-      padding: 22px 26px;
-      font-family: Calibri, "Segoe UI", Arial, sans-serif;
-      line-height: 1.55;
-      color: #1f2937;
+      width: 21cm;
+      max-width: 100%;
+      min-height: 29.7cm;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 4.5cm 2cm 2.5cm 2cm;
+      font-family: Carlito, Calibri, "Segoe UI", Arial, sans-serif;
+      line-height: 1.4;
+      color: #000000;
       font-size: 12pt;
-      min-height: 180px;
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.10);
     }
 
     .preview .oficio-line {
@@ -791,6 +799,8 @@
     const DB_TEMPLATE_CARTORIO = 'oficiosBancosTemplateCartorioV1';
     const STORE_TEMPLATE_CARTORIO = 'templates';
     const ID_TEMPLATE_CARTORIO = 'modelo';
+    const URL_FONTE_CARLITO_REGULAR = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Regular.ttf';
+    const URL_FONTE_CARLITO_BOLD = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Bold.ttf';
     let edicaoManualOficio = false;
     let edicaoOficioAtiva = false;
 
@@ -1687,6 +1697,9 @@
         { tipo: 'space' },
         { tipo: 'line', texto: 'Atenciosamente,' },
         { tipo: 'space' },
+        { tipo: 'space' },
+        { tipo: 'space' },
+        { tipo: 'space' },
         { tipo: 'signature', texto: quemAssina },
         { tipo: 'centerLine', texto: qualificacaoFuncional }
       ];
@@ -1924,8 +1937,8 @@
       const doc = iframe.contentDocument || iframe.contentWindow.document;
       doc.open();
       doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Imprimir ofício</title><style>' +
-        '@page{size:A4;margin:4.5cm 2cm 2cm 2cm;}' +
-        'body{margin:0;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:12pt;line-height:1.45;color:#000;}' +
+        '@page{size:A4;margin:4.5cm 2cm 2.5cm 2cm;}' +
+        'body{margin:0;font-family:Carlito,Calibri,"Segoe UI",Arial,sans-serif;font-size:12pt;line-height:1.4;color:#000;}' +
         '.oficio-line{margin:0 0 6px;}' +
         '.oficio-right{margin:0 0 8px;text-align:right;}' +
         '.oficio-space{height:12px;}' +
@@ -1963,8 +1976,9 @@
         const estruturaOficio = (edicaoManualOficio || edicaoOficioAtiva) ? montarEstruturaDaPreviaEditada() : montarEstruturaOficio(dados);
         const { PDFDocument, StandardFonts, rgb } = PDFLib;
         const pdfFinal = await PDFDocument.create();
-        const fonteNormal = await pdfFinal.embedFont(StandardFonts.Helvetica);
-        const fonteNegrito = await pdfFinal.embedFont(StandardFonts.HelveticaBold);
+        const fontesPdf = await carregarFontesDoOficio(pdfFinal, StandardFonts);
+        const fonteNormal = fontesPdf.normal;
+        const fonteNegrito = fontesPdf.negrito;
         const templateBytes = await obterTemplateCartorioBytes();
         const templateInfo = await prepararTemplateCartorio(pdfFinal, templateBytes);
 
@@ -1992,14 +2006,51 @@
       }
     }
 
+
+    async function carregarFontesDoOficio(pdf, StandardFonts) {
+      const fallbackNormal = await pdf.embedFont(StandardFonts.Helvetica);
+      const fallbackNegrito = await pdf.embedFont(StandardFonts.HelveticaBold);
+
+      try {
+        const fontkitGlobal = window.fontkit || window.Fontkit || null;
+        if (!fontkitGlobal || typeof pdf.registerFontkit !== 'function') {
+          throw new Error('fontkit indisponível no navegador.');
+        }
+
+        pdf.registerFontkit(fontkitGlobal);
+
+        const [respostaRegular, respostaBold] = await Promise.all([
+          fetch(URL_FONTE_CARLITO_REGULAR),
+          fetch(URL_FONTE_CARLITO_BOLD)
+        ]);
+
+        if (!respostaRegular.ok || !respostaBold.ok) {
+          throw new Error('não foi possível carregar a fonte Carlito.');
+        }
+
+        const [bytesRegular, bytesBold] = await Promise.all([
+          respostaRegular.arrayBuffer(),
+          respostaBold.arrayBuffer()
+        ]);
+
+        return {
+          normal: await pdf.embedFont(bytesRegular, { subset: true }),
+          negrito: await pdf.embedFont(bytesBold, { subset: true })
+        };
+      } catch (erro) {
+        console.warn('Fonte Carlito não carregada. Usando fonte padrão do PDF.', erro);
+        return { normal: fallbackNormal, negrito: fallbackNegrito };
+      }
+    }
+
     function adicionarOficioAoPdf(pdf, blocos, fonteNormal, fonteNegrito, rgb, templateInfo) {
       const largura = 595.28;
       const altura = 841.89;
-      const margemLateral = 55;
-      const margemInferior = 55;
+      const margemLateral = 56.69;
+      const margemInferior = 70.87;
       const margemSuperior = 127.56;
       const tamanho = 12;
-      const entrelinha = 16;
+      const entrelinha = 15.5;
       const larguraTexto = largura - margemLateral * 2;
       let page = pdf.addPage([largura, altura]);
       aplicarTemplateNaPagina(page);
