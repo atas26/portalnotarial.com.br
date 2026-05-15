@@ -712,10 +712,13 @@
             <label for="cargoAssina">Cargo</label>
             <select id="cargoAssina" data-required="true">
               <option value="">Escolha uma opção</option>
-              <option value="Tabelião">Tabelião</option>
-              <option value="Substituto">Substituto</option>
-              <option value="Escrevente autorizado">Escrevente autorizado</option>
-              <option value="Escrevente">Escrevente</option>
+              <option value="tabelião">tabelião</option>
+              <option value="tabeliã">tabeliã</option>
+              <option value="tabelião substituto">tabelião substituto</option>
+              <option value="tabeliã substituta">tabeliã substituta</option>
+              <option value="escrevente autorizado">escrevente autorizado</option>
+              <option value="escrevente autorizada">escrevente autorizada</option>
+              <option value="escrevente">escrevente</option>
             </select>
             <div class="small-note">Selecione o cargo de quem assina a certidão.</div>
           </div>
@@ -1760,13 +1763,13 @@
     function numerarPaginas(pdfDoc, fonte) {
       const paginas = pdfDoc.getPages();
       const total = paginas.length;
-      const tamanhoFonte = 10;
+      const tamanhoFonte = 12;
       paginas.forEach(function (pagina, indice) {
         const texto = String(indice + 1) + '/' + String(total);
         const larguraTexto = fonte.widthOfTextAtSize(texto, tamanhoFonte);
         pagina.drawText(texto, {
           x: 595.28 - 56.69 - larguraTexto,
-          y: 806,
+          y: 680,
           size: tamanhoFonte,
           font: fonte,
           color: PDFLib.rgb(0, 0, 0)
