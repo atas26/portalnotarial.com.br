@@ -1690,21 +1690,21 @@
       const bytes = await arquivo.arrayBuffer();
       const origem = await PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
       const indices = origem.getPageIndices();
-      const paginasCopiadas = await pdfDoc.copyPages(origem, indices);
       const larguraPagina = 595.28;
       const alturaPagina = 841.89;
 
-      paginasCopiadas.forEach(function (paginaOrigem) {
+      for (const indice of indices) {
+        const paginaOrigem = origem.getPage(indice);
+        const embed = await pdfDoc.embedPage(paginaOrigem);
         const pagina = pdfDoc.addPage([larguraPagina, alturaPagina]);
-        const embed = paginaOrigem;
-        const tamanho = embed.getSize();
+        const tamanho = paginaOrigem.getSize();
         const escala = Math.min(larguraPagina / tamanho.width, alturaPagina / tamanho.height);
         const largura = tamanho.width * escala;
         const altura = tamanho.height * escala;
         const x = (larguraPagina - largura) / 2;
         const y = (alturaPagina - altura) / 2;
         pagina.drawPage(embed, { x: x, y: y, width: largura, height: altura });
-      });
+      }
     }
 
     function numerarPaginas(pdfDoc, fonte) {
