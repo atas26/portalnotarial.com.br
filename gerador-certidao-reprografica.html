@@ -692,7 +692,7 @@
 
           <div class="field full">
             <label for="nomeCartorio">Nome do cartório</label>
-            <input id="nomeCartorio" type="text" maxlength="255" placeholder="Ex.: 26º Tabelionato de Notas de São Paulo" data-required="true" />
+            <input id="nomeCartorio" type="text" maxlength="255" placeholder="Ex.: XXº Tabelionato de Notas de São Paulo" data-required="true" />
             <div class="small-note">Informe o nome do cartório que emitirá a certidão.</div>
           </div>
 
@@ -1941,6 +1941,13 @@
       setStatus('Dados salvos removidos deste navegador.');
     }
 
+    function irParaArquivos() {
+      const tituloArquivos = Array.from(document.querySelectorAll('h2')).find(function (titulo) {
+        return titulo.textContent.trim() === '1. Arquivos';
+      });
+      if (tituloArquivos) tituloArquivos.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     function novaCertidao() {
       limparTudo();
       setStatus('Nova certidão iniciada. Dados salvos do cartório e template salvo foram preservados.');
@@ -1974,6 +1981,7 @@
       ids.btnEditarCertidao.textContent = 'Visualizar/editar certidão';
       atualizarPrevia(true);
       setStatus('Campos limpos. Preencha os dados para gerar nova certidão.');
+      window.setTimeout(irParaArquivos, 0);
     }
   </script>
 </body>
