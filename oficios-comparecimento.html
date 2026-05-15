@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gerador de ofício para declaração de comparecimento</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Carlito';
+      src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Carlito';
+      src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Bold.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --azul: rgb(0, 118, 255);
+      --azul-escuro: #0f172a;
+      --cinza: #64748b;
+      --cinza-claro: #f6f8fb;
+      --borda: #dbe3ef;
+      --branco: #ffffff;
+      --vermelho: rgb(232, 57, 70);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--cinza-claro);
+      color: var(--azul-escuro);
+    }
+
+    .shell {
+      max-width: 1120px;
+      margin: 34px auto;
+      padding: 0 20px 40px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #eef6ff 100%);
+      border: 1px solid var(--borda);
+      border-radius: 22px;
+      padding: 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 840px;
+      color: #42526b;
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .alerta {
+      margin-top: 18px;
+      border: 1px solid rgba(232, 57, 70, 0.32);
+      background: rgba(232, 57, 70, 0.08);
+      color: #8a1f2c;
+      border-radius: 14px;
+      padding: 13px 15px;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--branco);
+      border: 1px solid var(--borda);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+    }
+
+    .card.full {
+      grid-column: 1 / -1;
+    }
+
+    .card h2 {
+      margin: 0 0 16px;
+      font-size: 18px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #263449;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font-size: 14px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--azul-escuro);
+      background: #fff;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--azul);
+      box-shadow: 0 0 0 3px rgba(0, 118, 255, 0.12);
+    }
+
+    .actions,
+    .cartorio-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 18px;
+    }
+
+    .cartorio-actions {
+      margin-top: 2px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      background: var(--azul);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #e9eef6;
+      color: #172033;
+    }
+
+    .btn-danger {
+      background: rgba(232, 57, 70, 0.12);
+      color: #8a1f2c;
+    }
+
+    .status {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      color: #334155;
+      font-size: 14px;
+      line-height: 1.45;
+      white-space: pre-line;
+    }
+
+    .small-note {
+      font-size: 12px;
+      color: var(--cinza);
+      line-height: 1.4;
+      margin-top: 7px;
+    }
+
+
+
+    .signature-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .signature-option {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border: 1px solid var(--borda);
+      border-radius: 14px;
+      padding: 14px;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    .signature-option input {
+      width: auto;
+      margin-top: 3px;
+      cursor: pointer;
+    }
+
+    .signature-option strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+      color: #172033;
+    }
+
+    .signature-option span {
+      display: block;
+      font-size: 12px;
+      line-height: 1.4;
+      color: var(--cinza);
+    }
+
+    .preview .oficio-signature-line {
+      width: 8cm;
+      height: 18pt;
+      margin: 0 auto 6pt;
+      border-bottom: 1px solid #000000;
+    }
+
+    .preview .oficio-digital-note {
+      margin: -2pt 0 6pt;
+      text-align: center;
+      line-height: 1.5;
+      font-size: 12pt;
+    }
+
+    .template-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .template-status {
+      margin-top: 8px;
+      padding: 9px 11px;
+      border-radius: 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card-title-row h2 {
+      margin: 0;
+    }
+
+    .preview-panel {
+      display: none;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .preview-panel.is-visible {
+      display: block;
+    }
+
+    .preview {
+      width: 21cm;
+      max-width: 100%;
+      min-height: 29.7cm;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 6cm 2cm 2.5cm 2cm;
+      font-family: Carlito, Calibri, "Segoe UI", Arial, sans-serif;
+      line-height: 1.5;
+      color: #000000;
+      font-size: 12pt;
+      letter-spacing: normal;
+      word-spacing: normal;
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.10);
+    }
+
+    .preview.is-editing {
+      background: #ffffff;
+      border-color: var(--azul);
+      box-shadow: 0 0 0 3px rgba(0, 118, 255, 0.10);
+    }
+
+    .preview[contenteditable="true"] {
+      outline: none;
+    }
+
+    .preview .oficio-line {
+      margin: 0 0 6pt;
+      line-height: 1.5;
+    }
+
+    .preview .oficio-right {
+      margin: 0 0 8pt;
+      text-align: right;
+      line-height: 1.5;
+    }
+
+    .preview .oficio-space {
+      height: 14pt;
+    }
+
+    .preview .oficio-title {
+      margin: 0 0 18pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .preview .oficio-paragraph {
+      margin: 0 0 12pt;
+      text-align: justify;
+      line-height: 1.5;
+    }
+
+    .preview .oficio-signature {
+      margin: 0 0 6pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .preview .oficio-center {
+      margin: 0 0 6pt;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    footer {
+      color: var(--cinza);
+      font-size: 12px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    @media print {
+      @page {
+        size: A4;
+        margin: 6cm 2cm 2.5cm 2cm;
+      }
+
+      body {
+        background: #ffffff;
+      }
+
+      body * {
+        visibility: hidden !important;
+      }
+
+      .preview,
+      .preview * {
+        visibility: visible !important;
+      }
+
+      .preview {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 17cm;
+        min-height: auto;
+        border: 0;
+        border-radius: 0;
+        background: #ffffff;
+        padding: 0;
+        color: #000000;
+        box-shadow: none;
+        font-family: Carlito, Calibri, Arial, sans-serif;
+        font-size: 12pt;
+        line-height: 1.5;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .grid,
+      .form-grid,
+      .signature-options {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+      }
+
+      .card-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <h1>Gerador de ofício para declaração de comparecimento</h1>
+      <p>
+        Preencha os dados da pessoa atendida, revise a prévia da declaração e gere um PDF no padrão do ofício.
+      </p>
+      <div class="alerta">
+        Revise todos os campos antes de gerar o arquivo final. A ferramenta monta a declaração com base nos dados informados pelo usuário.
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card full">
+        <h2>1. Arquivos</h2>
+        <div class="form-grid">
+          <div class="field full">
+            <label for="templatePdf">Template do cartório em PDF</label>
+            <input type="file" id="templatePdf" accept="application/pdf" />
+            <div class="small-note">Opcional. Use um papel timbrado em PDF para mesclar com a declaração.</div>
+            <div class="template-actions">
+              <button type="button" class="btn-secondary" id="btnSalvarTemplate">Salvar template como modelo</button>
+              <button type="button" class="btn-danger" id="btnLimparTemplate">Limpar template salvo</button>
+            </div>
+            <div class="template-status" id="templateStatus">Nenhum template salvo neste navegador.</div>
+          </div>
+        </div>
+        <div class="status" id="statusBox">Preencha os dados e revise a prévia antes de gerar o PDF final.</div>
+      </div>
+
+      <div class="card full">
+        <h2>2. Dados da declaração</h2>
+        <form id="formDeclaracao">
+          <div class="form-grid">
+            <div class="field">
+              <label for="protocoloAto">Protocolo do ato</label>
+              <input id="protocoloAto" type="text" maxlength="255" placeholder="Ex.: 123456" required />
+              <div class="small-note">Informe o número do protocolo interno vinculado ao atendimento.</div>
+            </div>
+
+            <div class="field">
+              <label for="ano">Ano</label>
+              <input id="ano" type="number" min="2000" max="2100" placeholder="Ex.: 2026" required />
+              <div class="small-note">Informe o ano do protocolo ou do atendimento.</div>
+            </div>
+
+            <div class="field full">
+              <label for="nomeCartorio">Nome do cartório</label>
+              <input id="nomeCartorio" type="text" maxlength="255" placeholder="Ex.: 26º Tabelionato de Notas de São Paulo" required />
+              <div class="small-note">Informe o nome do cartório que emitirá a declaração.</div>
+            </div>
+
+            <div class="field full">
+              <label for="escrevente">Escrevente que fez o atendimento</label>
+              <input id="escrevente" type="text" maxlength="255" placeholder="Nome completo do escrevente" style="text-transform: uppercase;" required />
+              <div class="small-note">Informe o nome do escrevente responsável pelo atendimento. O campo será gravado para uso em novas declarações quando você clicar em “Salvar dados do cartório”.</div>
+            </div>
+
+            <div class="field full">
+              <label for="nomeCompleto">Nome completo do(a) comparecente</label>
+              <input id="nomeCompleto" type="text" maxlength="255" placeholder="Nome completo da pessoa que compareceu" style="text-transform: uppercase;" required />
+              <div class="small-note">Informe o nome da pessoa atendida, exatamente como deverá aparecer na declaração.</div>
+            </div>
+
+            <div class="field">
+              <label for="cpfNumero">CPF</label>
+              <input id="cpfNumero" type="text" maxlength="14" inputmode="numeric" placeholder="000.000.000-00" required />
+              <div class="small-note">Informe o CPF do(a) comparecente.</div>
+            </div>
+
+            <div class="field">
+              <label for="rgNumero">RG</label>
+              <input id="rgNumero" type="text" maxlength="20" placeholder="Número do RG" required />
+              <div class="small-note">Informe o documento de identidade apresentado pelo(a) comparecente.</div>
+            </div>
+
+            <div class="field">
+              <label for="dataComparecimento">Data</label>
+              <input id="dataComparecimento" type="date" required />
+              <div class="small-note">Informe a data em que ocorreu o comparecimento.</div>
+            </div>
+
+            <div class="field">
+              <label for="horaInicio">Hora início</label>
+              <input id="horaInicio" type="time" required />
+              <div class="small-note">Informe o horário inicial aproximado do atendimento.</div>
+            </div>
+
+            <div class="field">
+              <label for="horaFim">Hora fim</label>
+              <input id="horaFim" type="time" required />
+              <div class="small-note">Informe o horário final aproximado do atendimento.</div>
+            </div>
+
+            <div class="field full">
+              <label for="quemAssina">Quem assina o ofício</label>
+              <input id="quemAssina" type="text" maxlength="255" placeholder="Nome completo de quem assina o ofício" style="text-transform: uppercase;" required />
+              <div class="small-note">Informe o nome completo de quem assinará a declaração.</div>
+            </div>
+
+            <div class="field">
+              <label for="cargoAssina">Cargo</label>
+              <select id="cargoAssina" required>
+                <option value="">Escolha uma opção</option>
+                <option value="Tabelião">Tabelião</option>
+                <option value="Substituto">Substituto</option>
+                <option value="Escrevente autorizado">Escrevente autorizado</option>
+              </select>
+              <div class="small-note">Selecione o cargo de quem assina: Tabelião, Substituto ou Escrevente autorizado.</div>
+            </div>
+
+            <div class="field full">
+              <div class="cartorio-actions">
+                <button type="button" class="btn-secondary" id="btnSalvarDados">Salvar dados do cartório</button>
+                <button type="button" class="btn-danger" id="btnLimparDadosSalvos">Limpar dados salvos</button>
+              </div>
+              <div class="small-note">Use esta opção para manter, neste navegador, o nome do cartório, o escrevente que fez o atendimento, quem assina o ofício e o cargo.</div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="card full">
+        <div class="card-title-row">
+          <h2>3. Prévia da declaração</h2>
+          <button type="button" class="btn-secondary" id="btnEditarDeclaracao">Visualizar/editar declaração</button>
+        </div>
+        <div class="preview-panel" id="previewPanel">
+          <div class="small-note">A prévia é editável. Ao concluir, clique em “Concluir edição”.</div>
+          <div class="preview" id="previewDeclaracao">A prévia será gerada com os dados preenchidos.</div>
+        </div>
+      </div>
+
+      <div class="card full">
+        <h2>4. Tipo da assinatura do ofício</h2>
+        <div class="signature-options" role="radiogroup" aria-label="Tipo da assinatura do ofício">
+          <label class="signature-option" for="tipoAssinaturaDigital">
+            <input type="radio" id="tipoAssinaturaDigital" name="tipoAssinatura" value="digital" />
+            <span><strong>Digital</strong></span>
+          </label>
+          <label class="signature-option" for="tipoAssinaturaFisica">
+            <input type="radio" id="tipoAssinaturaFisica" name="tipoAssinatura" value="fisica" />
+            <span><strong>Física</strong></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="card full">
+        <h2>5. Gerar PDF</h2>
+        <p class="small-note">
+          O PDF final será montado com a declaração de comparecimento. Se houver template do cartório, ele será usado como fundo da página.
+        </p>
+        <div class="actions">
+          <button type="button" class="btn-primary" id="btnGerarPdf">Gerar PDF</button>
+          <button type="button" class="btn-secondary" id="btnImprimir">Imprimir declaração</button>
+          <button type="button" class="btn-secondary" id="btnNovoOficio">Novo ofício</button>
+          <button type="button" class="btn-danger" id="btnLimpar">Limpar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Ferramenta em versão inicial. O usuário deve revisar todos os dados antes de gerar o PDF final.
+  </footer>
+
+  <script>
+    const ids = {
+      templatePdf: document.getElementById('templatePdf'),
+      templateStatus: document.getElementById('templateStatus'),
+      btnSalvarTemplate: document.getElementById('btnSalvarTemplate'),
+      btnLimparTemplate: document.getElementById('btnLimparTemplate'),
+      statusBox: document.getElementById('statusBox'),
+      formDeclaracao: document.getElementById('formDeclaracao'),
+      previewPanel: document.getElementById('previewPanel'),
+      previewDeclaracao: document.getElementById('previewDeclaracao'),
+      btnEditarDeclaracao: document.getElementById('btnEditarDeclaracao'),
+      btnGerarPdf: document.getElementById('btnGerarPdf'),
+      btnImprimir: document.getElementById('btnImprimir'),
+      btnNovoOficio: document.getElementById('btnNovoOficio'),
+      btnLimpar: document.getElementById('btnLimpar'),
+      btnSalvarDados: document.getElementById('btnSalvarDados'),
+      btnLimparDadosSalvos: document.getElementById('btnLimparDadosSalvos'),
+      tipoAssinaturaDigital: document.getElementById('tipoAssinaturaDigital'),
+      tipoAssinaturaFisica: document.getElementById('tipoAssinaturaFisica')
+    };
+
+    const CHAVE_DADOS_DECLARACAO = 'oficioDeclaracaoComparecimentoDadosV1';
+    const DB_TEMPLATE_DECLARACAO = 'oficioDeclaracaoComparecimentoTemplateV1';
+    const STORE_TEMPLATE_DECLARACAO = 'templates';
+    const ID_TEMPLATE_DECLARACAO = 'modelo';
+    const URL_FONTE_CARLITO_REGULAR = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Regular.ttf';
+    const URL_FONTE_CARLITO_BOLD = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Bold.ttf';
+
+    let edicaoManualDeclaracao = false;
+    let edicaoDeclaracaoAtiva = false;
+    let previaAlteradaManualmente = false;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      inicializarDatas();
+      inicializarCaixaAlta();
+      inicializarCpf();
+      carregarDadosSalvos();
+      carregarStatusTemplateSalvo();
+      atualizarPrevia(true);
+    });
+
+    ['input', 'change'].forEach(function (evento) {
+      ids.formDeclaracao.addEventListener(evento, function () {
+        if (!edicaoManualDeclaracao && !previaAlteradaManualmente) atualizarPrevia(false);
+      });
+    });
+
+    ids.previewDeclaracao.addEventListener('input', function () {
+      if (edicaoDeclaracaoAtiva) {
+        previaAlteradaManualmente = true;
+        edicaoManualDeclaracao = true;
+      }
+    });
+
+    ids.btnEditarDeclaracao.addEventListener('click', alternarEdicaoDeclaracao);
+    ids.btnGerarPdf.addEventListener('click', gerarPdfFinal);
+    ids.btnImprimir.addEventListener('click', imprimirDeclaracao);
+    ids.btnNovoOficio.addEventListener('click', novoOficio);
+    ids.btnLimpar.addEventListener('click', limparTudo);
+    ids.btnSalvarDados.addEventListener('click', salvarDadosAssinatura);
+    ids.btnLimparDadosSalvos.addEventListener('click', limparDadosSalvos);
+    ids.btnSalvarTemplate.addEventListener('click', salvarTemplateCartorio);
+    ids.btnLimparTemplate.addEventListener('click', limparTemplateCartorioSalvo);
+    document.querySelectorAll('input[name="tipoAssinatura"]').forEach(function (campo) {
+      campo.addEventListener('change', function () {
+        if (!edicaoManualDeclaracao && !previaAlteradaManualmente) atualizarPrevia(false);
+      });
+    });
+
+    ids.templatePdf.addEventListener('change', function () {
+      if (ids.templatePdf.files && ids.templatePdf.files[0]) {
+        atualizarStatusTemplate('Template selecionado para este ofício: ' + ids.templatePdf.files[0].name + '. Clique em “Salvar template como modelo” para reutilizar nas próximas vezes.');
+      }
+    });
+
+    function inicializarDatas() {
+      const hoje = new Date();
+      const yyyy = hoje.getFullYear();
+      const mm = String(hoje.getMonth() + 1).padStart(2, '0');
+      const dd = String(hoje.getDate()).padStart(2, '0');
+      const iso = yyyy + '-' + mm + '-' + dd;
+      document.getElementById('dataComparecimento').value = iso;
+      const ano = document.getElementById('ano');
+      if (ano && !ano.value) ano.value = String(yyyy);
+    }
+
+    function inicializarCaixaAlta() {
+      ['escrevente', 'nomeCompleto', 'quemAssina'].forEach(function (id) {
+        const campo = document.getElementById(id);
+        if (!campo) return;
+        campo.addEventListener('input', function () {
+          const posicao = campo.selectionStart;
+          campo.value = campo.value.toUpperCase();
+          try { campo.setSelectionRange(posicao, posicao); } catch (e) {}
+        });
+      });
+    }
+
+    function inicializarCpf() {
+      const campo = document.getElementById('cpfNumero');
+      if (!campo) return;
+      campo.addEventListener('input', function () {
+        let valor = campo.value.replace(/\D/g, '').slice(0, 11);
+        valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+        valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+        valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        campo.value = valor;
+        validarCpfCampo(false);
+      });
+      campo.addEventListener('blur', function () {
+        if (!validarCpfCampo(true)) campo.reportValidity();
+      });
+    }
+
+    function cpfValido(valor) {
+      const cpf = String(valor || '').replace(/\D/g, '');
+      if (cpf.length !== 11) return false;
+      if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+      let soma = 0;
+      for (let i = 0; i < 9; i++) soma += Number(cpf.charAt(i)) * (10 - i);
+      let digito = 11 - (soma % 11);
+      if (digito >= 10) digito = 0;
+      if (digito !== Number(cpf.charAt(9))) return false;
+
+      soma = 0;
+      for (let i = 0; i < 10; i++) soma += Number(cpf.charAt(i)) * (11 - i);
+      digito = 11 - (soma % 11);
+      if (digito >= 10) digito = 0;
+      return digito === Number(cpf.charAt(10));
+    }
+
+    function validarCpfCampo() {
+      const campo = document.getElementById('cpfNumero');
+      if (!campo) return true;
+      const digitos = campo.value.replace(/\D/g, '');
+
+      if (!digitos) {
+        campo.setCustomValidity('');
+        return true;
+      }
+
+      if (!cpfValido(digitos)) {
+        campo.setCustomValidity('Informe um CPF válido.');
+        return false;
+      }
+
+      campo.setCustomValidity('');
+      return true;
+    }
+
+    function setStatus(texto) {
+      ids.statusBox.textContent = texto;
+    }
+
+    function getValor(id) {
+      const campo = document.getElementById(id);
+      return campo ? campo.value.trim() : '';
+    }
+
+    function getTextoSelecionado(id) {
+      const campo = document.getElementById(id);
+      if (!campo || campo.selectedIndex < 0) return '';
+      const opcao = campo.options[campo.selectedIndex];
+      return opcao ? opcao.text.trim() : '';
+    }
+
+    function formatarDataBR(iso) {
+      if (!iso) return '';
+      const partes = iso.split('-');
+      if (partes.length !== 3) return iso;
+      return partes[2] + '/' + partes[1] + '/' + partes[0];
+    }
+
+    function formatarDataExtensoBR(iso) {
+      if (!iso) return '';
+      const partes = iso.split('-');
+      if (partes.length !== 3) return iso;
+      const meses = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+      const dia = String(Number(partes[2]));
+      const mes = meses[Number(partes[1]) - 1];
+      const ano = partes[0];
+      if (!mes || !dia || !ano) return formatarDataBR(iso);
+      return dia + ' de ' + mes + ' de ' + ano;
+    }
+
+    function dividirNomeEQualificacao(texto) {
+      const partes = String(texto || '').split(',');
+      const nome = (partes.shift() || '').trim();
+      const qualificacao = partes.join(',').trim();
+      return {
+        nome: nome,
+        qualificacao: qualificacao || 'responsável pela assinatura'
+      };
+    }
+
+    function getTipoAssinatura() {
+      const selecionado = document.querySelector('input[name="tipoAssinatura"]:checked');
+      return selecionado ? selecionado.value : '';
+    }
+
+    function coletarDados() {
+      return {
+        protocoloAto: getValor('protocoloAto'),
+        ano: getValor('ano'),
+        nomeCartorio: getValor('nomeCartorio'),
+        escrevente: getValor('escrevente').toUpperCase(),
+        nomeCompleto: getValor('nomeCompleto').toUpperCase(),
+        cpfNumero: getValor('cpfNumero'),
+        rgNumero: getValor('rgNumero'),
+        dataComparecimento: formatarDataBR(getValor('dataComparecimento')),
+        dataComparecimentoExtenso: formatarDataExtensoBR(getValor('dataComparecimento')),
+        horaInicio: getValor('horaInicio'),
+        horaFim: getValor('horaFim'),
+        quemAssina: getValor('quemAssina').toUpperCase(),
+        qualificacaoFuncional: getValor('cargoAssina'),
+        tipoAssinatura: getTipoAssinatura()
+      };
+    }
+
+    function valorOuCampo(valor, campo) {
+      return valor || '[' + campo + ']';
+    }
+
+    function escaparHtml(valor) {
+      return String(valor || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function montarEstruturaDeclaracao(dados) {
+      const protocolo = valorOuCampo(dados.protocoloAto, 'PROTOCOLO DO ATO');
+      const ano = valorOuCampo(dados.ano, 'ANO');
+      const nomeCartorio = valorOuCampo(dados.nomeCartorio, 'NOME DO CARTÓRIO');
+      const nome = valorOuCampo(dados.nomeCompleto, 'NOME COMPLETO DO(A) COMPARECENTE');
+      const cpf = valorOuCampo(dados.cpfNumero, 'CPF');
+      const rg = valorOuCampo(dados.rgNumero, 'RG');
+      const data = valorOuCampo(dados.dataComparecimentoExtenso, 'DATA');
+      const horaInicio = valorOuCampo(dados.horaInicio, 'HORA INÍCIO');
+      const horaFim = valorOuCampo(dados.horaFim, 'HORA FIM');
+      const escrevente = valorOuCampo(dados.escrevente, 'ESCREVENTE');
+      const quemAssina = valorOuCampo(dados.quemAssina, 'NOME DE QUEM ASSINA');
+      const qualificacao = valorOuCampo(dados.qualificacaoFuncional, 'QUALIFICAÇÃO FUNCIONAL');
+
+      const blocos = [
+        { tipo: 'line', texto: 'Protocolo do ato: ' + protocolo + '/' + ano },
+        { tipo: 'rightLine', texto: 'São Paulo, ' + data },
+        { tipo: 'space' },
+        { tipo: 'title', texto: 'Declaração de comparecimento' },
+        { tipo: 'space' },
+        {
+          tipo: 'paragraphRich',
+          partes: [
+            { texto: 'Declaramos, para os devidos fins, que ' },
+            { texto: nome, bold: true },
+            { texto: ', portador(a) do RG nº ' + rg + ' e inscrito(a) no CPF nº ' + cpf + ', compareceu ao ' + nomeCartorio + ' em ' + data + ', no período das ' + horaInicio + ' às ' + horaFim + ', para tratar de assuntos particulares.' }
+          ]
+        },
+        { tipo: 'paragraph', texto: 'O atendimento foi realizado pelo(a) escrevente ' + escrevente + '.' },
+        { tipo: 'paragraph', texto: 'A presente declaração é emitida a pedido da pessoa interessada, para simples comprovação de comparecimento.' },
+        { tipo: 'space' },
+        { tipo: 'space' },
+        { tipo: 'space' }
+      ];
+
+      if (dados.tipoAssinatura === 'fisica') {
+        blocos.push({ tipo: 'signatureLine' });
+      }
+
+      blocos.push({ tipo: 'signature', texto: quemAssina });
+
+      if (dados.tipoAssinatura === 'digital') {
+        blocos.push({ tipo: 'digitalNote', texto: '(assinado digitalmente)' });
+      }
+
+      blocos.push({ tipo: 'centerLine', texto: qualificacao });
+      return blocos;
+    }
+
+    function montarHtmlDeclaracao(dados) {
+      return montarEstruturaDeclaracao(dados).map(function (bloco) {
+        if (bloco.tipo === 'space') return '<div class="oficio-space"></div>';
+        if (bloco.tipo === 'signatureLine') return '<div class="oficio-signature-line"></div>';
+        if (bloco.tipo === 'paragraphRich') {
+          const conteudo = (bloco.partes || []).map(function (parte) {
+            const textoParte = escaparHtml(parte.texto || '');
+            return parte.bold ? '<strong>' + textoParte + '</strong>' : textoParte;
+          }).join('');
+          return '<p class="oficio-paragraph">' + conteudo + '</p>';
+        }
+        const texto = escaparHtml(bloco.texto);
+        if (bloco.tipo === 'rightLine') return '<p class="oficio-right">' + texto + '</p>';
+        if (bloco.tipo === 'paragraph') return '<p class="oficio-paragraph">' + texto + '</p>';
+        if (bloco.tipo === 'title') return '<p class="oficio-title">' + texto + '</p>';
+        if (bloco.tipo === 'signature') return '<p class="oficio-signature">' + texto + '</p>';
+        if (bloco.tipo === 'digitalNote') return '<p class="oficio-digital-note">' + texto + '</p>';
+        if (bloco.tipo === 'centerLine') return '<p class="oficio-center">' + texto + '</p>';
+        if (bloco.tipo === 'lineBold') return '<p class="oficio-line"><strong>' + texto + '</strong></p>';
+        return '<p class="oficio-line">' + texto + '</p>';
+      }).join('');
+    }
+
+    function atualizarPrevia(forcar) {
+      if (!forcar && (edicaoManualDeclaracao || previaAlteradaManualmente)) return;
+      ids.previewDeclaracao.innerHTML = montarHtmlDeclaracao(coletarDados());
+    }
+
+    function alternarEdicaoDeclaracao() {
+      const painelVisivel = ids.previewPanel.classList.contains('is-visible');
+
+      if (!painelVisivel) {
+        if (!edicaoManualDeclaracao) atualizarPrevia(true);
+        ids.previewPanel.classList.add('is-visible');
+        edicaoDeclaracaoAtiva = true;
+        ids.previewDeclaracao.setAttribute('contenteditable', 'true');
+        ids.previewDeclaracao.classList.add('is-editing');
+        ids.btnEditarDeclaracao.textContent = 'Concluir edição';
+        window.setTimeout(function () { ids.previewDeclaracao.focus(); }, 50);
+        setStatus('Prévia aberta para visualização e edição. Ajuste o texto diretamente na prévia e clique em “Concluir edição”.');
+        return;
+      }
+
+      if (edicaoDeclaracaoAtiva) {
+        edicaoDeclaracaoAtiva = false;
+        ids.previewDeclaracao.setAttribute('contenteditable', 'false');
+        ids.previewDeclaracao.classList.remove('is-editing');
+        ids.btnEditarDeclaracao.textContent = 'Ocultar prévia';
+
+        if (previaAlteradaManualmente) {
+          edicaoManualDeclaracao = true;
+          setStatus('Edição manual aplicada. O PDF será gerado com o texto exibido na prévia.');
+        } else {
+          edicaoManualDeclaracao = false;
+          atualizarPrevia(true);
+          setStatus('Prévia conferida. O PDF será gerado com os campos preenchidos no formulário.');
+        }
+        return;
+      }
+
+      ids.previewPanel.classList.remove('is-visible');
+      ids.btnEditarDeclaracao.textContent = 'Visualizar/editar declaração';
+      setStatus('Prévia da declaração ocultada.');
+    }
+
+    function validarCamposAntesDeGerar() {
+      ['escrevente', 'nomeCompleto', 'quemAssina'].forEach(function (id) {
+        const campo = document.getElementById(id);
+        if (campo) campo.value = campo.value.toUpperCase();
+      });
+
+      validarCpfCampo(true);
+
+      if (!ids.formDeclaracao.reportValidity()) {
+        setStatus('Confira os campos obrigatórios antes de gerar o PDF final.');
+        return false;
+      }
+
+      if (!getTipoAssinatura()) {
+        alert('Selecione o tipo da assinatura do ofício.');
+        setStatus('Selecione o tipo da assinatura do ofício antes de gerar ou imprimir.');
+        const primeiroTipo = document.getElementById('tipoAssinaturaDigital');
+        if (primeiroTipo) primeiroTipo.focus();
+        return false;
+      }
+
+      if (!previaAlteradaManualmente) {
+        edicaoManualDeclaracao = false;
+        atualizarPrevia(true);
+      }
+      return true;
+    }
+
+    function imprimirDeclaracao() {
+      if (!validarCamposAntesDeGerar()) return;
+      if (!previaAlteradaManualmente) atualizarPrevia(true);
+
+      const iframe = document.createElement('iframe');
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      document.body.appendChild(iframe);
+
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open();
+      doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Imprimir declaração</title><style>' +
+        '@font-face{font-family:Carlito;src:url("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Regular.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}' +
+        '@font-face{font-family:Carlito;src:url("https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/carlito/Carlito-Bold.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap;}' +
+        '@page{size:A4;margin:6cm 2cm 2.5cm 2cm;}' +
+        'html,body{margin:0;padding:0;background:#fff;}' +
+        'body{font-family:Carlito,Calibri,Arial,sans-serif;font-size:12pt;line-height:1.5;color:#000;}' +
+        '.print-page{height:calc(29.7cm - 8.5cm);overflow:hidden;page-break-after:avoid;break-after:avoid;}' +
+        'p{page-break-inside:avoid;break-inside:avoid;}' +
+        '.oficio-line{margin:0 0 6pt;line-height:1.5;}' +
+        '.oficio-right{margin:0 0 8pt;text-align:right;line-height:1.5;}' +
+        '.oficio-space{height:14pt;}' +
+        '.oficio-title{margin:0 0 18pt;font-weight:700;text-transform:uppercase;text-align:center;line-height:1.5;}' +
+        '.oficio-paragraph{margin:0 0 12pt;text-align:justify;line-height:1.5;}' +
+        '.oficio-signature{margin:0 0 6pt;font-weight:700;text-transform:uppercase;text-align:center;line-height:1.5;}' +
+        '.oficio-signature-line{width:8cm;border-top:1px solid #000;margin:0 auto 12pt;height:0;}' +
+        '.oficio-digital-note{margin:0 0 6pt;text-align:center;font-size:11pt;line-height:1.5;}' +
+        '.oficio-center{margin:0 0 6pt;text-align:center;line-height:1.5;}' +
+        '</style></head><body><div class="print-page">' + ids.previewDeclaracao.innerHTML + '</div></body></html>');
+      doc.close();
+
+      iframe.onload = function () {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+        window.setTimeout(function () { iframe.remove(); }, 800);
+      };
+    }
+
+    async function gerarPdfFinal() {
+      if (!validarCamposAntesDeGerar()) return;
+
+      if (typeof PDFLib === 'undefined') {
+        alert('A biblioteca PDF-lib não foi carregada. Verifique a conexão com a internet e recarregue a página.');
+        return;
+      }
+
+      ids.btnGerarPdf.disabled = true;
+      setStatus('Gerando PDF final...');
+
+      try {
+        const { PDFDocument } = PDFLib;
+        const pdfDoc = await PDFDocument.create();
+        await registrarFontkit(pdfDoc);
+        const fontes = await carregarFontes(pdfDoc);
+
+        const blocos = edicaoManualDeclaracao ? montarBlocosDaPreviaEditada() : montarEstruturaDeclaracao(coletarDados());
+        const templateBytes = await obterTemplateCartorioBytes();
+        const templateInfo = await prepararTemplateCartorio(pdfDoc, templateBytes);
+        desenharDeclaracaoNoPdf(pdfDoc, blocos, fontes, templateInfo);
+
+        const bytes = await pdfDoc.save();
+        baixarArquivo(bytes, nomeArquivoPdf());
+        setStatus('PDF final gerado com sucesso.');
+      } catch (erro) {
+        console.error(erro);
+        const mensagem = erro && erro.message ? erro.message : 'Erro desconhecido.';
+        alert('Erro ao gerar o PDF: ' + mensagem);
+        setStatus('Não foi possível gerar o PDF. Detalhe técnico: ' + mensagem);
+      } finally {
+        ids.btnGerarPdf.disabled = false;
+      }
+    }
+
+    async function registrarFontkit(pdfDoc) {
+      if (window.fontkit && typeof pdfDoc.registerFontkit === 'function') {
+        pdfDoc.registerFontkit(window.fontkit);
+      }
+    }
+
+    async function carregarFontes(pdfDoc) {
+      const { StandardFonts } = PDFLib;
+      try {
+        if (!window.fontkit) throw new Error('fontkit indisponível');
+        const regularBytes = await fetch(URL_FONTE_CARLITO_REGULAR).then(function (res) { return res.arrayBuffer(); });
+        const boldBytes = await fetch(URL_FONTE_CARLITO_BOLD).then(function (res) { return res.arrayBuffer(); });
+        return {
+          regular: await pdfDoc.embedFont(regularBytes),
+          bold: await pdfDoc.embedFont(boldBytes)
+        };
+      } catch (erro) {
+        return {
+          regular: await pdfDoc.embedFont(StandardFonts.Helvetica),
+          bold: await pdfDoc.embedFont(StandardFonts.HelveticaBold)
+        };
+      }
+    }
+
+    function desenharDeclaracaoNoPdf(pdfDoc, blocos, fontes, templateInfo) {
+      const larguraPagina = 595.28;
+      const alturaPagina = 841.89;
+      const margemEsquerda = 56.69;
+      const margemDireita = 56.69;
+      const margemSuperior = 170.08;
+      const margemInferior = 70.87;
+      const larguraTexto = larguraPagina - margemEsquerda - margemDireita;
+      const tamanhoFonte = 12;
+      const linha = 18;
+      let pagina = pdfDoc.addPage([larguraPagina, alturaPagina]);
+      aplicarTemplateNaPagina(pagina);
+      let y = alturaPagina - margemSuperior;
+
+      function aplicarTemplateNaPagina(paginaAtual) {
+        if (!templateInfo || !templateInfo.pagina) return;
+        paginaAtual.drawPage(templateInfo.pagina, { x: 0, y: 0, width: larguraPagina, height: alturaPagina });
+      }
+
+      function novaPaginaSeNecessario(alturaNecessaria) {
+        if (y - alturaNecessaria < margemInferior) {
+          pagina = pdfDoc.addPage([larguraPagina, alturaPagina]);
+          aplicarTemplateNaPagina(pagina);
+          y = alturaPagina - margemSuperior;
+        }
+      }
+
+      function obterTokensRich(partes) {
+        const tokens = [];
+        (partes || []).forEach(function (parte) {
+          String(parte.texto || '').split(/(\s+)/).forEach(function (pedaco) {
+            if (!pedaco) return;
+            tokens.push({ texto: pedaco, bold: !!parte.bold });
+          });
+        });
+        return tokens;
+      }
+
+      function larguraToken(token) {
+        const fonteToken = token.bold ? fontes.bold : fontes.regular;
+        return fonteToken.widthOfTextAtSize(token.texto, tamanhoFonte);
+      }
+
+      function quebrarTokensRich(partes) {
+        const tokens = obterTokensRich(partes);
+        const linhas = [];
+        let linhaAtual = [];
+        let larguraAtual = 0;
+
+        tokens.forEach(function (token) {
+          const largura = larguraToken(token);
+          if (linhaAtual.length && larguraAtual + largura > larguraTexto && !/^\s+$/.test(token.texto)) {
+            while (linhaAtual.length && /^\s+$/.test(linhaAtual[linhaAtual.length - 1].texto)) linhaAtual.pop();
+            linhas.push(linhaAtual);
+            linhaAtual = [];
+            larguraAtual = 0;
+            if (/^\s+$/.test(token.texto)) return;
+          }
+
+          if (!linhaAtual.length && /^\s+$/.test(token.texto)) return;
+          linhaAtual.push(token);
+          larguraAtual += largura;
+        });
+
+        while (linhaAtual.length && /^\s+$/.test(linhaAtual[linhaAtual.length - 1].texto)) linhaAtual.pop();
+        if (linhaAtual.length) linhas.push(linhaAtual);
+        return linhas.length ? linhas : [[{ texto: '', bold: false }]];
+      }
+
+      function desenharLinhaRich(tokens, xInicial) {
+        let x = xInicial;
+        tokens.forEach(function (token) {
+          const fonteToken = token.bold ? fontes.bold : fontes.regular;
+          pagina.drawText(token.texto, { x: x, y: y, size: tamanhoFonte, font: fonteToken, color: PDFLib.rgb(0, 0, 0) });
+          x += fonteToken.widthOfTextAtSize(token.texto, tamanhoFonte);
+        });
+      }
+
+      blocos.forEach(function (bloco) {
+        if (bloco.tipo === 'space') {
+          novaPaginaSeNecessario(linha);
+          y -= linha;
+          return;
+        }
+
+        if (bloco.tipo === 'signatureLine') {
+          novaPaginaSeNecessario(24);
+          const larguraLinhaAssinatura = 226.77;
+          const xInicio = margemEsquerda + (larguraTexto - larguraLinhaAssinatura) / 2;
+          pagina.drawLine({
+            start: { x: xInicio, y: y - 8 },
+            end: { x: xInicio + larguraLinhaAssinatura, y: y - 8 },
+            thickness: 1,
+            color: PDFLib.rgb(0, 0, 0)
+          });
+          y -= 24;
+          return;
+        }
+
+        if (bloco.tipo === 'paragraphRich') {
+          const linhasRich = quebrarTokensRich(bloco.partes || []);
+          const alturaNecessaria = linhasRich.length * linha + 3;
+          novaPaginaSeNecessario(alturaNecessaria);
+          linhasRich.forEach(function (tokensLinha) {
+            desenharLinhaRich(tokensLinha, margemEsquerda);
+            y -= linha;
+          });
+          y -= 4;
+          return;
+        }
+
+        const texto = String(bloco.texto || '').replace(/\s+/g, ' ').trim();
+        if (!texto) return;
+        const fonte = ['lineBold', 'title', 'signature'].includes(bloco.tipo) ? fontes.bold : fontes.regular;
+        const linhas = quebrarTexto(texto, fonte, tamanhoFonte, larguraTexto, bloco.tipo === 'signature' || bloco.tipo === 'centerLine' || bloco.tipo === 'rightLine' || bloco.tipo === 'title' || bloco.tipo === 'digitalNote');
+        const alturaNecessaria = linhas.length * linha + 3;
+        novaPaginaSeNecessario(alturaNecessaria);
+
+        linhas.forEach(function (linhaTexto) {
+          let x = margemEsquerda;
+          const larguraLinha = fonte.widthOfTextAtSize(linhaTexto, tamanhoFonte);
+          if (bloco.tipo === 'rightLine') x = larguraPagina - margemDireita - larguraLinha;
+          if (bloco.tipo === 'signature' || bloco.tipo === 'centerLine' || bloco.tipo === 'title' || bloco.tipo === 'digitalNote') x = margemEsquerda + (larguraTexto - larguraLinha) / 2;
+          pagina.drawText(linhaTexto, { x: x, y: y, size: tamanhoFonte, font: fonte, color: PDFLib.rgb(0, 0, 0) });
+          y -= linha;
+        });
+
+        if (bloco.tipo === 'paragraph' || bloco.tipo === 'title') y -= 4;
+      });
+    }
+
+    function quebrarTexto(texto, fonte, tamanhoFonte, larguraMaxima, preservarLinha) {
+      if (preservarLinha && fonte.widthOfTextAtSize(texto, tamanhoFonte) <= larguraMaxima) return [texto];
+      const palavras = String(texto || '').split(/\s+/).filter(Boolean);
+      const linhas = [];
+      let atual = '';
+
+      palavras.forEach(function (palavra) {
+        const teste = atual ? atual + ' ' + palavra : palavra;
+        if (fonte.widthOfTextAtSize(teste, tamanhoFonte) <= larguraMaxima) {
+          atual = teste;
+        } else {
+          if (atual) linhas.push(atual);
+          atual = palavra;
+        }
+      });
+
+      if (atual) linhas.push(atual);
+      return linhas.length ? linhas : [''];
+    }
+
+    function partesRichDoElemento(el) {
+      const partes = [];
+      function visitar(no, boldAtivo) {
+        if (no.nodeType === Node.TEXT_NODE) {
+          if (no.textContent) partes.push({ texto: no.textContent, bold: boldAtivo });
+          return;
+        }
+        if (no.nodeType !== Node.ELEMENT_NODE) return;
+        const tag = no.tagName ? no.tagName.toLowerCase() : '';
+        const novoBold = boldAtivo || tag === 'strong' || tag === 'b';
+        Array.from(no.childNodes || []).forEach(function (filho) {
+          visitar(filho, novoBold);
+        });
+      }
+      Array.from(el.childNodes || []).forEach(function (filho) {
+        visitar(filho, false);
+      });
+      return partes.filter(function (parte) { return parte.texto && parte.texto.trim() !== ''; });
+    }
+
+    function montarBlocosDaPreviaEditada() {
+      const blocos = [];
+      const filhos = Array.from(ids.previewDeclaracao.children || []);
+      filhos.forEach(function (el) {
+        if (el.classList.contains('oficio-space')) {
+          blocos.push({ tipo: 'space' });
+          return;
+        }
+        if (el.classList.contains('oficio-signature-line')) {
+          blocos.push({ tipo: 'signatureLine' });
+          return;
+        }
+        const texto = el.innerText.replace(/\s+/g, ' ').trim();
+        if (!texto) return;
+        if (el.classList.contains('oficio-right')) blocos.push({ tipo: 'rightLine', texto: texto });
+        else if (el.classList.contains('oficio-paragraph') && el.querySelector('strong, b')) blocos.push({ tipo: 'paragraphRich', partes: partesRichDoElemento(el) });
+        else if (el.classList.contains('oficio-paragraph')) blocos.push({ tipo: 'paragraph', texto: texto });
+        else if (el.classList.contains('oficio-title')) blocos.push({ tipo: 'title', texto: texto });
+        else if (el.classList.contains('oficio-signature')) blocos.push({ tipo: 'signature', texto: texto });
+        else if (el.classList.contains('oficio-digital-note')) blocos.push({ tipo: 'digitalNote', texto: texto });
+        else if (el.classList.contains('oficio-center')) blocos.push({ tipo: 'centerLine', texto: texto });
+        else if (el.querySelector('strong, b')) blocos.push({ tipo: 'lineBold', texto: texto });
+        else blocos.push({ tipo: 'line', texto: texto });
+      });
+      return blocos.length ? blocos : montarEstruturaDeclaracao(coletarDados());
+    }
+
+    function abrirDbTemplateCartorio() {
+      return new Promise(function (resolve, reject) {
+        const requisicao = indexedDB.open(DB_TEMPLATE_DECLARACAO, 1);
+        requisicao.onupgradeneeded = function () {
+          const db = requisicao.result;
+          if (!db.objectStoreNames.contains(STORE_TEMPLATE_DECLARACAO)) {
+            db.createObjectStore(STORE_TEMPLATE_DECLARACAO, { keyPath: 'id' });
+          }
+        };
+        requisicao.onsuccess = function () { resolve(requisicao.result); };
+        requisicao.onerror = function () { reject(requisicao.error || new Error('Falha ao abrir o banco local do template.')); };
+      });
+    }
+
+    function operarTemplateCartorio(modo, valor) {
+      return abrirDbTemplateCartorio().then(function (db) {
+        return new Promise(function (resolve, reject) {
+          const transacao = db.transaction(STORE_TEMPLATE_DECLARACAO, modo === 'get' ? 'readonly' : 'readwrite');
+          const store = transacao.objectStore(STORE_TEMPLATE_DECLARACAO);
+          let requisicao;
+
+          if (modo === 'put') requisicao = store.put(valor);
+          if (modo === 'delete') requisicao = store.delete(ID_TEMPLATE_DECLARACAO);
+          if (modo === 'get') requisicao = store.get(ID_TEMPLATE_DECLARACAO);
+
+          requisicao.onsuccess = function () { resolve(requisicao.result); };
+          requisicao.onerror = function () { reject(requisicao.error || new Error('Falha ao acessar o template salvo.')); };
+          transacao.oncomplete = function () { db.close(); };
+          transacao.onerror = function () { reject(transacao.error || new Error('Falha na operação local do template.')); };
+        });
+      });
+    }
+
+    function atualizarStatusTemplate(texto) {
+      ids.templateStatus.textContent = texto;
+    }
+
+    async function salvarTemplateCartorio() {
+      const arquivo = ids.templatePdf && ids.templatePdf.files ? ids.templatePdf.files[0] : null;
+      if (!arquivo) {
+        alert('Selecione o template do cartório em PDF antes de salvar.');
+        return;
+      }
+
+      if (arquivo.type && arquivo.type !== 'application/pdf') {
+        alert('O template deve estar em PDF.');
+        return;
+      }
+
+      try {
+        const bytes = await arquivo.arrayBuffer();
+        await operarTemplateCartorio('put', {
+          id: ID_TEMPLATE_DECLARACAO,
+          nome: arquivo.name,
+          tipo: arquivo.type || 'application/pdf',
+          tamanho: arquivo.size,
+          salvoEm: new Date().toISOString(),
+          bytes: bytes
+        });
+        atualizarStatusTemplate('Template salvo neste navegador: ' + arquivo.name);
+        setStatus('Template do cartório salvo neste navegador. Ele será aplicado às próximas declarações geradas neste computador.');
+        alert('Template salvo neste navegador.');
+      } catch (erro) {
+        console.error(erro);
+        alert('Não foi possível salvar o template neste navegador. Você ainda pode selecionar o arquivo manualmente antes de gerar o PDF.');
+      }
+    }
+
+    async function limparTemplateCartorioSalvo() {
+      if (!confirm('Deseja apagar o template do cartório salvo neste navegador?')) return;
+      try {
+        await operarTemplateCartorio('delete');
+        ids.templatePdf.value = '';
+        atualizarStatusTemplate('Nenhum template salvo neste navegador.');
+        setStatus('Template do cartório apagado deste navegador.');
+      } catch (erro) {
+        console.error(erro);
+        alert('Não foi possível apagar o template salvo.');
+      }
+    }
+
+    async function carregarStatusTemplateSalvo() {
+      try {
+        const registro = await operarTemplateCartorio('get');
+        if (registro && registro.nome) {
+          atualizarStatusTemplate('Template salvo neste navegador: ' + registro.nome);
+        } else {
+          atualizarStatusTemplate('Nenhum template salvo neste navegador.');
+        }
+      } catch (erro) {
+        atualizarStatusTemplate('Nenhum template salvo neste navegador.');
+      }
+    }
+
+    async function obterTemplateCartorioBytes() {
+      const arquivo = ids.templatePdf && ids.templatePdf.files ? ids.templatePdf.files[0] : null;
+      if (arquivo) return await arquivo.arrayBuffer();
+
+      try {
+        const registro = await operarTemplateCartorio('get');
+        if (registro && registro.bytes) return registro.bytes;
+      } catch (erro) {
+        console.warn('Não foi possível carregar template salvo.', erro);
+      }
+
+      return null;
+    }
+
+    async function prepararTemplateCartorio(pdfDoc, bytesTemplate) {
+      if (!bytesTemplate) return null;
+      try {
+        const pdfTemplate = await PDFLib.PDFDocument.load(bytesTemplate, { ignoreEncryption: true });
+        const paginaOrigem = pdfTemplate.getPage(0);
+        const pagina = await pdfDoc.embedPage(paginaOrigem);
+        return { pagina: pagina };
+      } catch (erro) {
+        console.error(erro);
+        alert('Não foi possível aplicar o template do cartório. A declaração será gerada sem o template.');
+        return null;
+      }
+    }
+
+    function baixarArquivo(bytes, nome) {
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = nome;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }
+
+    function nomeArquivoPdf() {
+      const protocolo = getValor('protocoloAto') || 'sem-protocolo';
+      const limpo = protocolo.replace(/[^0-9A-Za-z_-]+/g, '-').replace(/-+/g, '-');
+      return 'oficio-declaracao-comparecimento-' + limpo + '.pdf';
+    }
+
+    function salvarDadosAssinatura() {
+      const dados = {
+        nomeCartorio: getValor('nomeCartorio'),
+        escrevente: getValor('escrevente').toUpperCase(),
+        quemAssina: getValor('quemAssina').toUpperCase(),
+        cargoAssina: getValor('cargoAssina')
+      };
+      localStorage.setItem(CHAVE_DADOS_DECLARACAO, JSON.stringify(dados));
+      setStatus('Dados salvos neste navegador para uso em novas declarações.');
+      alert('Dados salvos para uso em novas declarações.');
+    }
+
+    function carregarDadosSalvos() {
+      try {
+        const salvo = JSON.parse(localStorage.getItem(CHAVE_DADOS_DECLARACAO) || '{}');
+        if (salvo.nomeCartorio) document.getElementById('nomeCartorio').value = salvo.nomeCartorio;
+        if (salvo.escrevente) document.getElementById('escrevente').value = salvo.escrevente;
+        if (salvo.quemAssina) document.getElementById('quemAssina').value = salvo.quemAssina;
+        if (salvo.cargoAssina) document.getElementById('cargoAssina').value = salvo.cargoAssina;
+      } catch (e) {}
+    }
+
+    function limparDadosSalvos() {
+      localStorage.removeItem(CHAVE_DADOS_DECLARACAO);
+      setStatus('Dados salvos removidos deste navegador.');
+    }
+
+    function novoOficio() {
+      limparTudo();
+      setStatus('Novo ofício iniciado. Dados salvos do cartório e template salvo foram preservados.');
+    }
+
+    function limparTudo() {
+      ids.formDeclaracao.reset();
+      ids.templatePdf.value = '';
+      inicializarDatas();
+      carregarDadosSalvos();
+      carregarStatusTemplateSalvo();
+      edicaoManualDeclaracao = false;
+      edicaoDeclaracaoAtiva = false;
+      previaAlteradaManualmente = false;
+      ids.previewDeclaracao.setAttribute('contenteditable', 'false');
+      ids.previewDeclaracao.classList.remove('is-editing');
+      ids.previewPanel.classList.remove('is-visible');
+      ids.btnEditarDeclaracao.textContent = 'Visualizar/editar declaração';
+      atualizarPrevia(true);
+      setStatus('Campos limpos. Preencha os dados para gerar novo ofício.');
+    }
+  </script>
+</body>
+</html>
