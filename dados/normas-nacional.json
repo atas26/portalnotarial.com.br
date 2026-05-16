@@ -1,8 +1,8 @@
 {
-  "source": "https://atos.cnj.jus.br/files/compilado1507262026032369c1572e90dfd.pdf",
-  "updatedAt": "2026-05-15T08:00:50.275122+00:00",
-  "sha256": "6d631c5f733f312b9ba1438ae3608bec92db77f743e92b4cfdb296efa2fbbb53",
-  "totalItems": 817,
+  "source": "https://atos.cnj.jus.br/files/compilado114013202605156a07061dc2f12.pdf",
+  "updatedAt": "2026-05-16T08:00:49.670929+00:00",
+  "sha256": "3a1e1002920412e634c3c76941c52ff3abb5eed562e7977ffc91aae9df579dd1",
+  "totalItems": 835,
   "parserVersion": "cnj-hierarchy-v5",
   "articles": [
     {
@@ -9694,7 +9694,63 @@
           "type": "section-title"
         }
       ],
-      "texto": "Art. 125. As certidões dos imóveis que já forem objeto de matrícula eletrônica, após a “primeira qualificação eletrônica”, serão expedidas, independentemente de indicação de finalidade, em formato nato-digital estruturado, contendo a situação jurídica atual do imóvel, ou seja, a sua descrição, a titularidade e os ônus reais não cancelados.\n\nParágrafo único. A expedição de certidão de atos anteriores da cadeia filiatória do imóvel depende de identificação segura do requerente e de indicação da finalidade. Art. 126. O atendimento a requisições de buscas fundadas exclusivamente no indicador pessoal ou real pressupõe a identificação segura do solicitante, bem como a indicação da finalidade, de tudo mantendo-se o registro em meio físico ou virtual."
+      "texto": "Art. 125. As certidões dos imóveis que já forem objeto de matrícula eletrônica, após a “primeira qualificação eletrônica”, serão expedidas, independentemente de indicação de finalidade, em formato nato-digital estruturado, contendo a situação jurídica atual do imóvel, ou seja, a sua descrição, a titularidade e os ônus reais não cancelados.\n\nParágrafo único. A expedição de certidão de atos anteriores da cadeia filiatória do imóvel depende de identificação segura do requerente e de indicação da finalidade."
+    },
+    {
+      "id": "cnj-art-126",
+      "numero": "Art. 126",
+      "ordem": 126,
+      "tipo": "artigo",
+      "capitulo": "Código Nacional de Normas",
+      "secao": "Seção XIV",
+      "areas": [
+        "Registro de Imóveis",
+        "Tecnologia e proteção de dados"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO I",
+      "livroTitulo": "DO REGIME JURÍDICO ADMINISTRATIVO",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DO LIVRO III DA PARTE GERAL DESTE CÓDIGO DE NORMAS, DA CORREGEDORIA NACIONAL",
+      "capituloNumero": "",
+      "capituloTitulo": "",
+      "secaoTitulo": "Do Registro de Imóveis e a Proteção de Dados",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO I",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGIME JURÍDICO ADMINISTRATIVO",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DO LIVRO III DA PARTE GERAL DESTE CÓDIGO DE NORMAS, DA CORREGEDORIA NACIONAL",
+          "type": "title"
+        },
+        {
+          "text": "Seção XIV",
+          "type": "section"
+        },
+        {
+          "text": "Do Registro de Imóveis e a Proteção de Dados",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 126. O atendimento a requisições de buscas fundadas exclusivamente no indicador pessoal ou real pressupõe a identificação segura do solicitante, bem como a indicação da finalidade, de tudo mantendo-se o registro em meio físico ou virtual."
     },
     {
       "id": "cnj-art-127",
@@ -27518,6 +27574,1079 @@
         }
       ],
       "texto": "Art. 320-W. A apresentação da página na internet, a forma de preenchimento de formulários, os formatos dos dados, o cadastramento de autoridades e dos demais usuários, os métodos de identificação, a gestão do acesso, a usabilidade, a interoperabilidade, os requisitos do sistema e questões técnicas relativas ao uso da tecnologia constarão do manual operacional elaborado pelo ONR. (incluído pelo Provimento CN n. 204, de 26.8.2025)"
+    },
+    {
+      "id": "cnj-art-320-x",
+      "numero": "Art. 320-X",
+      "ordem": 320.24,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis",
+        "Tecnologia e proteção de dados"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-X. O Sistema de Constrição Judicial – Constrijud, consiste em plataforma informatizada, integrante do Sistema Eletrônico dos Registros Públicos (Serp), destinada ao encaminhamento, aos oficiais de registro de imóveis, de ordens judiciais de constrição e de comunicações correlatas, compreendendo penhora, arresto, sequestro, conversão de arresto em penhora, averbação premonitória, de existência de ação, bloqueio de matrícula, hipoteca judicial, citação em ações reais ou pessoais reipersecutórias e respectivas autorizações de cancelamento. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-y",
+      "numero": "Art. 320-Y",
+      "ordem": 320.25,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-Y. O sistema Constrijud será mantido e administrado pelo Operador Nacional do Sistema de Registro Eletrônico de Imóveis (ONR), como módulo integrante do Serp, sob a regulação e a fiscalização da Corregedoria Nacional de Justiça do Conselho Nacional de Justiça. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-z",
+      "numero": "Art. 320-Z",
+      "ordem": 320.26,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-Z. As ordens e comunicações referidas no art. 320-X deverão ser encaminhadas aos registradores de imóveis exclusivamente por intermédio do sistema Constrijud. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AA. Os oficiais de registro de imóveis deverão recusar, mediante nota devolutiva fundamentada, o cumprimento de ordens encaminhadas em desconformidade com o disposto no art. 320-Z, orientando quanto à necessidade de utilização do sistema Constrijud. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\nParágrafo único. Na hipótese de indisponibilidade técnica do Sistema Constrijud, devidamente comprovada, ou de reiteração do encaminhamento irregular, e a fim de evitar prejuízo às partes, o oficial de registro de imóveis deverá dar imediato cumprimento à ordem judicial, sem prejuízo de consignar expressamente a irregularidade do meio empregado, comunicando o fato, de forma simultânea, à Corregedoria do Tribunal de Justiça ao qual estiver vinculado e ao ONR, que promoverá a consolidação mensal dos dados relativos a situações similares e posterior comunicação à Corregedoria Nacional de Justiça. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AB. Os oficiais de registro de imóveis deverão verificar, diariamente, no sistema Constrijud, na abertura e no encerramento do expediente, bem como em intervalos não superiores a 2 (duas) horas, a existência de ordens de constrição, praticando, quando for o caso, os atos necessários à sua efetivação. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\nParágrafo único. Os prazos previstos no caput não se aplicam aos oficiais de registro de imóveis que adotarem interface de programação de aplicações (API) que possibilite a comunicação em tempo real. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AC. O protocolo será realizado de acordo com a sequência de apresentação das ordens judiciais recebidas, devendo o oficial de registro de imóveis proceder à prenotação no sistema interno da serventia, com a imediata indicação do prazo de sua vigência, e, em seguida, promover a correspondente atualização dessas informações no Constrijud. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AD. A constrição será registrada ou averbada após a qualificação registral, ficando a prática do respectivo ato condicionada ao prévio pagamento dos emolumentos, por meio do próprio Constrijud, ressalvadas as hipóteses legais de dispensa de antecipação ou de concessão da gratuidade da justiça. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\nParágrafo único. As hipóteses legais de não exigência da antecipação dos emolumentos ou de gratuidade da justiça deverão ser informadas na ordem de constrição, podendo o oficial de registro de imóveis conferir o deferimento nos autos do processo judicial digital ou solicitar a comprovação, caso não tenha acesso. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AE. Deferida a ordem de constrição pela autoridade judicial, a unidade jurisdicional promoverá o respectivo cadastramento no Constrijud. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§ 1º Em cooperação, o advogado da parte interessada, o Ministério Público, a Defensoria Pública e as autoridades policiais poderão cadastrar a ordem judicial no Constrijud, comunicando ao Juízo prolator da ordem. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§ 2º A autoridade judiciária, após análise das informações contidas no formulário, validará o seu conteúdo e autorizará o encaminhamento da ordem ao registrador, pelo Constrijud. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§ 3º Os atos de averbação ou registro da ordem poderão ser acompanhados no módulo de acesso do Constrijud para ciência das eventuais exigências apontadas em nota devolutiva expedida pelo oficial de registro de imóveis, podendo a parte interessada diligenciar seu atendimento independentemente de comando judicial. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AF. Sem prejuízo da atuação do interessado, caberá à autoridade judicial cumprir, se for ato de ofício, ou determinar que se cumpram, se for ato de atribuição das partes, as exigências da nota devolutiva para que a ordem de constrição, entregue ao registrador por intermédio do Constrijud, seja efetivada dentro do prazo de vigência da prenotação (Lei n. 6.015/1973, art. 205). (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§ 1º A prenotação da ordem será cancelada pelo oficial de registro de imóveis quando ultrapassado o prazo de sua vigência sem o cumprimento das exigências ou sem que tenha havido o pagamento dos emolumentos, quando devidos. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§ 2º Na hipótese do parágrafo anterior, serão devidos os valores dos emolumentos referentes à prenotação cujo prazo de vigência expirou e aqueles do envio da nova ordem de constrição, cumpridas as exigências faltantes. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AG. O oficial de registro de imóveis realizará, no âmbito da serventia e em seus livros, o registro, a averbação ou a emissão de nota devolutiva, no prazo de até 10 (dez) dias úteis, contados da prenotação. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§ 1º Sendo positiva a qualificação e não sendo caso de prévio pagamento dos emolumentos, será efetuado o registro ou a averbação, devendo ser anexada a certidão da matrícula com o ato praticado no Constrijud para a visualização e juntada aos autos do processo judicial. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§ 2º No caso de qualificação negativa, o oficial expedirá a nota devolutiva e a anexará ao Constrijud, em resposta à ordem recebida, para ciência do juízo e das partes interessadas. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AH. A ordem de cancelamento da constrição será enviada pela autoridade judicial por intermédio do Constrijud, não se sujeitando ao prazo de vigência da prenotação. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AI. Excetuadas situações abrangidas por isenções e imunidades previstas em Lei ou ordem judicial, conforme o caso, os emolumentos devidos pelo ato de constrição serão pagos conjuntamente com os de seu cancelamento, quando praticado sem a exigência da antecipação, pelo interessado que fizer o pedido de cancelamento no cartório de registro de imóveis, sem prejuízo da responsabilidade definida em lei ou em decisão judicial. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AJ. Ao enviar a ordem por intermédio do Constrijud, a autoridade judicial deverá informar, expressamente, se a constrição atingirá todo o bem ou apenas quota-parte. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\nParágrafo único. Na ausência de indicação expressa de que a constrição recai apenas sobre quota-parte, o oficial de registro de imóveis procederá à averbação ou ao registro considerando a integralidade do bem, sem prejuízo de ulterior retificação mediante ordem judicial. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AK. A constrição deverá recair sobre os direitos titularizados pelo réu ou executado na matrícula do imóvel, independentemente de expressa menção na ordem judicial, sendo desnecessária nota devolutiva para retificação da ordem. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§1º A constrição sobre os direitos do devedor fiduciante não obsta o procedimento de intimação para purgação da mora, nem impede a eventual consolidação da propriedade plena do imóvel pelo credor fiduciário, nos termos da legislação civil, salvo se houver ordem judicial expressa de bloqueio da matrícula. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§2º Caso a constrição judicial seja direcionada ao credor fiduciário, o ato recairá sobre o seu direito real de propriedade resolúvel e o crédito garantido. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AL. Ressalvada determinação judicial em sentido contrário, a averbação de constrição judicial ou o bloqueio de matrícula não impede a prática de atos de saneamento de especialidade objetiva ou subjetiva, nem de atos de gestão e parcelamento do solo, tais como retificações, unificações, desmembramentos. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§1º Nos casos previstos no caput, o oficial de registro de imóveis deverá realizar o transporte automático das constrições e gravames vigentes para as novas matrículas abertas ou para os atos subsequentes, independentemente de prévia autorização do juízo que determinou a medida. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§2º O transporte da carga constritiva é obrigatório para viabilizar a conformidade da matrícula com os requisitos informacionais obrigatórios constantes do art. 176. II, da Lei n. 6.015/1973 e deste Código, devendo o oficial assegurar a inserção do Código Nacional de Matrícula (CNM) e a descrição georreferenciada, quando exigível. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§ 3º Efetuado o saneamento e o transporte das constrições, o oficial de registro de imóveis deverá comunicar o juízo competente por intermédio do sistema Constrijud, informando os dados da nova matrícula e o encerramento da matrícula originária, garantindo a rastreabilidade da ordem judicial. (incluído pelo Provimento CN n. 224, de 12.5.2026)\n\n§ 4º Ficam ressalvadas as ordens judiciais de bloqueio de matrícula que contenham determinação expressa de proibição de atos de modificação da poligonal ou de saneamento, hipótese em que o oficial deverá consultar a autoridade ordenadora antes da prática do ato. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AM. O oficial de registro de imóveis deverá expedir nota devolutiva fundamentada sempre que verificar que a constrição poderá atingir direito de terceiro não indicado na ordem judicial, indicando, de forma clara, os elementos que evidenciam a necessidade de complementação ou esclarecimento da ordem. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
+    },
+    {
+      "id": "cnj-art-320-a",
+      "numero": "Art. 320-A",
+      "ordem": 320.01,
+      "tipo": "artigo",
+      "capitulo": "CAPÍTULO VII - DO REGISTRO DE IMÓVEIS",
+      "secao": "Seção I",
+      "areas": [
+        "Registro de Imóveis",
+        "Tecnologia e proteção de dados"
+      ],
+      "temas": [],
+      "norma": true,
+      "notas": [],
+      "parte": "PARTE GERAL",
+      "livro": "LIVRO IV",
+      "livroTitulo": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+      "titulo": "TÍTULO II",
+      "tituloTitulo": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+      "capituloNumero": "CAPÍTULO VII",
+      "capituloTitulo": "DO REGISTRO DE IMÓVEIS",
+      "secaoTitulo": "-C",
+      "subsecao": "",
+      "subsecaoTitulo": "",
+      "estrutura": [
+        {
+          "text": "PARTE GERAL",
+          "type": "upper"
+        },
+        {
+          "text": "LIVRO IV",
+          "type": "upper"
+        },
+        {
+          "text": "DA ORGANIZAÇÃO DIGITAL DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "TÍTULO II",
+          "type": "upper"
+        },
+        {
+          "text": "DOS SISTEMAS DIGITAIS DOS SERVIÇOS",
+          "type": "title"
+        },
+        {
+          "text": "CAPÍTULO VII",
+          "type": "upper"
+        },
+        {
+          "text": "DO REGISTRO DE IMÓVEIS",
+          "type": "title"
+        },
+        {
+          "text": "Seção I",
+          "type": "section"
+        },
+        {
+          "text": "-C",
+          "type": "section-title"
+        }
+      ],
+      "texto": "Art. 320-AN. As questões técnicas referentes ao uso da tecnologia, tais como gestão do acesso, cadastramento, usabilidade, interoperabilidade, padrões e atualizações tecnológicas, serão definidas no manual operacional elaborado pelo ONR, observado o disposto nesta Seção. (incluído pelo Provimento CN n. 224, de 12.5.2026)"
     },
     {
       "id": "cnj-art-321",
