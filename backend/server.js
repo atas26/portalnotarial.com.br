@@ -19,7 +19,7 @@ app.use(
 app.use(
   rateLimit({
     windowMs: 60 * 1000,
-    limit: 60,
+    limit: 30,
     standardHeaders: true,
     legacyHeaders: false,
     message: {
@@ -61,6 +61,11 @@ function cpfValido(cpf) {
   return digito2 === Number(numeros[10]);
 }
 
+function respostaEhHtml(texto) {
+  return String(texto || "").trim().toLowerCase().startsWith("<!doctype html")
+    || String(texto || "").trim().toLowerCase().startsWith("<html");
+}
+
 app.get("/", (req, res) => {
   res.json({
     status: "online",
@@ -92,25 +97,39 @@ app.get("/api/pep", async (req, res) => {
       });
     }
 
-    const url = new URL("https://api.portaldatransparencia.gov.br/api-de-dados/pep");
+    const url = new URL("http://api.portaldatransparencia.gov.br/api-de-dados/pep");
     url.searchParams.set("cpf", cpf);
     url.searchParams.set("pagina", pagina);
 
     const resposta = await fetch(url.toString(), {
       method: "GET",
       headers: {
-        accept: "application/json",
-        "chave-api-dados": PORTAL_TOKEN
+        "Accept": "application/json",
+        "chave-api-dados": PORTAL_TOKEN,
+        "User-Agent": "consulta-pep-portal-notarial/1.0"
       }
     });
 
     const texto = await resposta.text();
 
+    if (respostaEhHtml(texto)) {
+      return res.status(502).json({
+        erro: "A API oficial retornou uma página HTML de verificação humana, e não uma resposta JSON.",
+        statusRecebidoDaApiOficial: resposta.status,
+        orientacao: "Isso normalmente indica bloqueio ou desafio de segurança no acesso automatizado a partir do servidor. Teste novamente em alguns minutos. Se persistir, será necessário consultar a CGU ou usar a base aberta de download de PEP."
+      });
+    }
+
     let dados;
+
     try {
       dados = texto ? JSON.parse(texto) : [];
     } catch {
-      dados = texto;
+      return res.status(502).json({
+        erro: "A API oficial retornou uma resposta que não pôde ser interpretada como JSON.",
+        statusRecebidoDaApiOficial: resposta.status,
+        detalhe: texto
+      });
     }
 
     if (!resposta.ok) {
