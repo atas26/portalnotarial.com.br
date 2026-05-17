@@ -1,42 +1,38 @@
 import express from "express";
 import cors from "cors";
-import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import { parse } from "csv-parse/sync";
+import fs from "fs/promises";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-const PORTAL_TOKEN = process.env.PORTAL_TRANSPARENCIA_TOKEN;
-const DEBUG_TOKEN = process.env.DEBUG_TOKEN;
-const ORIGENS = (process.env.FRONTEND_ORIGIN || "")
-  .split(",")
-  .map((s) => s.trim())
-  .filter(Boolean);
+const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "*";
 
-const API_URL = "https://api.portaldatransparencia.gov.br/api-de-dados/pep";
-const TTL_MS = 12 * 60 * 60 * 1000;
-const TIMEOUT_MS = 10000;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const cache = new Map();
+const CSV_PATH = path.join(__dirname, "data", "pep.csv");
 
-app.set("trust proxy", 1);
-app.use(helmet());
+let registrosPep = [];
+let indicePorCpf = new Map();
+let baseCarregadaEm = null;
+let arquivoBase = "pep.csv";
+
 app.use(express.json());
 
 app.use(
   cors({
-    origin(origin, cb) {
-      if (!origin) return cb(null, true);
-      if (ORIGENS.length === 0 || ORIGENS.includes(origin)) return cb(null, true);
-      return cb(new Error("Origem não autorizada"));
-    }
+    origin: FRONTEND_ORIGIN === "*" ? "*" : FRONTEND_ORIGIN
   })
 );
 
 app.use(
   rateLimit({
     windowMs: 60 * 1000,
-    limit: 20,
+    limit: 60,
     standardHeaders: true,
     legacyHeaders: false,
     message: {
@@ -55,234 +51,185 @@ function cpfValido(cpf) {
   if (numeros.length !== 11) return false;
   if (/^(\d)\1{10}$/.test(numeros)) return false;
 
-  const calc = (base) => {
-    let soma = 0;
-    for (let i = 0; i < base; i++) {
-      soma += Number(numeros[i]) * (base + 1 - i);
+  let soma = 0;
+
+  for (let i = 0; i < 9; i++) {
+    soma += Number(numeros[i]) * (10 - i);
+  }
+
+  let digito1 = 11 - (soma % 11);
+  if (digito1 >= 10) digito1 = 0;
+
+  if (digito1 !== Number(numeros[9])) return false;
+
+  soma = 0;
+
+  for (let i = 0; i < 10; i++) {
+    soma += Number(numeros[i]) * (11 - i);
+  }
+
+  let digito2 = 11 - (soma % 11);
+  if (digito2 >= 10) digito2 = 0;
+
+  return digito2 === Number(numeros[10]);
+}
+
+function normalizarCabecalho(texto) {
+  return String(texto || "")
+    .replace(/^\uFEFF/, "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+function obterValor(objeto, nomesPossiveis) {
+  for (const nome of nomesPossiveis) {
+    if (
+      objeto &&
+      objeto[nome] !== undefined &&
+      objeto[nome] !== null &&
+      String(objeto[nome]).trim() !== ""
+    ) {
+      return String(objeto[nome]).trim();
     }
-    const digito = 11 - (soma % 11);
-    return digito >= 10 ? 0 : digito;
+  }
+
+  return "";
+}
+
+function transformarRegistro(linha) {
+  const cpf = obterValor(linha, ["cpf"]);
+  const nome = obterValor(linha, ["nome"]);
+  const siglaFuncao = obterValor(linha, ["sigla_funcao"]);
+  const descricaoFuncao = obterValor(linha, ["descricao_funcao"]);
+  const nivelFuncao = obterValor(linha, ["nivel_funcao"]);
+  const nomeOrgao = obterValor(linha, ["nome_orgao"]);
+  const dataInicioExercicio = obterValor(linha, ["data_inicio_exercicio"]);
+  const dataFimExercicio = obterValor(linha, ["data_fim_exercicio"]);
+  const dataFimCarencia = obterValor(linha, ["data_fim_carencia"]);
+
+  return {
+    cpf,
+    nome,
+    sigla_funcao: siglaFuncao,
+    descricao_funcao: descricaoFuncao,
+    nivel_funcao: nivelFuncao,
+    nome_orgao: nomeOrgao,
+    dt_inicio_exercicio: dataInicioExercicio,
+    dt_fim_exercicio: dataFimExercicio,
+    dt_fim_carencia: dataFimCarencia
   };
-
-  return calc(9) === Number(numeros[9]) && calc(10) === Number(numeros[10]);
 }
 
-function respostaEhHtml(texto) {
-  const t = String(texto || "").trim().toLowerCase();
-  return t.startsWith("<!doctype html") || t.startsWith("<html");
-}
+async function carregarBasePep() {
+  const conteudo = await fs.readFile(CSV_PATH, "utf8");
 
-function mascararCpf(cpf) {
-  if (!cpf || cpf.length !== 11) return "***";
-  return `${cpf.slice(0, 3)}.***.***-${cpf.slice(9)}`;
-}
+  const linhas = parse(conteudo, {
+    delimiter: ";",
+    columns: (cabecalhos) => cabecalhos.map(normalizarCabecalho),
+    bom: true,
+    skip_empty_lines: true,
+    trim: true,
+    relax_column_count: true
+  });
 
-function debugAutorizado(req) {
-  if (!DEBUG_TOKEN) return false;
-  return req.query.token === DEBUG_TOKEN;
-}
+  registrosPep = linhas.map(transformarRegistro);
+  indicePorCpf = new Map();
 
-async function buscarPep(cpf, pagina) {
-  const chave = `${cpf}|${pagina}`;
-  const agora = Date.now();
-  const cached = cache.get(chave);
+  for (const registro of registrosPep) {
+    const cpfLimpo = limparCpf(registro.cpf);
 
-  if (cached && cached.expira > agora) {
-    return { dados: cached.dados, origem: "cache" };
+    if (!cpfLimpo) {
+      continue;
+    }
+
+    if (!indicePorCpf.has(cpfLimpo)) {
+      indicePorCpf.set(cpfLimpo, []);
+    }
+
+    indicePorCpf.get(cpfLimpo).push(registro);
   }
 
-  const url = `${API_URL}?cpf=${cpf}&pagina=${pagina}`;
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  const infoArquivo = await fs.stat(CSV_PATH);
 
-  try {
-    const resposta = await fetch(url, {
-      method: "GET",
-      signal: controller.signal,
-      headers: {
-        Accept: "application/json",
-        "chave-api-dados": PORTAL_TOKEN,
-        "User-Agent": "consulta-pep-portal-notarial/1.1"
-      }
-    });
+  baseCarregadaEm = new Date().toISOString();
+  arquivoBase = path.basename(CSV_PATH);
 
-    const texto = await resposta.text();
-    const tipo = resposta.headers.get("content-type") || "";
-
-    if (respostaEhHtml(texto) || !tipo.includes("application/json")) {
-      const erro = new Error("Resposta não JSON da CGU");
-      erro.status = resposta.status;
-      erro.amostra = texto.slice(0, 200);
-      throw erro;
-    }
-
-    let dados;
-    try {
-      dados = texto ? JSON.parse(texto) : [];
-    } catch {
-      const erro = new Error("JSON inválido");
-      erro.status = 502;
-      erro.amostra = texto.slice(0, 200);
-      throw erro;
-    }
-
-    if (!resposta.ok) {
-      const erro = new Error("Falha na CGU");
-      erro.status = resposta.status;
-      erro.detalhe = dados;
-      throw erro;
-    }
-
-    cache.set(chave, { dados, expira: agora + TTL_MS });
-    return { dados, origem: "api" };
-  } finally {
-    clearTimeout(timer);
-  }
+  console.log(`Base PEP carregada com ${registrosPep.length} registros.`);
+  console.log(`Arquivo: ${arquivoBase}`);
+  console.log(`Última modificação do arquivo: ${infoArquivo.mtime.toISOString()}`);
 }
 
-app.get("/", (_req, res) => {
+app.get("/", (req, res) => {
   res.json({
     status: "online",
     servico: "Consulta PEP por CPF",
-    fonte: "Portal da Transparência da CGU"
+    modo: "consulta local em base CSV oficial",
+    fonte: "Portal da Transparência da CGU",
+    arquivoBase,
+    baseCarregadaEm,
+    totalRegistros: registrosPep.length
   });
 });
 
-app.get("/debug/ip", async (req, res) => {
-  if (!debugAutorizado(req)) {
-    return res.status(401).json({ erro: "Token de debug inválido." });
-  }
-
+app.get("/api/pep", (req, res) => {
   try {
-    const r = await fetch("https://api.ipify.org?format=json");
-    const ip = await r.json();
-    return res.json({
-      ipDoRender: ip,
-      observacao:
-        "Compare esse IP com listas de IPs de provedores cloud. Se estiver em faixa conhecida da AWS, GCP ou Cloudflare usada pelo Render, a CGU pode estar bloqueando."
-    });
-  } catch (e) {
-    return res.status(500).json({ erro: e.message });
-  }
-});
-
-app.get("/debug/cgu", async (req, res) => {
-  if (!debugAutorizado(req)) {
-    return res.status(401).json({ erro: "Token de debug inválido." });
-  }
-
-  if (!PORTAL_TOKEN) {
-    return res.status(500).json({ erro: "PORTAL_TRANSPARENCIA_TOKEN não configurado." });
-  }
-
-  const cpfTeste = limparCpf(req.query.cpf) || "15882240824";
-  const pagina = parseInt(req.query.pagina, 10) || 1;
-  const url = `${API_URL}?cpf=${cpfTeste}&pagina=${pagina}`;
-
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-
-  try {
-    const r = await fetch(url, {
-      method: "GET",
-      signal: controller.signal,
-      headers: {
-        Accept: "application/json",
-        "chave-api-dados": PORTAL_TOKEN,
-        "User-Agent": "consulta-pep-portal-notarial/1.1"
-      }
-    });
-
-    const texto = await r.text();
-    const headersRecebidos = {};
-    r.headers.forEach((valor, nome) => {
-      headersRecebidos[nome] = valor;
-    });
-
-    return res.json({
-      urlChamada: url,
-      statusHttp: r.status,
-      statusTextHttp: r.statusText,
-      contentType: r.headers.get("content-type"),
-      tamanhoCorpo: texto.length,
-      pareceHtml: respostaEhHtml(texto),
-      headersRecebidos,
-      amostraInicio: texto.slice(0, 400),
-      amostraFim: texto.length > 400 ? texto.slice(-200) : ""
-    });
-  } catch (e) {
-    return res.status(500).json({
-      erro: e.message,
-      nome: e.name
-    });
-  } finally {
-    clearTimeout(timer);
-  }
-});
-
-app.get("/api/pep", async (req, res) => {
-  try {
-    if (!PORTAL_TOKEN) {
+    if (!registrosPep.length) {
       return res.status(500).json({
-        erro: "Token da API não configurado no servidor."
+        erro: "Base PEP não carregada no servidor."
       });
     }
 
     const cpf = limparCpf(req.query.cpf);
-    const pagina = parseInt(req.query.pagina, 10) || 1;
+    const pagina = String(req.query.pagina || "1").trim();
 
     if (!cpf) {
-      return res.status(400).json({ erro: "Informe o CPF para consulta." });
+      return res.status(400).json({
+        erro: "Informe o CPF para consulta."
+      });
     }
 
     if (!cpfValido(cpf)) {
-      return res.status(400).json({ erro: "CPF inválido. Confira os números informados." });
+      return res.status(400).json({
+        erro: "CPF inválido. Confira os números informados."
+      });
     }
 
-    if (!Number.isInteger(pagina) || pagina < 1 || pagina > 100) {
-      return res.status(400).json({ erro: "Parâmetro pagina inválido." });
-    }
-
-    const { dados, origem } = await buscarPep(cpf, pagina);
+    const resultado = indicePorCpf.get(cpf) || [];
 
     return res.json({
       fonte: "Portal da Transparência da Controladoria-Geral da União",
+      modoConsulta: "base CSV oficial carregada no backend",
       consultaRealizadaEm: new Date().toISOString(),
-      parametroPesquisado: { cpf },
+      baseCarregadaEm,
+      arquivoBase,
+      parametroPesquisado: {
+        cpf
+      },
       pagina,
-      origem,
-      resultado: dados
+      resultado
     });
   } catch (erro) {
-    console.error("[pep]", {
-      cpf: mascararCpf(limparCpf(req.query.cpf)),
-      status: erro.status,
-      msg: erro.message,
-      amostra: erro.amostra
-    });
-
-    if (erro.name === "AbortError") {
-      return res.status(504).json({
-        erro: "Tempo de resposta excedido ao consultar a API oficial."
-      });
-    }
-
-    if (erro.status && String(erro.amostra || "").length > 0) {
-      return res.status(502).json({
-        erro: "A API oficial retornou uma página HTML de verificação humana, e não uma resposta JSON.",
-        statusRecebidoDaApiOficial: erro.status,
-        orientacao:
-          "Isso normalmente indica bloqueio ou desafio de segurança no acesso automatizado a partir do servidor. Teste novamente em alguns minutos. Se persistir, será necessário consultar a CGU ou usar a base aberta de download de PEP."
-      });
-    }
-
-    return res.status(erro.status || 500).json({
+    return res.status(500).json({
       erro: "Erro interno ao consultar PEP.",
       detalhe: erro.message
     });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor iniciado na porta ${PORT}`);
-});
+carregarBasePep()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Servidor iniciado na porta ${PORT}`);
+    });
+  })
+  .catch((erro) => {
+    console.error("Erro ao carregar a base PEP:", erro);
+
+    app.listen(PORT, () => {
+      console.log(`Servidor iniciado na porta ${PORT}, mas a base PEP não foi carregada.`);
+    });
+  });
