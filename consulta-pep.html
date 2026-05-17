@@ -217,6 +217,11 @@
       border-bottom: 0;
     }
 
+    .cpf-coluna {
+      white-space: nowrap;
+      min-width: 120px;
+    }
+
     .fim-carencia {
       font-weight: 700;
     }
@@ -234,16 +239,6 @@
 
     .rodape p:last-child {
       margin-bottom: 0;
-    }
-
-    .rodape a {
-      color: var(--azul);
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .rodape a:hover {
-      text-decoration: underline;
     }
 
     .marca-pdf {
@@ -332,13 +327,13 @@
       <div class="marca-pdf">
         Portal Notarial<br>
         Consulta PEP por CPF<br>
-        Fonte dos dados: Portal da Transparência da Controladoria-Geral da União.
+        Fonte dos dados: Siscoaf - Sistema de Controle de Atividades Financeiras.
       </div>
 
       <h1>Consulta PEP por CPF</h1>
 
       <p class="descricao">
-        Consulta auxiliar de pessoas expostas politicamente com base nos dados do Portal da Transparência da CGU.
+        Consulta auxiliar de pessoas expostas politicamente com base nos dados do Siscoaf.
       </p>
 
       <div class="linha">
@@ -378,14 +373,14 @@
         <table>
           <thead>
             <tr>
-              <th>CPF na base</th>
+              <th class="cpf-coluna">CPF na base</th>
               <th>Nome</th>
               <th>Função</th>
-              <th>Nível</th>
               <th>Órgão</th>
               <th>Início do exercício</th>
               <th>Fim do exercício</th>
               <th>Fim da carência</th>
+              <th>Atualização</th>
             </tr>
           </thead>
           <tbody id="tabelaResultado"></tbody>
@@ -394,10 +389,7 @@
 
       <div class="rodape">
         <p>
-          Fonte dos dados:
-          <a href="https://portaldatransparencia.gov.br/download-de-dados/pep" target="_blank" rel="noopener noreferrer">
-            Portal da Transparência da Controladoria-Geral da União
-          </a>.
+          Fonte dos dados: Siscoaf - Sistema de Controle de Atividades Financeiras.
         </p>
 
         <p>
@@ -566,20 +558,20 @@
         const cpf = obterValor(item, ["cpf", "cpf_normalizado", "cpf_original_arquivo"]);
         const nome = obterValor(item, ["nome"]);
         const funcao = obterValor(item, ["descricao_funcao", "sigla_funcao"]);
-        const nivel = obterValor(item, ["nivel_funcao"]);
         const orgao = obterValor(item, ["nome_orgao"]);
         const inicio = obterValor(item, ["dt_inicio_exercicio"]);
         const fim = obterValor(item, ["dt_fim_exercicio"]);
         const carencia = obterValor(item, ["dt_fim_carencia", "dt_final_carencia"]);
+        const atualizacao = obterValor(item, ["atualizacao"]);
 
-        linha.appendChild(criarCelula(cpf));
+        linha.appendChild(criarCelula(cpf, "cpf-coluna"));
         linha.appendChild(criarCelula(nome));
         linha.appendChild(criarCelula(funcao));
-        linha.appendChild(criarCelula(nivel));
         linha.appendChild(criarCelula(orgao));
         linha.appendChild(criarCelula(inicio));
         linha.appendChild(criarCelula(fim));
         linha.appendChild(criarCelula(carencia, "fim-carencia"));
+        linha.appendChild(criarCelula(atualizacao));
 
         tabelaResultado.appendChild(linha);
       }
@@ -592,12 +584,7 @@
         ? new Date(dadosConsulta.consultaRealizadaEm).toLocaleString("pt-BR")
         : "Não informada";
 
-      const dataBase = dadosConsulta.ultimaModificacaoArquivo
-        ? new Date(dadosConsulta.ultimaModificacaoArquivo).toLocaleString("pt-BR")
-        : "Não informada";
-
-      resumo.textContent =
-        `Consulta realizada em ${dataConsulta}. Base utilizada: ${dadosConsulta.arquivoBase || "pep.csv"}. Última modificação da base: ${dataBase}. Ordenação: fim da carência em ordem decrescente. Total exibido: ${listaOrdenada.length}.`;
+      resumo.textContent = `Consulta realizada em ${dataConsulta}.`;
 
       if (dadosConsulta.tipoConsulta === "cpf_mascarado_compativel") {
         alertaCpfMascarado.style.display = "block";
