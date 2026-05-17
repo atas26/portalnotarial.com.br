@@ -97,7 +97,7 @@ app.get("/api/pep", async (req, res) => {
       });
     }
 
-    const url = new URL("http://api.portaldatransparencia.gov.br/api-de-dados/pep");
+    const url = new URL("https://www.portaldatransparencia.gov.br/api-de-dados/pep");
     url.searchParams.set("cpf", cpf);
     url.searchParams.set("pagina", pagina);
 
