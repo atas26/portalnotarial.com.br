@@ -7,6 +7,7 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 const PORTAL_TOKEN = process.env.PORTAL_TRANSPARENCIA_TOKEN;
+const DEBUG_TOKEN = process.env.DEBUG_TOKEN;
 const ORIGENS = (process.env.FRONTEND_ORIGIN || "")
   .split(",")
   .map((s) => s.trim())
@@ -76,6 +77,11 @@ function mascararCpf(cpf) {
   return `${cpf.slice(0, 3)}.***.***-${cpf.slice(9)}`;
 }
 
+function debugAutorizado(req) {
+  if (!DEBUG_TOKEN) return false;
+  return req.query.token === DEBUG_TOKEN;
+}
+
 async function buscarPep(cpf, pagina) {
   const chave = `${cpf}|${pagina}`;
   const agora = Date.now();
@@ -140,6 +146,78 @@ app.get("/", (_req, res) => {
     servico: "Consulta PEP por CPF",
     fonte: "Portal da Transparência da CGU"
   });
+});
+
+app.get("/debug/ip", async (req, res) => {
+  if (!debugAutorizado(req)) {
+    return res.status(401).json({ erro: "Token de debug inválido." });
+  }
+
+  try {
+    const r = await fetch("https://api.ipify.org?format=json");
+    const ip = await r.json();
+    return res.json({
+      ipDoRender: ip,
+      observacao:
+        "Compare esse IP com listas de IPs de provedores cloud. Se estiver em faixa conhecida da AWS, GCP ou Cloudflare usada pelo Render, a CGU pode estar bloqueando."
+    });
+  } catch (e) {
+    return res.status(500).json({ erro: e.message });
+  }
+});
+
+app.get("/debug/cgu", async (req, res) => {
+  if (!debugAutorizado(req)) {
+    return res.status(401).json({ erro: "Token de debug inválido." });
+  }
+
+  if (!PORTAL_TOKEN) {
+    return res.status(500).json({ erro: "PORTAL_TRANSPARENCIA_TOKEN não configurado." });
+  }
+
+  const cpfTeste = limparCpf(req.query.cpf) || "15882240824";
+  const pagina = parseInt(req.query.pagina, 10) || 1;
+  const url = `${API_URL}?cpf=${cpfTeste}&pagina=${pagina}`;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  try {
+    const r = await fetch(url, {
+      method: "GET",
+      signal: controller.signal,
+      headers: {
+        Accept: "application/json",
+        "chave-api-dados": PORTAL_TOKEN,
+        "User-Agent": "consulta-pep-portal-notarial/1.1"
+      }
+    });
+
+    const texto = await r.text();
+    const headersRecebidos = {};
+    r.headers.forEach((valor, nome) => {
+      headersRecebidos[nome] = valor;
+    });
+
+    return res.json({
+      urlChamada: url,
+      statusHttp: r.status,
+      statusTextHttp: r.statusText,
+      contentType: r.headers.get("content-type"),
+      tamanhoCorpo: texto.length,
+      pareceHtml: respostaEhHtml(texto),
+      headersRecebidos,
+      amostraInicio: texto.slice(0, 400),
+      amostraFim: texto.length > 400 ? texto.slice(-200) : ""
+    });
+  } catch (e) {
+    return res.status(500).json({
+      erro: e.message,
+      nome: e.name
+    });
+  } finally {
+    clearTimeout(timer);
+  }
 });
 
 app.get("/api/pep", async (req, res) => {
