@@ -9,12 +9,18 @@
   <style>
     :root {
       --azul: rgb(0, 118, 255);
+      --azul-escuro: #0f4fc7;
       --texto: #1f2937;
       --cinza: #6b7280;
       --borda: #e5e7eb;
       --fundo: #f8fafc;
       --branco: #ffffff;
       --erro: #b91c1c;
+      --info: #1d4ed8;
+      --sucesso: #166534;
+      --alerta-texto: #92400e;
+      --alerta-fundo: #fffbeb;
+      --alerta-borda: #fde68a;
     }
 
     * {
@@ -29,7 +35,7 @@
     }
 
     .container {
-      max-width: 960px;
+      max-width: 980px;
       margin: 0 auto;
       padding: 32px 16px;
     }
@@ -81,6 +87,13 @@
       align-items: end;
     }
 
+    .acoes {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
     button {
       border: 0;
       border-radius: 10px;
@@ -93,9 +106,31 @@
       white-space: nowrap;
     }
 
+    button:hover {
+      background: var(--azul-escuro);
+    }
+
     button:disabled {
       opacity: 0.6;
       cursor: not-allowed;
+    }
+
+    .botao-secundario {
+      background: #e5e7eb;
+      color: #111827;
+    }
+
+    .botao-secundario:hover {
+      background: #d1d5db;
+    }
+
+    .botao-pdf {
+      background: #111827;
+      color: #ffffff;
+    }
+
+    .botao-pdf:hover {
+      background: #374151;
     }
 
     .mensagem {
@@ -116,8 +151,15 @@
     .mensagem.info {
       display: block;
       background: #eff6ff;
-      color: #1d4ed8;
+      color: var(--info);
       border: 1px solid #bfdbfe;
+    }
+
+    .mensagem.sucesso {
+      display: block;
+      background: #f0fdf4;
+      color: var(--sucesso);
+      border: 1px solid #bbf7d0;
     }
 
     .resultado {
@@ -134,6 +176,18 @@
       color: var(--cinza);
       font-size: 14px;
       line-height: 1.5;
+    }
+
+    .alerta {
+      margin-bottom: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--alerta-fundo);
+      border: 1px solid var(--alerta-borda);
+      color: var(--alerta-texto);
+      font-size: 14px;
+      line-height: 1.5;
+      display: none;
     }
 
     table {
@@ -163,15 +217,25 @@
       border-bottom: 0;
     }
 
+    .fim-carencia {
+      font-weight: 700;
+    }
+
     .rodape {
       margin-top: 18px;
       font-size: 13px;
       color: var(--cinza);
       line-height: 1.5;
     }
-    .fim-carencia {
-  font-weight: 700;
-}
+
+    .marca-pdf {
+      display: none;
+      margin-bottom: 18px;
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.5;
+    }
+
     @media (max-width: 700px) {
       .linha {
         grid-template-columns: 1fr;
@@ -181,9 +245,64 @@
         width: 100%;
       }
 
+      .acoes {
+        flex-direction: column;
+      }
+
       table {
         display: block;
         overflow-x: auto;
+      }
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .container {
+        max-width: none;
+        padding: 0;
+      }
+
+      .card {
+        border: 0;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+      }
+
+      .linha,
+      .acoes,
+      #mensagem {
+        display: none !important;
+      }
+
+      .marca-pdf {
+        display: block;
+      }
+
+      .resultado {
+        display: block !important;
+      }
+
+      table {
+        page-break-inside: auto;
+      }
+
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+
+      th,
+      td {
+        font-size: 11px;
+        padding: 7px;
+      }
+
+      .rodape {
+        font-size: 11px;
       }
     }
   </style>
@@ -192,6 +311,12 @@
 <body data-api="https://consulta-pep-backend.onrender.com">
   <main class="container">
     <section class="card">
+      <div class="marca-pdf">
+        Portal Notarial<br>
+        Consulta PEP por CPF<br>
+        Fonte dos dados: Portal da Transparência da Controladoria-Geral da União.
+      </div>
+
       <h1>Consulta PEP por CPF</h1>
 
       <p class="descricao">
@@ -216,15 +341,26 @@
         </button>
       </div>
 
+      <div class="acoes">
+        <button id="botaoNovaConsulta" class="botao-secundario" type="button">
+          Nova consulta
+        </button>
+
+        <button id="botaoGerarPdf" class="botao-pdf" type="button" disabled>
+          Gerar PDF
+        </button>
+      </div>
+
       <div id="mensagem" class="mensagem"></div>
 
       <div id="resultado" class="resultado">
         <div id="resumo" class="resumo"></div>
+        <div id="alertaCpfMascarado" class="alerta"></div>
 
         <table>
           <thead>
             <tr>
-              <th>CPF</th>
+              <th>CPF na base</th>
               <th>Nome</th>
               <th>Função</th>
               <th>Nível</th>
@@ -239,8 +375,9 @@
       </div>
 
       <p class="rodape">
-        Fonte dos dados, Portal da Transparência da Controladoria-Geral da União.
+        Fonte dos dados: Portal da Transparência da Controladoria-Geral da União.
         A consulta é informativa e não substitui a qualificação jurídica, cadastral, notarial ou registral do caso concreto.
+        Quando a base pública contém CPF mascarado, o resultado indica compatibilidade com o trecho central do CPF, e não confirmação integral do CPF pesquisado.
       </p>
     </section>
   </main>
@@ -250,10 +387,15 @@
 
     const campoCpf = document.getElementById("cpf");
     const botaoConsultar = document.getElementById("botaoConsultar");
+    const botaoNovaConsulta = document.getElementById("botaoNovaConsulta");
+    const botaoGerarPdf = document.getElementById("botaoGerarPdf");
     const mensagem = document.getElementById("mensagem");
     const resultado = document.getElementById("resultado");
     const resumo = document.getElementById("resumo");
+    const alertaCpfMascarado = document.getElementById("alertaCpfMascarado");
     const tabelaResultado = document.getElementById("tabelaResultado");
+
+    let ultimaConsultaComResultado = false;
 
     function limparCpf(cpf) {
       return String(cpf || "").replace(/\D/g, "");
@@ -275,15 +417,18 @@
       if (/^(\d)\1{10}$/.test(numeros)) return false;
 
       let soma = 0;
+
       for (let i = 0; i < 9; i++) {
         soma += Number(numeros[i]) * (10 - i);
       }
 
       let digito1 = 11 - (soma % 11);
       if (digito1 >= 10) digito1 = 0;
+
       if (digito1 !== Number(numeros[9])) return false;
 
       soma = 0;
+
       for (let i = 0; i < 10; i++) {
         soma += Number(numeros[i]) * (11 - i);
       }
@@ -308,6 +453,10 @@
       resultado.className = "resultado";
       resumo.textContent = "";
       tabelaResultado.innerHTML = "";
+      alertaCpfMascarado.style.display = "none";
+      alertaCpfMascarado.textContent = "";
+      ultimaConsultaComResultado = false;
+      botaoGerarPdf.disabled = true;
     }
 
     function obterValor(objeto, nomesPossiveis) {
@@ -316,64 +465,161 @@
           objeto &&
           objeto[nome] !== undefined &&
           objeto[nome] !== null &&
-          objeto[nome] !== ""
+          String(objeto[nome]).trim() !== ""
         ) {
-          return objeto[nome];
+          return String(objeto[nome]).trim();
         }
       }
 
       return "Não informado";
     }
 
+    function criarCelula(texto, classe) {
+      const td = document.createElement("td");
+      td.textContent = texto || "Não informado";
+
+      if (classe) {
+        td.classList.add(classe);
+      }
+
+      return td;
+    }
+
+    function converterDataParaOrdenacao(data) {
+      const texto = String(data || "").trim();
+
+      if (!texto || texto.toLowerCase() === "não informado" || texto.toLowerCase() === "não informada" || texto.toLowerCase() === "na") {
+        return 0;
+      }
+
+      const partes = texto.split("/");
+
+      if (partes.length !== 3) {
+        return 0;
+      }
+
+      const dia = Number(partes[0]);
+      const mes = Number(partes[1]);
+      const ano = Number(partes[2]);
+
+      if (!dia || !mes || !ano) {
+        return 0;
+      }
+
+      return new Date(ano, mes - 1, dia).getTime();
+    }
+
+    function ordenarPorFimCarenciaDecrescente(lista) {
+      return [...lista].sort(function (a, b) {
+        const carenciaA = obterValor(a, ["dataFimCarencia", "dt_fim_carencia"]);
+        const carenciaB = obterValor(b, ["dataFimCarencia", "dt_fim_carencia"]);
+
+        return converterDataParaOrdenacao(carenciaB) - converterDataParaOrdenacao(carenciaA);
+      });
+    }
+
+    function obterOrgao(item) {
+      if (item && item.orgaoExercicio) {
+        return obterValor(item.orgaoExercicio, ["nome", "nome_orgao", "nomeOrgao"]);
+      }
+
+      return obterValor(item, [
+        "nome_orgao",
+        "nomeOrgao",
+        "orgao",
+        "nome_do_orgao"
+      ]);
+    }
+
     function renderizarTabela(lista, dadosConsulta) {
       tabelaResultado.innerHTML = "";
 
       if (!Array.isArray(lista) || lista.length === 0) {
-        mostrarMensagem("info", "Nenhum resultado encontrado para o CPF informado.");
+        mostrarMensagem("info", "CPF não localizado na base PEP oficial carregada.");
+        resultado.className = "resultado";
+        ultimaConsultaComResultado = false;
+        botaoGerarPdf.disabled = true;
         return;
       }
 
-      for (const item of lista) {
+      const listaOrdenada = ordenarPorFimCarenciaDecrescente(lista);
+
+      for (const item of listaOrdenada) {
         const linha = document.createElement("tr");
 
         const dadosPep = item && item.pep ? item.pep : item;
-        const dadosOrgao = item && item.orgaoExercicio ? item.orgaoExercicio : item;
 
         const cpf = obterValor(dadosPep, ["cpf", "codigoFormatado"]);
         const nome = obterValor(dadosPep, ["nome"]);
+
         const funcao = obterValor(item, [
           "descricaoFuncao",
           "descricao_funcao",
           "siglaFuncao",
           "sigla_funcao"
         ]);
-        const nivel = obterValor(item, ["nivelFuncao", "nivel_funcao"]);
-        const orgao = obterValor(dadosOrgao, ["nome", "nome_orgao", "nomeOrgao"]);
-        const inicio = obterValor(item, ["dataInicioExercicio", "dt_inicio_exercicio"]);
-        const fim = obterValor(item, ["dataFimExercicio", "dt_fim_exercicio"]);
-        const carencia = obterValor(item, ["dataFimCarencia", "dt_fim_carencia"]);
 
-        linha.innerHTML = `
-          <td>${cpf}</td>
-          <td>${nome}</td>
-          <td>${funcao}</td>
-          <td>${nivel}</td>
-          <td>${orgao}</td>
-          <td>${inicio}</td>
-          <td>${fim}</td>
-          <td>${carencia}</td>
-        `;
+        const nivel = obterValor(item, [
+          "nivelFuncao",
+          "nivel_funcao"
+        ]);
+
+        const orgao = obterOrgao(item);
+
+        const inicio = obterValor(item, [
+          "dataInicioExercicio",
+          "dt_inicio_exercicio"
+        ]);
+
+        const fim = obterValor(item, [
+          "dataFimExercicio",
+          "dt_fim_exercicio"
+        ]);
+
+        const carencia = obterValor(item, [
+          "dataFimCarencia",
+          "dt_fim_carencia"
+        ]);
+
+        linha.appendChild(criarCelula(cpf));
+        linha.appendChild(criarCelula(nome));
+        linha.appendChild(criarCelula(funcao));
+        linha.appendChild(criarCelula(nivel));
+        linha.appendChild(criarCelula(orgao));
+        linha.appendChild(criarCelula(inicio));
+        linha.appendChild(criarCelula(fim));
+        linha.appendChild(criarCelula(carencia, "fim-carencia"));
 
         tabelaResultado.appendChild(linha);
       }
 
       resultado.className = "resultado ativo";
+      ultimaConsultaComResultado = true;
+      botaoGerarPdf.disabled = false;
 
       const dataConsulta = dadosConsulta.consultaRealizadaEm
         ? new Date(dadosConsulta.consultaRealizadaEm).toLocaleString("pt-BR")
         : "Não informada";
 
-      resumo.textContent = `Consulta realizada em ${dataConsulta}. Total exibido nesta página, ${lista.length}.`;
+      const dataBase = dadosConsulta.ultimaModificacaoArquivo
+        ? new Date(dadosConsulta.ultimaModificacaoArquivo).toLocaleString("pt-BR")
+        : "Não informada";
+
+      const tipoConsulta = dadosConsulta.tipoConsulta === "cpf_mascarado_compativel"
+        ? "CPF mascarado compatível"
+        : "CPF completo";
+
+      resumo.textContent =
+        `Consulta realizada em ${dataConsulta}. Base utilizada: ${dadosConsulta.arquivoBase || "pep.csv"}. Última modificação da base: ${dataBase}. Tipo de correspondência: ${tipoConsulta}. Ordenação: fim da carência em ordem decrescente. Total exibido: ${listaOrdenada.length}.`;
+
+      if (dadosConsulta.tipoConsulta === "cpf_mascarado_compativel") {
+        alertaCpfMascarado.style.display = "block";
+        alertaCpfMascarado.textContent =
+          "A base pública de PEP contém CPF mascarado. O resultado indica compatibilidade com o trecho central do CPF pesquisado, e não confirmação integral dos dígitos ocultos.";
+      } else {
+        alertaCpfMascarado.style.display = "none";
+        alertaCpfMascarado.textContent = "";
+      }
     }
 
     async function consultarPep() {
@@ -422,11 +668,29 @@
       }
     }
 
+    function novaConsulta() {
+      campoCpf.value = "";
+      limparMensagem();
+      limparResultado();
+      campoCpf.focus();
+    }
+
+    function gerarPdf() {
+      if (!ultimaConsultaComResultado) {
+        mostrarMensagem("erro", "Realize uma consulta com resultado antes de gerar o PDF.");
+        return;
+      }
+
+      window.print();
+    }
+
     campoCpf.addEventListener("input", function () {
       campoCpf.value = formatarCpf(campoCpf.value);
     });
 
     botaoConsultar.addEventListener("click", consultarPep);
+    botaoNovaConsulta.addEventListener("click", novaConsulta);
+    botaoGerarPdf.addEventListener("click", gerarPdf);
 
     campoCpf.addEventListener("keydown", function (evento) {
       if (evento.key === "Enter") {
