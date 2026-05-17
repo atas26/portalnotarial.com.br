@@ -18,11 +18,9 @@ const __dirname = path.dirname(__filename);
 const CSV_PATH = path.join(__dirname, "data", "pep.csv");
 
 let indicePorCpfCompleto = new Map();
-let indicePorMioloCpf = new Map();
 
 let totalRegistros = 0;
 let totalCpfsIndexados = 0;
-let totalMiolosIndexados = 0;
 let baseStatus = "iniciando";
 let baseErro = null;
 let baseCarregadaEm = null;
@@ -50,26 +48,26 @@ app.use(
   })
 );
 
-function limparCpf(cpf) {
-  return String(cpf || "").replace(/\D/g, "");
+function somenteNumeros(valor) {
+  return String(valor || "").replace(/\D/g, "");
 }
 
-function obterMioloCpf(cpf) {
-  const numeros = limparCpf(cpf);
+function normalizarCpfBase(cpf) {
+  const numeros = somenteNumeros(cpf);
 
-  if (numeros.length === 11) {
-    return numeros.slice(3, 9);
+  if (!numeros) {
+    return "";
   }
 
-  if (numeros.length === 6) {
-    return numeros;
+  if (numeros.length > 11) {
+    return numeros.slice(-11);
   }
 
-  return "";
+  return numeros.padStart(11, "0");
 }
 
 function cpfValido(cpf) {
-  const numeros = limparCpf(cpf);
+  const numeros = normalizarCpfBase(cpf);
 
   if (numeros.length !== 11) return false;
   if (/^(\d)\1{10}$/.test(numeros)) return false;
@@ -95,6 +93,16 @@ function cpfValido(cpf) {
   if (digito2 >= 10) digito2 = 0;
 
   return digito2 === Number(numeros[10]);
+}
+
+function formatarCpfParaExibicao(cpf) {
+  const numeros = normalizarCpfBase(cpf);
+
+  if (numeros.length !== 11) {
+    return cpf || "";
+  }
+
+  return numeros.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
 }
 
 function normalizarCabecalho(texto) {
@@ -164,48 +172,23 @@ function obterValor(objeto, nomesPossiveis) {
 }
 
 function transformarRegistro(linha) {
-  const cpf = obterValor(linha, ["cpf", "_coluna_0"]);
-  const nome = obterValor(linha, ["nome", "nome_pep", "nome_pessoa", "_coluna_1"]);
-  const siglaFuncao = obterValor(linha, ["sigla_funcao", "sigla_fun_o", "_coluna_2"]);
-  const descricaoFuncao = obterValor(linha, [
-    "descricao_funcao",
-    "descri_o_fun_o",
-    "funcao",
-    "descricao_da_funcao",
-    "_coluna_3"
-  ]);
-  const nivelFuncao = obterValor(linha, ["nivel_funcao", "n_vel_fun_o", "_coluna_4"]);
+  const cpfOriginal = obterValor(linha, ["cpf_pep", "cpf", "_coluna_0"]);
+  const cpfNormalizado = normalizarCpfBase(cpfOriginal);
 
-  const nomeOrgao = obterValor(linha, [
-    "nome_orgao",
-    "nome_rg_o",
-    "orgao",
-    "nome_do_orgao",
-    "_coluna_5"
-  ]);
-
-  const dataInicioExercicio = obterValor(linha, [
-    "data_inicio_exercicio",
-    "dt_inicio_exercicio",
-    "data_in_cio_exerc_cio",
-    "_coluna_6"
-  ]);
-
-  const dataFimExercicio = obterValor(linha, [
-    "data_fim_exercicio",
-    "dt_fim_exercicio",
-    "_coluna_7"
-  ]);
-
-  const dataFimCarencia = obterValor(linha, [
-    "data_fim_carencia",
-    "dt_fim_carencia",
-    "data_fim_car_ncia",
-    "_coluna_8"
-  ]);
+  const nome = obterValor(linha, ["nome_pep", "nome", "_coluna_1"]);
+  const siglaFuncao = obterValor(linha, ["sigla_funcao_pep", "sigla_funcao", "_coluna_2"]);
+  const descricaoFuncao = obterValor(linha, ["descricao_funcao_pep", "descricao_funcao", "_coluna_3"]);
+  const nivelFuncao = obterValor(linha, ["nivel_funcao_pep", "nivel_funcao", "_coluna_4"]);
+  const nomeOrgao = obterValor(linha, ["nome_orgao_pep", "nome_orgao", "_coluna_5"]);
+  const dataInicioExercicio = obterValor(linha, ["dt_inicio_exercicio", "data_inicio_exercicio", "_coluna_6"]);
+  const dataFimExercicio = obterValor(linha, ["dt_fim_exercicio", "data_fim_exercicio", "_coluna_7"]);
+  const dataFimCarencia = obterValor(linha, ["dt_final_carencia", "dt_fim_carencia", "data_fim_carencia", "_coluna_8"]);
+  const atualizacao = obterValor(linha, ["atualizacao", "_coluna_9"]);
 
   return {
-    cpf,
+    cpf: formatarCpfParaExibicao(cpfNormalizado),
+    cpf_original_arquivo: cpfOriginal,
+    cpf_normalizado: cpfNormalizado,
     nome,
     sigla_funcao: siglaFuncao,
     descricao_funcao: descricaoFuncao,
@@ -213,7 +196,8 @@ function transformarRegistro(linha) {
     nome_orgao: nomeOrgao,
     dt_inicio_exercicio: dataInicioExercicio,
     dt_fim_exercicio: dataFimExercicio,
-    dt_fim_carencia: dataFimCarencia
+    dt_fim_carencia: dataFimCarencia,
+    atualizacao
   };
 }
 
@@ -275,7 +259,7 @@ async function carregarBasePep() {
     ultimaModificacaoArquivo = infoArquivo.mtime.toISOString();
 
     const stream = fs.createReadStream(CSV_PATH, {
-      encoding: "latin1"
+      encoding: "utf8"
     });
 
     const leitor = readline.createInterface({
@@ -287,7 +271,6 @@ async function carregarBasePep() {
     let delimitador = ";";
 
     const novoIndiceCpfCompleto = new Map();
-    const novoIndiceMiolo = new Map();
 
     let contadorRegistros = 0;
 
@@ -303,7 +286,7 @@ async function carregarBasePep() {
         cabecalhos = separarLinhaCsv(linha, delimitador).map(normalizarCabecalho);
         camposDetectados = cabecalhos;
 
-        if (!cabecalhos.includes("cpf")) {
+        if (!cabecalhos.includes("cpf_pep") && !cabecalhos.includes("cpf")) {
           throw new Error(
             `Campo CPF não localizado no cabeçalho do CSV. Campos detectados: ${cabecalhos.join(", ")}`
           );
@@ -321,32 +304,22 @@ async function carregarBasePep() {
       }
 
       const registro = transformarRegistro(objeto);
-      const cpfLimpoDaBase = limparCpf(registro.cpf);
-      const mioloDaBase = obterMioloCpf(registro.cpf);
+      const cpfNormalizado = registro.cpf_normalizado;
 
       contadorRegistros++;
 
-      if (cpfLimpoDaBase.length === 11) {
-        adicionarAoIndice(novoIndiceCpfCompleto, cpfLimpoDaBase, {
+      if (cpfNormalizado.length === 11) {
+        adicionarAoIndice(novoIndiceCpfCompleto, cpfNormalizado, {
           ...registro,
           tipo_correspondencia: "cpf_completo"
-        });
-      }
-
-      if (mioloDaBase.length === 6) {
-        adicionarAoIndice(novoIndiceMiolo, mioloDaBase, {
-          ...registro,
-          tipo_correspondencia: "cpf_mascarado_compativel"
         });
       }
     }
 
     indicePorCpfCompleto = novoIndiceCpfCompleto;
-    indicePorMioloCpf = novoIndiceMiolo;
 
     totalRegistros = contadorRegistros;
     totalCpfsIndexados = novoIndiceCpfCompleto.size;
-    totalMiolosIndexados = novoIndiceMiolo.size;
 
     baseCarregadaEm = new Date().toISOString();
     baseStatus = "pronta";
@@ -354,16 +327,13 @@ async function carregarBasePep() {
     console.log("Base PEP carregada.");
     console.log(`Arquivo: ${arquivoBase}`);
     console.log(`Registros lidos: ${totalRegistros}`);
-    console.log(`CPFs completos indexados: ${totalCpfsIndexados}`);
-    console.log(`Miolos de CPF indexados: ${totalMiolosIndexados}`);
+    console.log(`CPFs indexados: ${totalCpfsIndexados}`);
   } catch (erro) {
     baseStatus = "erro";
     baseErro = erro.message;
     totalRegistros = 0;
     totalCpfsIndexados = 0;
-    totalMiolosIndexados = 0;
     indicePorCpfCompleto = new Map();
-    indicePorMioloCpf = new Map();
 
     console.error("Erro ao carregar a base PEP:", erro);
   }
@@ -374,8 +344,8 @@ app.get("/", (req, res) => {
     status: "online",
     servico: "Consulta PEP por CPF",
     modo: "consulta local em base CSV oficial",
-    observacao: "A base pública de PEP pode trazer CPF mascarado. Nesse caso, a consulta por CPF completo é feita pelo trecho central disponível no arquivo.",
-    fonte: "Portal da Transparência da CGU",
+    observacao: "CPFs do arquivo são normalizados para 11 dígitos, com zeros à esquerda quando necessário.",
+    fonte: "Arquivo PEP do Siscoaf",
     baseStatus,
     baseErro,
     arquivoBase,
@@ -383,7 +353,6 @@ app.get("/", (req, res) => {
     ultimaModificacaoArquivo,
     totalRegistros,
     totalCpfsIndexados,
-    totalMiolosIndexados,
     camposDetectados
   });
 });
@@ -398,7 +367,6 @@ app.get("/debug-base", (req, res) => {
     ultimaModificacaoArquivo,
     totalRegistros,
     totalCpfsIndexados,
-    totalMiolosIndexados,
     camposDetectados
   });
 });
@@ -420,7 +388,7 @@ app.get("/api/pep", (req, res) => {
       });
     }
 
-    const cpf = limparCpf(req.query.cpf);
+    const cpf = normalizarCpfBase(req.query.cpf);
     const pagina = String(req.query.pagina || "1").trim();
 
     if (!cpf) {
@@ -435,31 +403,21 @@ app.get("/api/pep", (req, res) => {
       });
     }
 
-    const mioloCpfPesquisado = obterMioloCpf(cpf);
-
     let resultado = indicePorCpfCompleto.get(cpf) || [];
-    let tipoConsulta = "cpf_completo";
-
-    if (!resultado.length && mioloCpfPesquisado) {
-      resultado = indicePorMioloCpf.get(mioloCpfPesquisado) || [];
-      tipoConsulta = "cpf_mascarado_compativel";
-    }
-
     resultado = ordenarPorFimCarenciaDecrescente(resultado);
 
     return res.json({
-      fonte: "Portal da Transparência da Controladoria-Geral da União",
+      fonte: "Arquivo PEP do Siscoaf",
       modoConsulta: "base CSV oficial carregada no backend",
-      observacao: "Quando a base contém CPF mascarado, o resultado indica compatibilidade com o trecho central do CPF, e não confirmação por CPF completo.",
+      observacao: "Os CPFs do arquivo foram normalizados para 11 dígitos, com zeros à esquerda quando necessário.",
       consultaRealizadaEm: new Date().toISOString(),
       baseCarregadaEm,
       ultimaModificacaoArquivo,
       arquivoBase,
       parametroPesquisado: {
-        cpf,
-        mioloCpfPesquisado
+        cpf
       },
-      tipoConsulta,
+      tipoConsulta: "cpf_completo",
       ordenacao: "Fim da carência em ordem decrescente",
       pagina,
       resultado
