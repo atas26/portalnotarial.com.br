@@ -164,16 +164,45 @@ function obterValor(objeto, nomesPossiveis) {
 }
 
 function transformarRegistro(linha) {
-  const cpf = obterValor(linha, ["cpf"]);
-  const nome = obterValor(linha, ["nome", "nome_pep", "nome_pessoa"]);
-  const siglaFuncao = obterValor(linha, ["sigla_funcao"]);
-  const descricaoFuncao = obterValor(linha, ["descricao_funcao", "funcao", "descricao_da_funcao"]);
-  const nivelFuncao = obterValor(linha, ["nivel_funcao"]);
-  const codOrgao = obterValor(linha, ["cod_orgao", "codigo_orgao"]);
-  const nomeOrgao = obterValor(linha, ["nome_orgao", "orgao", "nome_do_orgao"]);
-  const dataInicioExercicio = obterValor(linha, ["dt_inicio_exercicio", "data_inicio_exercicio"]);
-  const dataFimExercicio = obterValor(linha, ["dt_fim_exercicio", "data_fim_exercicio"]);
-  const dataFimCarencia = obterValor(linha, ["dt_fim_carencia", "data_fim_carencia"]);
+  const cpf = obterValor(linha, ["cpf", "_coluna_0"]);
+  const nome = obterValor(linha, ["nome", "nome_pep", "nome_pessoa", "_coluna_1"]);
+  const siglaFuncao = obterValor(linha, ["sigla_funcao", "sigla_fun_o", "_coluna_2"]);
+  const descricaoFuncao = obterValor(linha, [
+    "descricao_funcao",
+    "descri_o_fun_o",
+    "funcao",
+    "descricao_da_funcao",
+    "_coluna_3"
+  ]);
+  const nivelFuncao = obterValor(linha, ["nivel_funcao", "n_vel_fun_o", "_coluna_4"]);
+
+  const nomeOrgao = obterValor(linha, [
+    "nome_orgao",
+    "nome_rg_o",
+    "orgao",
+    "nome_do_orgao",
+    "_coluna_5"
+  ]);
+
+  const dataInicioExercicio = obterValor(linha, [
+    "data_inicio_exercicio",
+    "dt_inicio_exercicio",
+    "data_in_cio_exerc_cio",
+    "_coluna_6"
+  ]);
+
+  const dataFimExercicio = obterValor(linha, [
+    "data_fim_exercicio",
+    "dt_fim_exercicio",
+    "_coluna_7"
+  ]);
+
+  const dataFimCarencia = obterValor(linha, [
+    "data_fim_carencia",
+    "dt_fim_carencia",
+    "data_fim_car_ncia",
+    "_coluna_8"
+  ]);
 
   return {
     cpf,
@@ -181,7 +210,6 @@ function transformarRegistro(linha) {
     sigla_funcao: siglaFuncao,
     descricao_funcao: descricaoFuncao,
     nivel_funcao: nivelFuncao,
-    cod_orgao: codOrgao,
     nome_orgao: nomeOrgao,
     dt_inicio_exercicio: dataInicioExercicio,
     dt_fim_exercicio: dataFimExercicio,
@@ -199,6 +227,39 @@ function adicionarAoIndice(indice, chave, registro) {
   }
 
   indice.get(chave).push(registro);
+}
+
+function converterDataParaOrdenacao(data) {
+  const texto = String(data || "").trim();
+
+  if (!texto || texto.toLowerCase() === "não informada" || texto.toLowerCase() === "na") {
+    return 0;
+  }
+
+  const partes = texto.split("/");
+
+  if (partes.length !== 3) {
+    return 0;
+  }
+
+  const dia = Number(partes[0]);
+  const mes = Number(partes[1]);
+  const ano = Number(partes[2]);
+
+  if (!dia || !mes || !ano) {
+    return 0;
+  }
+
+  return new Date(ano, mes - 1, dia).getTime();
+}
+
+function ordenarPorFimCarenciaDecrescente(lista) {
+  return [...lista].sort((a, b) => {
+    const dataA = converterDataParaOrdenacao(a.dt_fim_carencia);
+    const dataB = converterDataParaOrdenacao(b.dt_fim_carencia);
+
+    return dataB - dataA;
+  });
 }
 
 async function carregarBasePep() {
@@ -256,6 +317,7 @@ async function carregarBasePep() {
 
       for (let i = 0; i < cabecalhos.length; i++) {
         objeto[cabecalhos[i]] = valores[i] || "";
+        objeto[`_coluna_${i}`] = valores[i] || "";
       }
 
       const registro = transformarRegistro(objeto);
@@ -383,6 +445,8 @@ app.get("/api/pep", (req, res) => {
       tipoConsulta = "cpf_mascarado_compativel";
     }
 
+    resultado = ordenarPorFimCarenciaDecrescente(resultado);
+
     return res.json({
       fonte: "Portal da Transparência da Controladoria-Geral da União",
       modoConsulta: "base CSV oficial carregada no backend",
@@ -396,6 +460,7 @@ app.get("/api/pep", (req, res) => {
         mioloCpfPesquisado
       },
       tipoConsulta,
+      ordenacao: "Fim da carência em ordem decrescente",
       pagina,
       resultado
     });
