@@ -17,9 +17,12 @@ const __dirname = path.dirname(__filename);
 
 const CSV_PATH = path.join(__dirname, "data", "pep.csv");
 
-let indicePorCpf = new Map();
+let indicePorCpfCompleto = new Map();
+let indicePorMioloCpf = new Map();
+
 let totalRegistros = 0;
 let totalCpfsIndexados = 0;
+let totalMiolosIndexados = 0;
 let baseStatus = "iniciando";
 let baseErro = null;
 let baseCarregadaEm = null;
@@ -49,6 +52,20 @@ app.use(
 
 function limparCpf(cpf) {
   return String(cpf || "").replace(/\D/g, "");
+}
+
+function obterMioloCpf(cpf) {
+  const numeros = limparCpf(cpf);
+
+  if (numeros.length === 11) {
+    return numeros.slice(3, 9);
+  }
+
+  if (numeros.length === 6) {
+    return numeros;
+  }
+
+  return "";
 }
 
 function cpfValido(cpf) {
@@ -172,6 +189,18 @@ function transformarRegistro(linha) {
   };
 }
 
+function adicionarAoIndice(indice, chave, registro) {
+  if (!chave) {
+    return;
+  }
+
+  if (!indice.has(chave)) {
+    indice.set(chave, []);
+  }
+
+  indice.get(chave).push(registro);
+}
+
 async function carregarBasePep() {
   try {
     baseStatus = "carregando";
@@ -195,7 +224,10 @@ async function carregarBasePep() {
 
     let cabecalhos = null;
     let delimitador = ";";
-    const novoIndice = new Map();
+
+    const novoIndiceCpfCompleto = new Map();
+    const novoIndiceMiolo = new Map();
+
     let contadorRegistros = 0;
 
     for await (const linhaOriginal of leitor) {
@@ -227,37 +259,49 @@ async function carregarBasePep() {
       }
 
       const registro = transformarRegistro(objeto);
-      const cpfLimpo = limparCpf(registro.cpf);
+      const cpfLimpoDaBase = limparCpf(registro.cpf);
+      const mioloDaBase = obterMioloCpf(registro.cpf);
 
       contadorRegistros++;
 
-      if (!cpfLimpo) {
-        continue;
+      if (cpfLimpoDaBase.length === 11) {
+        adicionarAoIndice(novoIndiceCpfCompleto, cpfLimpoDaBase, {
+          ...registro,
+          tipo_correspondencia: "cpf_completo"
+        });
       }
 
-      if (!novoIndice.has(cpfLimpo)) {
-        novoIndice.set(cpfLimpo, []);
+      if (mioloDaBase.length === 6) {
+        adicionarAoIndice(novoIndiceMiolo, mioloDaBase, {
+          ...registro,
+          tipo_correspondencia: "cpf_mascarado_compativel"
+        });
       }
-
-      novoIndice.get(cpfLimpo).push(registro);
     }
 
-    indicePorCpf = novoIndice;
+    indicePorCpfCompleto = novoIndiceCpfCompleto;
+    indicePorMioloCpf = novoIndiceMiolo;
+
     totalRegistros = contadorRegistros;
-    totalCpfsIndexados = novoIndice.size;
+    totalCpfsIndexados = novoIndiceCpfCompleto.size;
+    totalMiolosIndexados = novoIndiceMiolo.size;
+
     baseCarregadaEm = new Date().toISOString();
     baseStatus = "pronta";
 
-    console.log(`Base PEP carregada.`);
+    console.log("Base PEP carregada.");
     console.log(`Arquivo: ${arquivoBase}`);
     console.log(`Registros lidos: ${totalRegistros}`);
-    console.log(`CPFs indexados: ${totalCpfsIndexados}`);
+    console.log(`CPFs completos indexados: ${totalCpfsIndexados}`);
+    console.log(`Miolos de CPF indexados: ${totalMiolosIndexados}`);
   } catch (erro) {
     baseStatus = "erro";
     baseErro = erro.message;
     totalRegistros = 0;
     totalCpfsIndexados = 0;
-    indicePorCpf = new Map();
+    totalMiolosIndexados = 0;
+    indicePorCpfCompleto = new Map();
+    indicePorMioloCpf = new Map();
 
     console.error("Erro ao carregar a base PEP:", erro);
   }
@@ -268,6 +312,7 @@ app.get("/", (req, res) => {
     status: "online",
     servico: "Consulta PEP por CPF",
     modo: "consulta local em base CSV oficial",
+    observacao: "A base pública de PEP pode trazer CPF mascarado. Nesse caso, a consulta por CPF completo é feita pelo trecho central disponível no arquivo.",
     fonte: "Portal da Transparência da CGU",
     baseStatus,
     baseErro,
@@ -276,6 +321,7 @@ app.get("/", (req, res) => {
     ultimaModificacaoArquivo,
     totalRegistros,
     totalCpfsIndexados,
+    totalMiolosIndexados,
     camposDetectados
   });
 });
@@ -290,6 +336,7 @@ app.get("/debug-base", (req, res) => {
     ultimaModificacaoArquivo,
     totalRegistros,
     totalCpfsIndexados,
+    totalMiolosIndexados,
     camposDetectados
   });
 });
@@ -326,18 +373,29 @@ app.get("/api/pep", (req, res) => {
       });
     }
 
-    const resultado = indicePorCpf.get(cpf) || [];
+    const mioloCpfPesquisado = obterMioloCpf(cpf);
+
+    let resultado = indicePorCpfCompleto.get(cpf) || [];
+    let tipoConsulta = "cpf_completo";
+
+    if (!resultado.length && mioloCpfPesquisado) {
+      resultado = indicePorMioloCpf.get(mioloCpfPesquisado) || [];
+      tipoConsulta = "cpf_mascarado_compativel";
+    }
 
     return res.json({
       fonte: "Portal da Transparência da Controladoria-Geral da União",
       modoConsulta: "base CSV oficial carregada no backend",
+      observacao: "Quando a base contém CPF mascarado, o resultado indica compatibilidade com o trecho central do CPF, e não confirmação por CPF completo.",
       consultaRealizadaEm: new Date().toISOString(),
       baseCarregadaEm,
       ultimaModificacaoArquivo,
       arquivoBase,
       parametroPesquisado: {
-        cpf
+        cpf,
+        mioloCpfPesquisado
       },
+      tipoConsulta,
       pagina,
       resultado
     });
