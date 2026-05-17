@@ -5,22 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Consulta PEP por CPF</title>
+  <meta name="description" content="Consulta auxiliar de Pessoas Expostas Politicamente por CPF, com base em arquivo PEP do Siscoaf.">
 
   <style>
     :root {
-      --azul: rgb(0, 118, 255);
-      --azul-escuro: #0f4fc7;
-      --texto: #1f2937;
-      --cinza: #6b7280;
-      --borda: #e5e7eb;
-      --fundo: #f8fafc;
-      --branco: #ffffff;
-      --erro: #b91c1c;
-      --info: #1d4ed8;
-      --sucesso: #166534;
-      --alerta-texto: #92400e;
-      --alerta-fundo: #fffbeb;
-      --alerta-borda: #fde68a;
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --text: #172033;
+      --muted: #64748b;
+      --line: #d8dee9;
+      --brand: #0076ff;
+      --brand-dark: #005bd1;
+      --soft: #eef5ff;
+      --warn: #fff7ed;
+      --warn-border: #fed7aa;
+      --ok: #ecfdf5;
+      --bad: #fff1f2;
+      --shadow: 0 18px 55px rgba(15, 23, 42, .09);
+      --radius: 22px;
     }
 
     * {
@@ -29,283 +31,467 @@
 
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--fundo);
-      color: var(--texto);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(0, 118, 255, .12), transparent 32rem),
+        linear-gradient(180deg, #f8fbff 0%, var(--bg) 55%, #eef2f7 100%);
+      color: var(--text);
+      line-height: 1.48;
     }
 
-    .container {
-      max-width: 980px;
+    .wrap {
+      width: min(1220px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 32px 16px;
     }
 
-    .card {
-      background: var(--branco);
-      border: 1px solid var(--borda);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    header {
+      padding: 34px 0 18px;
+    }
+
+    .hero {
+      background: rgba(255, 255, 255, .86);
+      border: 1px solid rgba(216, 222, 233, .8);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 32px 28px 30px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 22px;
+      align-items: stretch;
+      backdrop-filter: blur(12px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      background: var(--soft);
+      color: var(--brand-dark);
+      border: 1px solid #cfe2ff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .02em;
+      margin-bottom: 14px;
     }
 
     h1 {
-      margin: 0 0 8px;
-      font-size: 28px;
-      line-height: 1.2;
+      margin: 0;
+      font-size: clamp(30px, 4vw, 52px);
+      line-height: 1.02;
+      letter-spacing: -.045em;
     }
 
-    .descricao {
-      margin: 0 0 24px;
-      color: var(--cinza);
-      line-height: 1.5;
+    .lead {
+      margin: 20px 0 0;
+      max-width: none;
+      width: 100%;
+      color: #334155;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .scope {
+      margin: 18px 0 0;
+      max-width: none;
+      width: 100%;
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.65;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+
+    main {
+      padding: 18px 0 54px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 430px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 12px 36px rgba(15, 23, 42, .06);
+    }
+
+    .panel-head {
+      padding: 18px 18px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -.02em;
+    }
+
+    .panel-head p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .panel-body {
+      padding: 18px;
     }
 
     label {
       display: block;
-      margin-bottom: 8px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 750;
+      color: #273244;
+      margin: 0 0 7px;
+    }
+
+    input,
+    button {
+      font: inherit;
     }
 
     input {
       width: 100%;
-      padding: 14px;
-      border: 1px solid var(--borda);
-      border-radius: 10px;
-      font-size: 16px;
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 12px;
       outline: none;
+      transition: border-color .15s, box-shadow .15s;
     }
 
     input:focus {
-      border-color: var(--azul);
-      box-shadow: 0 0 0 3px rgba(0, 118, 255, 0.12);
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(0, 118, 255, .12);
     }
 
-    .linha {
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .actions {
       display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
-      align-items: end;
-    }
-
-    .acoes {
-      display: flex;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
       margin-top: 18px;
-      flex-wrap: wrap;
     }
 
     button {
       border: 0;
-      border-radius: 10px;
-      background: var(--azul);
-      color: white;
-      padding: 15px 20px;
-      font-size: 16px;
-      font-weight: 700;
+      border-radius: 15px;
+      padding: 12px 14px;
       cursor: pointer;
-      white-space: nowrap;
+      font-weight: 800;
+      transition: transform .08s, filter .15s, background .15s;
     }
 
-    button:hover {
-      background: var(--azul-escuro);
+    button:active {
+      transform: translateY(1px);
     }
 
     button:disabled {
-      opacity: 0.6;
+      opacity: .62;
       cursor: not-allowed;
     }
 
-    .botao-secundario {
-      background: #e5e7eb;
-      color: #111827;
+    .primary {
+      background: var(--brand);
+      color: white;
     }
 
-    .botao-secundario:hover {
-      background: #d1d5db;
+    .primary:hover {
+      background: var(--brand-dark);
     }
 
-    .botao-pdf {
-      background: var(--azul);
-      color: #ffffff;
+    .secondary {
+      background: #e2e8f0;
+      color: #0f172a;
     }
 
-    .botao-pdf:hover {
-      background: var(--azul-escuro);
+    .ghost {
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      color: #0f172a;
+    }
+
+    .mini-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .mini-actions button {
+      padding: 9px 11px;
+      border-radius: 12px;
+      font-size: 13px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: var(--ok);
+      color: #047857;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .status.warn {
+      background: var(--warn);
+      color: #9a3412;
+      border: 1px solid var(--warn-border);
+    }
+
+    .empty {
+      min-height: 520px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 34px;
+    }
+
+    .empty .mark {
+      width: 62px;
+      height: 62px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 14px;
+      background: var(--soft);
+      color: var(--brand);
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    .empty h2 {
+      margin: 0 0 10px;
+      letter-spacing: -.02em;
+    }
+
+    .empty p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 560px;
+    }
+
+    .resultado-topo {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .resumo {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0;
     }
 
     .mensagem {
-      margin-top: 18px;
-      padding: 14px;
-      border-radius: 10px;
+      margin-top: 14px;
+      padding: 13px 14px;
+      border-radius: 17px;
       display: none;
+      font-size: 14px;
       line-height: 1.5;
     }
 
     .mensagem.erro {
       display: block;
-      background: #fef2f2;
-      color: var(--erro);
-      border: 1px solid #fecaca;
+      background: var(--bad);
+      color: #9f1239;
+      border: 1px solid #fecdd3;
     }
 
     .mensagem.info {
       display: block;
-      background: #eff6ff;
-      color: var(--info);
-      border: 1px solid #bfdbfe;
-    }
-
-    .mensagem.sucesso {
-      display: block;
-      background: #f0fdf4;
-      color: var(--sucesso);
-      border: 1px solid #bbf7d0;
-    }
-
-    .resultado {
-      margin-top: 24px;
-      display: none;
-    }
-
-    .resultado.ativo {
-      display: block;
-    }
-
-    .resumo {
-      margin-bottom: 16px;
-      color: var(--cinza);
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .alerta {
-      margin-bottom: 16px;
-      padding: 12px;
-      border-radius: 10px;
-      background: var(--alerta-fundo);
-      border: 1px solid var(--alerta-borda);
-      color: var(--alerta-texto);
-      font-size: 14px;
-      line-height: 1.5;
-      display: none;
+      background: #f8fbff;
+      color: #1d4ed8;
+      border: 1px solid #dbeafe;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background: white;
-      border: 1px solid var(--borda);
-      border-radius: 12px;
-      overflow: hidden;
+      font-size: 14px;
     }
 
     th,
     td {
-      padding: 12px;
-      border-bottom: 1px solid var(--borda);
       text-align: left;
       vertical-align: top;
-      font-size: 14px;
+      border-bottom: 1px solid #e5eaf2;
+      padding: 11px 8px;
     }
 
     th {
-      background: #f1f5f9;
-      font-weight: 700;
+      color: #334155;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .045em;
+      background: #f8fafc;
     }
 
-    tr:last-child td {
-      border-bottom: 0;
+    .table-scroll {
+      overflow-x: auto;
     }
 
     .cpf-coluna {
       white-space: nowrap;
-      min-width: 120px;
+      min-width: 126px;
     }
 
     .fim-carencia {
-      font-weight: 700;
+      font-weight: 800;
+      white-space: nowrap;
     }
 
-    .rodape {
-      margin-top: 18px;
+    .data-coluna {
+      white-space: nowrap;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .note {
+      border: 1px solid #dbeafe;
+      background: #f8fbff;
+      border-radius: 17px;
+      padding: 13px 14px;
+      color: #334155;
+      margin-top: 14px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    footer {
+      color: #64748b;
       font-size: 13px;
-      color: var(--cinza);
-      line-height: 1.5;
+      padding: 0 0 44px;
     }
 
-    .rodape p {
-      margin: 0 0 10px;
+    .src {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 15px;
     }
 
-    .rodape p:last-child {
+    .src p {
+      margin: 0 0 8px;
+    }
+
+    .src p:last-child {
       margin-bottom: 0;
     }
 
-    .marca-pdf {
-      display: none;
-      margin-bottom: 18px;
-      font-size: 13px;
-      color: #374151;
-      line-height: 1.5;
+    .institutional-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 16px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
     }
 
-    @media (max-width: 700px) {
-      .linha {
+    .institutional-nav a {
+      font-weight: 800;
+      color: #0f172a;
+      text-decoration: none;
+    }
+
+    .institutional-nav a:hover {
+      text-decoration: underline;
+    }
+
+    .print-url {
+      display: none;
+    }
+
+    @media (max-width: 980px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .wrap {
+        width: min(100% - 22px, 1220px);
+      }
+
+      .hero,
+      .panel-body,
+      .panel-head {
+        padding: 16px;
+      }
+
+      .actions {
         grid-template-columns: 1fr;
       }
 
-      button {
-        width: 100%;
-      }
-
-      .acoes {
-        flex-direction: column;
-      }
-
       table {
-        display: block;
-        overflow-x: auto;
+        min-width: 860px;
       }
     }
 
     @media print {
       body {
-        background: #ffffff;
+        background: #fff;
       }
 
-      .container {
-        max-width: none;
+      header,
+      .left-panel,
+      .mini-actions,
+      footer {
+        display: none;
+      }
+
+      .wrap {
+        width: 100%;
+      }
+
+      main {
         padding: 0;
       }
 
-      .card {
-        border: 0;
-        box-shadow: none;
-        border-radius: 0;
-        padding: 0;
-      }
-
-      .linha,
-      .acoes,
-      #mensagem {
-        display: none !important;
-      }
-
-      .marca-pdf {
+      .grid {
         display: block;
       }
 
-      .resultado {
-        display: block !important;
+      .panel {
+        box-shadow: none;
+        border: 0;
       }
 
-      table {
-        page-break-inside: auto;
+      .panel-head,
+      .panel-body {
+        padding: 0;
       }
 
-      tr {
-        page-break-inside: avoid;
-        page-break-after: auto;
+      .print-url {
+        display: block;
+        margin: 0 0 14px;
+        font-size: 13px;
+        color: #334155;
       }
 
       th,
@@ -313,95 +499,132 @@
         font-size: 11px;
         padding: 7px;
       }
-
-      .rodape {
-        font-size: 11px;
-      }
     }
   </style>
 </head>
 
 <body data-api="https://consulta-pep-backend.onrender.com">
-  <main class="container">
-    <section class="card">
-      <div class="marca-pdf">
-        Portal Notarial<br>
-        Consulta PEP por CPF<br>
-        Fonte dos dados: Siscoaf - Sistema de Controle de Atividades Financeiras.
-      </div>
-
-      <h1>Consulta PEP por CPF</h1>
-
-      <p class="descricao">
-        Consulta auxiliar de pessoas expostas politicamente com base nos dados do Siscoaf.
-      </p>
-
-      <div class="linha">
+  <header>
+    <div class="wrap">
+      <section class="hero" aria-labelledby="titulo">
         <div>
-          <label for="cpf">CPF pesquisado</label>
-          <input
-            id="cpf"
-            type="text"
-            placeholder="Digite o CPF"
-            autocomplete="off"
-            inputmode="numeric"
-            maxlength="14"
-          />
+          <div class="eyebrow">Consulta PEP</div>
+          <h1 id="titulo">Consulta PEP por CPF</h1>
+
+          <p class="lead">
+            Consulte, de forma auxiliar, registros de Pessoas Expostas Politicamente a partir do CPF informado.
+          </p>
+
+          <p class="scope">
+            A ferramenta utiliza arquivo PEP do Siscoaf e apresenta os dados localizados para apoio à triagem cadastral, jurídica, notarial ou registral. O resultado não substitui a conferência do caso concreto.
+          </p>
+        </div>
+      </section>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap grid">
+      <section class="panel left-panel">
+        <div class="panel-head">
+          <h2>Consulta</h2>
+          <p>Informe o CPF completo para pesquisar na base PEP carregada.</p>
         </div>
 
-        <button id="botaoConsultar" type="button">
-          Consultar
-        </button>
-      </div>
+        <div class="panel-body">
+          <div class="field">
+            <label for="cpf">CPF pesquisado</label>
+            <input
+              id="cpf"
+              type="text"
+              placeholder="Digite o CPF"
+              autocomplete="off"
+              inputmode="numeric"
+              maxlength="14"
+            >
+            <div class="hint">Digite somente os números ou use o formato 000.000.000-00.</div>
+          </div>
 
-      <div class="acoes">
-        <button id="botaoNovaConsulta" class="botao-secundario" type="button">
-          Nova consulta
-        </button>
+          <div class="actions">
+            <button id="botaoConsultar" class="primary" type="button">Consultar</button>
+            <button id="botaoNovaConsulta" class="secondary" type="button">Nova consulta</button>
+          </div>
 
-        <button id="botaoGerarPdf" class="botao-pdf" type="button" disabled>
-          Gerar PDF
-        </button>
-      </div>
+          <div class="mini-actions">
+            <button id="botaoGerarPdf" class="ghost" type="button" disabled>Gerar PDF</button>
+          </div>
 
-      <div id="mensagem" class="mensagem"></div>
+          <div id="mensagem" class="mensagem"></div>
+        </div>
+      </section>
 
-      <div id="resultado" class="resultado">
-        <div id="resumo" class="resumo"></div>
-        <div id="alertaCpfMascarado" class="alerta"></div>
+      <section class="panel" id="resultadoPanel">
+        <div class="empty" id="empty">
+          <div>
+            <div class="mark">PEP</div>
+            <h2>Resultado da consulta</h2>
+            <p>
+              O resultado aparecerá aqui após a consulta, com CPF, nome, função, órgão, datas de exercício, fim da carência e atualização.
+            </p>
+          </div>
+        </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th class="cpf-coluna">CPF na base</th>
-              <th>Nome</th>
-              <th>Função</th>
-              <th>Órgão</th>
-              <th>Início do exercício</th>
-              <th>Fim do exercício</th>
-              <th>Fim da carência</th>
-              <th>Atualização</th>
-            </tr>
-          </thead>
-          <tbody id="tabelaResultado"></tbody>
-        </table>
-      </div>
+        <div id="resultado" class="hidden">
+          <div class="panel-head resultado-topo">
+            <div>
+              <div class="status" id="statusConsulta">Consulta realizada</div>
+              <h2>Resultado da consulta</h2>
+              <p id="resumo" class="resumo"></p>
+            </div>
+          </div>
 
-      <div class="rodape">
-        <p>
-          Fonte dos dados: Siscoaf - Sistema de Controle de Atividades Financeiras.
-        </p>
+          <div class="panel-body">
+            <div class="print-url">https://portalnotarial.com.br/consulta-pep.html</div>
 
-        <p>
-          A consulta é informativa e não substitui a qualificação jurídica, cadastral, notarial ou registral do caso concreto.
-        </p>
+            <div class="table-scroll">
+              <table aria-label="Resultado da consulta PEP">
+                <thead>
+                  <tr>
+                    <th class="cpf-coluna">CPF na base</th>
+                    <th>Nome</th>
+                    <th>Função</th>
+                    <th>Órgão</th>
+                    <th class="data-coluna">Início do exercício</th>
+                    <th class="data-coluna">Fim do exercício</th>
+                    <th class="data-coluna">Fim da carência</th>
+                    <th class="data-coluna">Atualização</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaResultado"></tbody>
+              </table>
+            </div>
 
-        <p>
-          Quando a base pública contém CPF mascarado em razão da LGPD, o resultado indica compatibilidade com o trecho central do CPF, e não a confirmação integral do CPF pesquisado.
-        </p>
-      </div>
-    </section>
+            <div class="note">
+              A consulta é informativa e não substitui a qualificação jurídica, cadastral, notarial ou registral do caso concreto.
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="src">
+        <p>Fonte dos dados: Siscoaf - Sistema de Controle de Atividades Financeiras.</p>
+        <p>Uso recomendado: triagem e conferência auxiliar. O resultado não substitui a análise do caso concreto.</p>
+
+        <nav class="institutional-nav" aria-label="Links institucionais">
+          <a href="https://portalnotarial.com.br/">Início</a>
+          <a href="https://portalnotarial.com.br/sobre.html">Sobre</a>
+          <a href="https://portalnotarial.com.br/contato.html">Contato</a>
+          <a href="https://portalnotarial.com.br/politica-de-privacidade.html">Privacidade</a>
+          <a href="https://portalnotarial.com.br/termos-de-uso.html">Termos</a>
+          <a href="https://portalnotarial.com.br/aviso-legal.html">Aviso legal</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
 
   <script>
     const API_BASE_URL = document.body.dataset.api;
@@ -412,9 +635,10 @@
     const botaoGerarPdf = document.getElementById("botaoGerarPdf");
     const mensagem = document.getElementById("mensagem");
     const resultado = document.getElementById("resultado");
+    const empty = document.getElementById("empty");
     const resumo = document.getElementById("resumo");
-    const alertaCpfMascarado = document.getElementById("alertaCpfMascarado");
     const tabelaResultado = document.getElementById("tabelaResultado");
+    const resultadoPanel = document.getElementById("resultadoPanel");
 
     let ultimaConsultaComResultado = false;
 
@@ -471,11 +695,10 @@
     }
 
     function limparResultado() {
-      resultado.className = "resultado";
       resumo.textContent = "";
       tabelaResultado.innerHTML = "";
-      alertaCpfMascarado.style.display = "none";
-      alertaCpfMascarado.textContent = "";
+      resultado.classList.add("hidden");
+      empty.classList.remove("hidden");
       ultimaConsultaComResultado = false;
       botaoGerarPdf.disabled = true;
     }
@@ -509,7 +732,12 @@
     function converterDataParaOrdenacao(data) {
       const texto = String(data || "").trim();
 
-      if (!texto || texto.toLowerCase() === "não informado" || texto.toLowerCase() === "não informada" || texto.toLowerCase() === "na") {
+      if (
+        !texto ||
+        texto.toLowerCase() === "não informado" ||
+        texto.toLowerCase() === "não informada" ||
+        texto.toLowerCase() === "na"
+      ) {
         return 0;
       }
 
@@ -544,7 +772,8 @@
 
       if (!Array.isArray(lista) || lista.length === 0) {
         mostrarMensagem("info", "CPF não localizado na base PEP carregada.");
-        resultado.className = "resultado";
+        resultado.classList.add("hidden");
+        empty.classList.remove("hidden");
         ultimaConsultaComResultado = false;
         botaoGerarPdf.disabled = true;
         return;
@@ -568,15 +797,16 @@
         linha.appendChild(criarCelula(nome));
         linha.appendChild(criarCelula(funcao));
         linha.appendChild(criarCelula(orgao));
-        linha.appendChild(criarCelula(inicio));
-        linha.appendChild(criarCelula(fim));
+        linha.appendChild(criarCelula(inicio, "data-coluna"));
+        linha.appendChild(criarCelula(fim, "data-coluna"));
         linha.appendChild(criarCelula(carencia, "fim-carencia"));
-        linha.appendChild(criarCelula(atualizacao));
+        linha.appendChild(criarCelula(atualizacao, "data-coluna"));
 
         tabelaResultado.appendChild(linha);
       }
 
-      resultado.className = "resultado ativo";
+      resultado.classList.remove("hidden");
+      empty.classList.add("hidden");
       ultimaConsultaComResultado = true;
       botaoGerarPdf.disabled = false;
 
@@ -584,16 +814,11 @@
         ? new Date(dadosConsulta.consultaRealizadaEm).toLocaleString("pt-BR")
         : "Não informada";
 
-      resumo.textContent = `Consulta realizada em ${dataConsulta}.`;
+      resumo.textContent = `Consulta realizada em ${dataConsulta}. Total exibido: ${listaOrdenada.length}.`;
 
-      if (dadosConsulta.tipoConsulta === "cpf_mascarado_compativel") {
-        alertaCpfMascarado.style.display = "block";
-        alertaCpfMascarado.textContent =
-          "A base pública de PEP contém CPFs mascarados em razão da LGPD. O resultado indica compatibilidade com o trecho central do CPF pesquisado, e não a confirmação integral dos dígitos ocultos.";
-      } else {
-        alertaCpfMascarado.style.display = "none";
-        alertaCpfMascarado.textContent = "";
-      }
+      setTimeout(function () {
+        resultadoPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 0);
     }
 
     async function consultarPep() {
@@ -646,7 +871,11 @@
       campoCpf.value = "";
       limparMensagem();
       limparResultado();
-      campoCpf.focus();
+
+      setTimeout(function () {
+        campoCpf.scrollIntoView({ behavior: "smooth", block: "center" });
+        campoCpf.focus();
+      }, 0);
     }
 
     function gerarPdf() {
