@@ -846,6 +846,7 @@
     .cards {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-auto-rows: 1fr;
       gap: 16px;
     }
 
@@ -995,6 +996,26 @@
 
     .card--servicos {
       --cor: var(--servico);
+    }
+
+    .card--certidao {
+      --cor: var(--roxo);
+    }
+
+    .card--oficio-comparecimento {
+      --cor: var(--azul);
+    }
+
+    .card--oficio-cartorios {
+      --cor: var(--ciano);
+    }
+
+    .card--oficio-bancos {
+      --cor: var(--verde);
+    }
+
+    .card--pep {
+      --cor: var(--vermelho);
     }
 
     .card-bottom {
@@ -2341,6 +2362,67 @@
         </div>
       </section>
 
+      <section class="tools-group" aria-labelledby="grupo-documentos">
+        <div class="tools-heading">
+          <h2 id="grupo-documentos">Geração de documentos</h2>
+          <p>Montagem de certidões e ofícios notariais com preenchimento guiado, prévia editável e PDF final.</p>
+        </div>
+
+        <div class="cards" aria-label="Geradores de documentos notariais">
+          <a class="card card--certidao" href="gerador-certidao-reprografica.html" aria-label="Abrir gerador de certidão reprográfica">
+            <div>
+              <span class="card-kicker">Certidão</span>
+              <h3>Gerador de certidão reprográfica</h3>
+              <p>
+                Monte a certidão, anexe o PDF do ato digitalizado e gere o arquivo final com numeração automática das páginas.
+              </p>
+            </div>
+            <div class="card-bottom" aria-hidden="true">
+              <div class="arrow">→</div>
+            </div>
+          </a>
+
+          <a class="card card--oficio-comparecimento" href="oficios-comparecimento.html" aria-label="Abrir gerador de ofício de declaração de comparecimento">
+            <div>
+              <span class="card-kicker">Ofícios</span>
+              <h3>Ofício de declaração de comparecimento</h3>
+              <p>
+                Gere a declaração de comparecimento com dados do atendido, prévia editável e PDF no padrão do ofício.
+              </p>
+            </div>
+            <div class="card-bottom" aria-hidden="true">
+              <div class="arrow">→</div>
+            </div>
+          </a>
+
+          <a class="card card--oficio-cartorios" href="oficios-outros-cartorios.html" aria-label="Abrir gerador de ofício para outros cartórios">
+            <div>
+              <span class="card-kicker">Ofícios</span>
+              <h3>Ofício para outros cartórios</h3>
+              <p>
+                Comunique retificação, dissolução, revogação ou substabelecimento, com o traslado lavrado anexado ao PDF final.
+              </p>
+            </div>
+            <div class="card-bottom" aria-hidden="true">
+              <div class="arrow">→</div>
+            </div>
+          </a>
+
+          <a class="card card--oficio-bancos" href="oficios-bancos/" aria-label="Abrir gerador de ofício para bancos em inventário">
+            <div>
+              <span class="card-kicker">Ofícios</span>
+              <h3>Ofício para bancos em inventário</h3>
+              <p>
+                Solicite informações bancárias em inventário, com leitura auxiliar da certidão de óbito e anexação do comunicado da Febraban.
+              </p>
+            </div>
+            <div class="card-bottom" aria-hidden="true">
+              <div class="arrow">→</div>
+            </div>
+          </a>
+        </div>
+      </section>
+
       <section class="tools-group" aria-labelledby="grupo-calculos">
         <div class="tools-heading">
           <h2 id="grupo-calculos">Cálculos e orçamento</h2>
@@ -2431,6 +2513,19 @@
         </div>
 
         <div class="cards cards-2" aria-label="Ferramentas de apoio operacional">
+          <a class="card card--pep" href="consulta-pep.html" aria-label="Abrir consulta PEP por CPF">
+            <div>
+              <span class="card-kicker">Triagem</span>
+              <h3>Consulta PEP por CPF</h3>
+              <p>
+                Pesquisa auxiliar de Pessoas Expostas Politicamente a partir do CPF, com base no Siscoaf, para apoio à triagem cadastral.
+              </p>
+            </div>
+            <div class="card-bottom" aria-hidden="true">
+              <div class="arrow">→</div>
+            </div>
+          </a>
+
           <a class="card card--servicos" href="https://portalnotarial.com.br/links-uteis.html" aria-label="Abrir páginas de serviços e links úteis">
             <div>
               <span class="card-kicker">Links úteis</span>
