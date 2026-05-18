@@ -405,11 +405,12 @@
     .source-box ul{margin:0;padding-left:18px;color:#475569;font-size:14px;line-height:1.65}
 
     .faq-list{display:grid;gap:10px;margin-top:20px}
+    #faq{margin-bottom:32px}
     .faq-list details{margin:0;border:1px solid #dbe3ef;border-radius:16px;background:#fff;overflow:hidden}
     .faq-list summary{padding:14px 16px;background:#f8fafc;color:#0f172a;font-weight:850;cursor:pointer}
     .faq-list .faq-body{padding:14px 16px;color:#475569;font-size:14px;line-height:1.65}
 
-    footer{color:#64748b;font-size:13px;padding:0 0 44px}
+    footer{color:#64748b;font-size:13px;padding:0 0 44px;margin-top:32px}
     .src{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px}
     .src p{margin:0 0 8px}
     .src p:last-child{margin-bottom:0}
@@ -919,6 +920,10 @@ function limpar(){
   document.querySelector('input[name="tipoTributo"][value="itbi"]').checked = true;
   atualizaCamposTributo();
   calcular(false);
+  setTimeout(() => {
+    const destino = el('dados-calculo');
+    if (destino) destino.scrollIntoView({ behavior:'smooth', block:'start' });
+  }, 0);
 }
 
 async function copiarResultado(){
