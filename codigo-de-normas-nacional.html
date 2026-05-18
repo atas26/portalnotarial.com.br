@@ -911,6 +911,29 @@ footer{color:#64748b;font-size:13px;padding:22px 0 44px}
 .institutional-nav a{font-weight:800;color:#0f172a}
 .toast{z-index:90}
 
+
+.index-list a.index-level{
+  border-bottom:1px solid #eef2f7;
+  line-height:1.35;
+}
+.index-list a.index-level-0{
+  font-weight:900;
+  color:#0f172a;
+  padding-top:12px;
+}
+.index-list a.index-level-1{
+  font-weight:850;
+  color:#172033;
+}
+.index-list a.index-level-2{
+  font-weight:750;
+}
+.index-list a.index-level-3,
+.index-list a.index-level-4,
+.index-list a.index-level-5{
+  font-weight:650;
+}
+
 @media (max-width:1180px){
   #consulta-normas{grid-template-columns:260px minmax(0,1fr)}
   .right-col{display:none}
@@ -1056,7 +1079,7 @@ footer{color:#64748b;font-size:13px;padding:22px 0 44px}
           </label>
 
           <h3 style="margin-top:20px">Índice</h3>
-          <p class="help">Os artigos aparecem após o carregamento da base.</p>
+          <p class="help">Livros, títulos, capítulos, seções e subseções aparecem após o carregamento da base.</p>
           <ul id="indexList" class="index-list"></ul>
         </div>
       </aside>
@@ -2188,16 +2211,82 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       }).join('') + (state.results.length > 120 ? `<div class="empty">Foram encontrados ${state.results.length} resultados. Exibidos os 120 primeiros. Refine a busca para reduzir a lista.</div>` : '');
     }
 
+    function makeIndexLabel(primary, secondary) {
+      const base = String(primary || '').trim();
+      const complement = String(secondary || '').trim();
+      if (!base && !complement) return '';
+      if (!complement) return base;
+      if (normalizeSearch(base) === normalizeSearch(complement)) return base;
+      return `${base} - ${complement}`;
+    }
+
+    function addIndexEntry(rows, seen, rec, label, level) {
+      const text = String(label || '').replace(/\s+/g, ' ').trim();
+      if (!text) return;
+      const key = `${level}|${normalizeSearch(text)}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+      rows.push({ id: rec.id, label: text, level, numero: rec.numero || '' });
+    }
+
+    function fallbackIndexRowsFromHierarchy(rec, rows, seen) {
+      const lines = hierarchyLines(rec);
+      lines.forEach(line => {
+        const text = String(line && line.text || '').trim();
+        const normalized = normalizeSearch(text);
+        if (!text) return;
+
+        let level = null;
+        if (/^parte\b/.test(normalized)) level = 0;
+        else if (/^livro\b/.test(normalized)) level = 1;
+        else if (/^titulo\b/.test(normalized)) level = 2;
+        else if (/^capitulo\b/.test(normalized)) level = 3;
+        else if (/^secao\b/.test(normalized)) level = 4;
+        else if (/^subsecao\b/.test(normalized)) level = 5;
+
+        if (level !== null) addIndexEntry(rows, seen, rec, text, level);
+      });
+    }
+
     function renderIndex() {
       const list = $('#indexList');
       if (!state.articles.length) {
         list.innerHTML = '<li><span class="muted">Sem base carregada.</span></li>';
         return;
       }
-      const articles = state.articles.filter(a => a.tipo === 'artigo');
-      list.innerHTML = articles.slice(0, 180).map(a => `
-        <li><a href="#${a.id}" data-index-id="${a.id}">${escapeHtml(a.numero)}<span class="muted">${escapeHtml(a.capitulo || a.areas[0] || '')}</span></a></li>
-      `).join('') + (articles.length > 180 ? '<li><span class="muted">Índice limitado aos 180 primeiros artigos. Use a busca para os demais.</span></li>' : '');
+
+      const rows = [];
+      const seen = new Set();
+      const articles = state.articles
+        .filter(a => a.tipo === 'artigo' || a.tipo === 'anexo')
+        .sort((a, b) => a.ordem - b.ordem);
+
+      articles.forEach(rec => {
+        const before = rows.length;
+        addIndexEntry(rows, seen, rec, rec.parte, 0);
+        addIndexEntry(rows, seen, rec, makeIndexLabel(rec.livro, rec.livroTitulo), 1);
+        addIndexEntry(rows, seen, rec, makeIndexLabel(rec.titulo, rec.tituloTitulo), 2);
+        addIndexEntry(rows, seen, rec, makeIndexLabel(rec.capituloNumero || rec.capitulo, rec.capituloTitulo), 3);
+        addIndexEntry(rows, seen, rec, makeIndexLabel(rec.secao, rec.secaoTitulo), 4);
+        addIndexEntry(rows, seen, rec, makeIndexLabel(rec.subsecao, rec.subsecaoTitulo), 5);
+
+        if (rows.length === before && Array.isArray(rec.estrutura) && rec.estrutura.length) {
+          fallbackIndexRowsFromHierarchy(rec, rows, seen);
+        }
+      });
+
+      if (!rows.length) {
+        const articleRows = articles.slice(0, 180).map(a => `
+          <li><a href="#${a.id}" data-index-id="${a.id}">${escapeHtml(a.numero)}<span class="muted">${escapeHtml(a.capitulo || a.areas[0] || '')}</span></a></li>
+        `).join('');
+        list.innerHTML = articleRows + (articles.length > 180 ? '<li><span class="muted">Índice limitado aos 180 primeiros artigos. Use a busca para os demais.</span></li>' : '');
+        return;
+      }
+
+      list.innerHTML = rows.map(row => {
+        const indent = Math.min(row.level * 10, 44);
+        return `<li><a href="#${row.id}" data-index-id="${row.id}" class="index-level index-level-${row.level}" style="padding-left:${indent}px">${escapeHtml(row.label)}<span class="muted">${escapeHtml(row.numero ? 'a partir de ' + row.numero : '')}</span></a></li>`;
+      }).join('');
     }
 
     function renderFavorites() {
