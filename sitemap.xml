@@ -2,73 +2,103 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://portalnotarial.com.br/</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.00</priority>
   </url>
   <url>
     <loc>https://portalnotarial.com.br/links-uteis.html</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://portalnotarial.com.br/competencia-e-notariado.html</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
     <loc>https://portalnotarial.com.br/codigo-de-normas-nacional.html</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
     <loc>https://portalnotarial.com.br/codigo-de-normas-de-sao-paulo.html</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
     <loc>https://portalnotarial.com.br/aplicador-de-emolumentos.html</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://portalnotarial.com.br/calculadora-escritura-tributo-registro-sp.html</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://portalnotarial.com.br/gerador-de-orcamentos-notariais.html</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
     <loc>https://portalnotarial.com.br/calculadora-tarifas-conta-notarial.html</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
+    <loc>https://portalnotarial.com.br/consulta-pep.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://portalnotarial.com.br/gerador-certidao-reprografica.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://portalnotarial.com.br/oficios-comparecimento.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://portalnotarial.com.br/oficios-outros-cartorios.html</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://portalnotarial.com.br/oficios-bancos/</loc>
+    <lastmod>2026-05-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://portalnotarial.com.br/fontes-normativas.html</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
     <loc>https://portalnotarial.com.br/atualizacoes.html</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://portalnotarial.com.br/mapa-do-site.html</loc>
-    <lastmod>2026-05-13</lastmod>
+    <lastmod>2026-05-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
