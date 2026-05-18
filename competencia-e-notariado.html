@@ -239,6 +239,302 @@
 
 </style>
 
+
+<style id="portal-layout-aplicador-overrides">
+/* Layout visual alinhado ao Aplicador de Emolumentos. Mantém React, lógica jurídica e bibliotecas externas originais. */
+:root{
+  --bg:#f5f7fb;
+  --panel:#ffffff;
+  --text:#172033;
+  --muted:#64748b;
+  --line:#d8dee9;
+  --brand:#0076ff;
+  --brand-dark:#005bd1;
+  --soft:#eef5ff;
+  --warn:#fff7ed;
+  --warn-border:#fed7aa;
+  --shadow:0 18px 55px rgba(15,23,42,.09);
+  --radius:22px;
+}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif!important;
+  background:
+    radial-gradient(circle at top left, rgba(0,118,255,.12), transparent 32rem),
+    linear-gradient(180deg,#f8fbff 0%,var(--bg) 55%,#eef2f7 100%)!important;
+  color:var(--text)!important;
+  line-height:1.48;
+}
+body.bg-stone-100{background:
+  radial-gradient(circle at top left, rgba(0,118,255,.12), transparent 32rem),
+  linear-gradient(180deg,#f8fbff 0%,var(--bg) 55%,#eef2f7 100%)!important;}
+a{text-decoration:none}
+#root>.min-h-screen{background:transparent!important;color:var(--text)!important}
+.wrap{width:min(1220px,calc(100% - 32px));max-width:none;margin:0 auto}
+header.no-print{
+  border:0!important;
+  background:transparent!important;
+  padding:34px 0 18px!important;
+}
+header.no-print>div{
+  width:min(1220px,calc(100% - 32px));
+  max-width:none!important;
+  margin:0 auto;
+  padding:32px 28px 30px!important;
+  background:rgba(255,255,255,.86)!important;
+  border:1px solid rgba(216,222,233,.8)!important;
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(12px);
+  position:relative;
+  overflow:hidden;
+}
+header.no-print>div:after{
+  content:"";
+  position:absolute;
+  width:250px;
+  height:250px;
+  right:-90px;
+  top:-110px;
+  border-radius:50%;
+  background:rgba(0,118,255,.12);
+  pointer-events:none;
+}
+header.no-print .flex.items-center.gap-3.mb-6{
+  margin:0 0 14px!important;
+  position:relative;
+  z-index:1;
+}
+header.no-print .h-px{display:none!important}
+header.no-print span.text-xs.uppercase{
+  display:inline-flex!important;
+  gap:8px;
+  align-items:center;
+  width:max-content;
+  max-width:100%;
+  background:var(--soft);
+  color:var(--brand-dark)!important;
+  border:1px solid #cfe2ff;
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:13px!important;
+  font-weight:700!important;
+  letter-spacing:.02em!important;
+  text-transform:none!important;
+}
+header.no-print h1{
+  margin:0!important;
+  max-width:none!important;
+  width:100%;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif!important;
+  font-size:clamp(30px,4vw,52px)!important;
+  line-height:1.02!important;
+  font-weight:850!important;
+  letter-spacing:-.045em!important;
+  color:#0f172a!important;
+  position:relative;
+  z-index:1;
+}
+header.no-print h1 .italic{font-style:normal!important;font-weight:850!important}
+header.no-print p{
+  margin:20px 0 0!important;
+  max-width:none!important;
+  width:100%;
+  color:#334155!important;
+  font-size:18px!important;
+  line-height:1.7!important;
+  position:relative;
+  z-index:1;
+}
+.adsense-section,
+.bloco-como-utilizar{
+  margin:22px auto 0!important;
+  background:rgba(255,255,255,.88)!important;
+  border:1px solid rgba(216,222,233,.84)!important;
+  border-radius:28px!important;
+  box-shadow:var(--shadow)!important;
+  padding:30px 28px!important;
+  scroll-margin-top:26px;
+  color:var(--text)!important;
+}
+.section-kicker{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  background:var(--soft);
+  color:var(--brand-dark);
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:12px;
+  font-weight:850;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin:0 0 14px;
+}
+.adsense-section h2,
+.bloco-como-utilizar h2{
+  margin:0 0 12px!important;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif!important;
+  font-size:clamp(28px,3vw,42px)!important;
+  line-height:1.08!important;
+  font-weight:850!important;
+  letter-spacing:-.035em!important;
+  color:#0f172a!important;
+}
+.adsense-section p,
+.bloco-como-utilizar .intro{
+  color:#334155!important;
+  margin:0!important;
+  font-size:16px!important;
+  line-height:1.7!important;
+}
+.bloco-como-utilizar .intro+.intro{margin-top:10px!important}
+.info-grid,
+.bloco-como-utilizar .cards{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-top:22px;
+}
+.info-card,
+.bloco-como-utilizar .card{
+  background:#fff!important;
+  border:1px solid #dbe3ef!important;
+  border-radius:18px!important;
+  padding:18px!important;
+  min-height:118px;
+}
+.info-card h3,
+.bloco-como-utilizar .card h3{
+  margin:0 0 9px!important;
+  font-size:16px!important;
+  line-height:1.25!important;
+  color:#0f172a!important;
+  font-weight:850!important;
+  letter-spacing:-.01em!important;
+}
+.info-card p,
+.bloco-como-utilizar .card p{
+  margin:0!important;
+  font-size:14px!important;
+  color:#475569!important;
+  line-height:1.65!important;
+}
+.bloco-como-utilizar .alerta{
+  margin-top:20px!important;
+  background:#f8fafc!important;
+  border-left:4px solid var(--brand)!important;
+  border-radius:0 14px 14px 0!important;
+  padding:16px 18px!important;
+  color:#334155!important;
+  font-size:14px!important;
+  line-height:1.7!important;
+}
+.bloco-como-utilizar .atualizacao{margin-top:16px!important;font-size:14px!important;color:#64748b!important;display:block;line-height:1.5}
+main#consulta{
+  width:min(1220px,calc(100% - 32px));
+  max-width:none!important;
+  margin:22px auto 0!important;
+  padding:0 0 54px!important;
+  background:transparent!important;
+}
+main#consulta>.anim-fadeup{
+  background:var(--panel)!important;
+  border:1px solid var(--line)!important;
+  border-radius:var(--radius)!important;
+  box-shadow:0 12px 36px rgba(15,23,42,.06)!important;
+  padding:18px!important;
+}
+main#consulta .mb-6{
+  border-bottom:1px solid var(--line);
+  padding:18px 18px 12px!important;
+  margin:-18px -18px 18px!important;
+}
+main#consulta .mb-6 p{
+  display:block!important;
+  font-size:13px!important;
+  font-weight:850!important;
+  color:var(--brand-dark)!important;
+  letter-spacing:.02em!important;
+  text-transform:none!important;
+  margin:0 0 7px!important;
+}
+main#consulta .mb-6 h2{
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif!important;
+  font-size:20px!important;
+  font-weight:850!important;
+  letter-spacing:-.02em!important;
+  color:#0f172a!important;
+}
+.option-card{
+  border:1px solid #dbe3ef!important;
+  border-radius:18px!important;
+  background:#fff!important;
+  padding:18px!important;
+  box-shadow:none!important;
+}
+.option-card:hover{border-color:var(--brand)!important;box-shadow:0 12px 28px rgba(15,23,42,.10)!important;transform:translateY(-1px)}
+.option-card .option-icon{background:var(--soft)!important;color:var(--brand-dark)!important;border-radius:14px!important}
+.option-card p.font-medium{color:#0f172a!important;font-weight:850!important}
+.option-card p.text-\[15px\]{color:#475569!important;font-size:14px!important;line-height:1.65!important}
+main#consulta .bg-white.border.border-stone-200.overflow-hidden{
+  border:1px solid var(--line)!important;
+  border-radius:var(--radius)!important;
+  box-shadow:0 12px 36px rgba(15,23,42,.06)!important;
+}
+main#consulta .bg-orange-700{
+  background:linear-gradient(180deg,var(--brand),var(--brand-dark))!important;
+}
+main#consulta .text-orange-700,
+footer .text-orange-700{color:var(--brand)!important}
+.source-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:20px}
+.source-box{background:#fff;border:1px solid #dbe3ef;border-radius:18px;padding:18px}
+.source-box h3{margin:0 0 9px;font-size:16px;color:#0f172a;font-weight:850}
+.source-box ul{margin:0;padding-left:18px;color:#475569;font-size:14px;line-height:1.65;list-style:disc}
+.faq-list{display:grid;gap:10px;margin-top:20px}
+.faq-list details{margin:0;border:1px solid #dbe3ef;border-radius:16px;background:#fff;overflow:hidden;padding:0}
+.faq-list summary{padding:14px 16px;background:#f8fafc;color:#0f172a;font-weight:850;cursor:pointer;font-size:14px}
+.faq-list .faq-body{padding:14px 16px;color:#475569;font-size:14px;line-height:1.65}
+.faq-bottom{margin-bottom:22px!important}
+footer.no-print{
+  background:transparent!important;
+  border:0!important;
+  margin:22px 0 0!important;
+  color:#64748b!important;
+  font-size:13px!important;
+  padding:0 0 44px!important;
+}
+footer.no-print>div{
+  width:min(1220px,calc(100% - 32px));
+  max-width:none!important;
+  margin:0 auto;
+  background:#fff!important;
+  border:1px solid var(--line)!important;
+  border-radius:18px!important;
+  padding:18px!important;
+  box-shadow:0 12px 36px rgba(15,23,42,.04);
+}
+footer.no-print .text-xs.uppercase{letter-spacing:.16em!important;color:var(--brand)!important;font-weight:850!important}
+footer.no-print .space-y-3 p{font-size:14px!important;color:#334155!important;line-height:1.65!important}
+.pn-footer-final{border-top:1px solid #e2e8f0!important;margin-top:18px!important;padding-top:14px!important}
+.pn-footer-links,.pn-footer-support{gap:10px 16px!important}
+@media(max-width:980px){
+  .wrap,header.no-print>div,main#consulta,footer.no-print>div{width:min(100% - 22px,1220px)}
+  header.no-print>div,.adsense-section,.bloco-como-utilizar{padding:22px 18px!important;border-radius:22px!important}
+  .info-grid,.bloco-como-utilizar .cards,.source-grid{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .pn-button,.hero-link{width:100%}
+  main#consulta>.anim-fadeup{padding:16px!important}
+}
+@media print{
+  header.no-print,.adsense-section,.bloco-como-utilizar,footer.no-print{display:none!important}
+  body{background:#fff!important}
+  main#consulta{width:100%;padding:0!important}
+}
+</style>
+
 </head>
 <body class="bg-stone-100 text-slate-900">
 
@@ -685,50 +981,81 @@ function paragrafosNormativos(texto) {
 // =====================================================================
 
 function BlocoExplicativoCompetencia() {
-    return React.createElement("section", { className: "pn-editorial pn-static-shell", "aria-labelledby": "sobre-ferramenta" },
-        React.createElement("h2", { id: "sobre-ferramenta" }, "Competência notarial eletrônica e híbrida"),
-        React.createElement("p", null, "Esta ferramenta auxilia a identificação do tabelião de notas competente para ato notarial eletrônico ou híbrido a partir do tipo de ato e das respostas fornecidas pelo usuário. O resultado apresenta o critério geral aplicável à situação informada."),
-        React.createElement("div", { className: "pn-action-row" },
-            React.createElement("a", { href: "#consulta", className: "pn-button pn-button-primary" }, "Ir para a ferramenta"),
-            React.createElement("a", { href: "https://portalnotarial.com.br/", className: "pn-button pn-button-secondary" }, "Voltar à home")),
-        React.createElement("div", { className: "pn-info-grid" },
-            React.createElement("div", { className: "pn-info-card" },
-                React.createElement("h3", null, "O que a ferramenta faz"),
-                React.createElement("p", null, "Organiza perguntas sobre o tipo de ato e indica o critério geral de competência do tabelião de notas para atos eletrônicos ou híbridos.")),
-            React.createElement("div", { className: "pn-info-card" },
-                React.createElement("h3", null, "Quando usar"),
-                React.createElement("p", null, "Use a consulta antes de lavrar ou solicitar escritura, procuração, ata notarial, reconhecimento de firma, autenticação, apostilamento ou outro ato no e-Notariado.")),
-            React.createElement("div", { className: "pn-info-card" },
-                React.createElement("h3", null, "Como usar"),
-                React.createElement("p", null, "Selecione o tipo de ato, responda às perguntas contextuais e confira o resultado com a base normativa exibida na própria tela.")),
-            React.createElement("div", { className: "pn-info-card" },
-                React.createElement("h3", null, "Como interpretar o resultado"),
-                React.createElement("p", null, "O resultado indica o critério de competência aplicável, o detalhamento da regra e, quando necessário, uma observação interpretativa.")),
-            React.createElement("div", { className: "pn-info-card" },
-                React.createElement("h3", null, "Critérios e fontes"),
-                React.createElement("p", null, "A lógica considera o Código Nacional de Normas da Corregedoria Nacional de Justiça e a Lei nº 8.935/1994, nos dispositivos indicados em cada resposta.")),
-            React.createElement("div", { className: "pn-info-card" },
+    return React.createElement(React.Fragment, null,
+        React.createElement("section", { className: "wrap adsense-section", id: "informacoes-ferramenta", "aria-labelledby": "infoTitulo" },
+            React.createElement("div", { className: "section-kicker" }, "Informações"),
+            React.createElement("h2", { id: "infoTitulo" }, "O que a ferramenta faz"),
+            React.createElement("p", null, "A ferramenta organiza perguntas sobre o tipo de ato notarial eletrônico ou híbrido e indica o critério geral de competência do tabelião de notas, conforme as respostas fornecidas pelo usuário."),
+            React.createElement("div", { className: "info-grid" },
+                React.createElement("article", { className: "info-card" },
+                    React.createElement("h3", null, "Quando usar"),
+                    React.createElement("p", null, "Use antes de solicitar ou preparar escritura, procuração, ata notarial, reconhecimento de firma, autenticação, apostilamento, certificado digital notarizado ou outro ato praticado pelo e-Notariado.")),
+                React.createElement("article", { className: "info-card" },
+                    React.createElement("h3", null, "Como interpretar o resultado"),
+                    React.createElement("p", null, "O resultado indica o tabelião competente, a base normativa aplicável, o detalhamento da regra e eventual observação interpretativa para conferência do caso concreto.")),
+                React.createElement("article", { className: "info-card" },
+                    React.createElement("h3", null, "Limite operacional"),
+                    React.createElement("p", null, "A consulta não substitui a qualificação notarial, a conferência documental, a comprovação de domicílio, a verificação da localização do imóvel nem a decisão do tabelião responsável.")))),
+        React.createElement("section", { className: "wrap bloco-como-utilizar", id: "como-usar" },
+            React.createElement("h2", null, "Como usar a ferramenta"),
+            React.createElement("p", { className: "intro" }, "O fluxo foi organizado para apoiar a triagem inicial da competência em atos eletrônicos e híbridos, sem alterar a análise jurídica do caso concreto."),
+            React.createElement("p", { className: "intro" }, "Selecione o tipo de ato, responda às perguntas contextuais e confira a base normativa exibida no resultado."),
+            React.createElement("div", { className: "cards" },
+                React.createElement("div", { className: "card" },
+                    React.createElement("h3", null, "1. Escolha o ato"),
+                    React.createElement("p", null, "Indique se a consulta envolve escritura pública, parte domiciliada no exterior, ata notarial, procuração, testamento, reconhecimento de firma, autenticação ou apostilamento.")),
+                React.createElement("div", { className: "card" },
+                    React.createElement("h3", null, "2. Responda às perguntas"),
+                    React.createElement("p", null, "Informe os elementos relevantes para a competência, como existência de imóvel, ato híbrido, local do fato, domicílio da parte ou subtipo do ato eletrônico.")),
+                React.createElement("div", { className: "card" },
+                    React.createElement("h3", null, "3. Confira o enquadramento"),
+                    React.createElement("p", null, "Leia o resultado, a base normativa, o detalhamento e as notas de leitura antes de usar a informação em atendimento, minuta ou ato formal."))),
+            React.createElement("div", { className: "alerta" }, "Antes de aplicar o resultado, confirme a redação vigente do Código Nacional de Normas, a documentação apresentada, o domicílio indicado e a natureza jurídica do ato."),
+            React.createElement("div", { className: "atualizacao" }, "Última atualização da ferramenta: 18/05/2026.")));
+}
+
+function CriteriosFontesCompetencia() {
+    return React.createElement("section", { className: "wrap adsense-section", id: "criterios-fontes", "aria-labelledby": "criteriosTitulo" },
+        React.createElement("div", { className: "section-kicker" }, "Critérios e fontes"),
+        React.createElement("h2", { id: "criteriosTitulo" }, "Critérios utilizados na consulta"),
+        React.createElement("p", null, "A consulta considera os critérios de competência territorial e operacional previstos no Código Nacional de Normas da Corregedoria Nacional de Justiça e na Lei nº 8.935/1994, conforme os dispositivos exibidos em cada resultado."),
+        React.createElement("div", { className: "source-grid" },
+            React.createElement("article", { className: "source-box" },
+                React.createElement("h3", null, "Fontes indicadas"),
+                React.createElement("ul", null,
+                    React.createElement("li", null, "Código Nacional de Normas da Corregedoria Nacional de Justiça, Provimento CNJ nº 149/2023."),
+                    React.createElement("li", null, "Arts. 289 e 302 a 306 do Código Nacional de Normas, conforme hipótese indicada."),
+                    React.createElement("li", null, "Art. 313 do Código Nacional de Normas para ato notarial híbrido."),
+                    React.createElement("li", null, "Lei nº 8.935/1994, especialmente art. 8º, quando indicado no resultado."))),
+            React.createElement("article", { className: "source-box" },
                 React.createElement("h3", null, "Limites da ferramenta"),
-                React.createElement("p", null, "A consulta não substitui a conferência de domicílio, localização do imóvel, documentos apresentados, capacidade das partes e demais requisitos do ato."))),
-        React.createElement("section", { className: "pn-faq", "aria-labelledby": "faq-ferramenta" },
-            React.createElement("h3", { id: "faq-ferramenta" }, "Perguntas frequentes"),
+                React.createElement("ul", null,
+                    React.createElement("li", null, "Não substitui a leitura da norma oficial vigente."),
+                    React.createElement("li", null, "Não verifica documentos, capacidade, representação, domicílio ou localização do imóvel."),
+                    React.createElement("li", null, "Não resolve divergência interpretativa entre critérios de competência."),
+                    React.createElement("li", null, "Não dispensa a análise do tabelião responsável pelo ato.")))));
+}
+
+function FaqCompetencia() {
+    return React.createElement("section", { className: "wrap adsense-section faq-bottom", id: "faq", "aria-labelledby": "faqTitulo" },
+        React.createElement("div", { className: "section-kicker" }, "FAQ"),
+        React.createElement("h2", { id: "faqTitulo" }, "Perguntas frequentes"),
+        React.createElement("div", { className: "faq-list" },
             React.createElement("details", null,
                 React.createElement("summary", null, "A ferramenta substitui a análise do tabelião?"),
-                React.createElement("p", null, "Não. A ferramenta organiza critérios gerais e deve ser usada como apoio à consulta. A análise do caso concreto depende dos documentos, das partes e da norma vigente.")),
+                React.createElement("div", { className: "faq-body" }, "Não. A ferramenta organiza critérios gerais de competência e serve como apoio de triagem. A análise do caso concreto depende dos documentos, das partes, da norma vigente e da decisão do tabelião responsável.")),
             React.createElement("details", null,
                 React.createElement("summary", null, "O resultado tem caráter oficial?"),
-                React.createElement("p", null, "Não. O resultado é informativo. Para uso formal, confira a redação vigente das normas e a orientação da serventia responsável pelo ato.")),
+                React.createElement("div", { className: "faq-body" }, "Não. O resultado é informativo. Para uso formal, confira a redação vigente do Código Nacional de Normas e a orientação da serventia competente.")),
             React.createElement("details", null,
                 React.createElement("summary", null, "A ferramenta considera atos híbridos?"),
-                React.createElement("p", null, "Sim. O fluxo possui perguntas próprias para atos híbridos e indica a base normativa correspondente quando essa hipótese é selecionada.")),
+                React.createElement("div", { className: "faq-body" }, "Sim. O fluxo possui perguntas próprias para ato híbrido com imóvel e ato híbrido sem imóvel, com indicação da base normativa correspondente.")),
             React.createElement("details", null,
                 React.createElement("summary", null, "O domicílio precisa ser comprovado?"),
-                React.createElement("p", null, "Sim. Quando o critério utilizado for o domicílio, a comprovação deve observar os documentos e parâmetros aplicáveis ao caso.")),
+                React.createElement("div", { className: "faq-body" }, "Sim. Quando o critério de competência for o domicílio, a comprovação deve observar a documentação aplicável ao caso concreto e a regra indicada no Código Nacional de Normas.")),
             React.createElement("details", null,
-                React.createElement("summary", null, "O que fazer em caso de divergência interpretativa?"),
-                React.createElement("p", null, "A divergência deve ser analisada pelo tabelião responsável, com base na redação normativa vigente, nos documentos apresentados e na natureza do ato."))),
-        React.createElement("div", { className: "pn-note" }, "Em caso concreto, a competência deve ser confirmada pelo tabelião responsável pelo ato, com base nos documentos apresentados e na norma vigente."),
-        React.createElement("span", { className: "pn-meta" }, "Última atualização da ferramenta: 04/05/2026."));
+                React.createElement("summary", null, "O que fazer em caso de dúvida interpretativa?"),
+                React.createElement("div", { className: "faq-body" }, "A dúvida deve ser analisada pelo tabelião responsável, com base na redação vigente da norma, na documentação apresentada e na natureza do ato."))));
 }
 
 function CompetenciaENotariado() {
@@ -881,6 +1208,8 @@ function CompetenciaENotariado() {
                         React.createElement("div", { className: "flex-1" },
                             React.createElement("p", { className: "text-slate-500 text-xs" }, r.pergunta),
                             React.createElement("p", { className: "text-slate-900" }, r.escolha)))))))))),
+        React.createElement(CriteriosFontesCompetencia, null),
+        React.createElement(FaqCompetencia, null),
         React.createElement("footer", { className: "no-print border-t border-stone-300 bg-stone-50 mt-16" },
             React.createElement("div", { className: "max-w-4xl mx-auto px-6 py-10" },
                 React.createElement("p", { className: "text-xs uppercase tracking-[0.25em] text-orange-700 mb-4 font-medium" }, "Notas de leitura"),
