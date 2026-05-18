@@ -1774,7 +1774,6 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
                 <div class="tags">${tags || '<span class="tag gray">sem tema inferido</span>'}</div>
               </div>
             </div>
-            <h3 class="item-heading"><span class="item-number">${escapeHtml(displayRecordLabel(rec))}</span></h3>
             <div class="full-text normative-text">${formatNormativeText(rec, q)}</div>
           </article>`;
       }).join('') + suffix;
@@ -1793,7 +1792,6 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
             <label class="chapter-filter-option">
               <input type="checkbox" data-chapter-select="${escapeHtml(chapter.title)}" ${selected.has(chapter.title) ? 'checked' : ''} />
               <strong class="hierarchy-tag">${formatHierarchyLabel(chapter.title)}</strong>
-              <span class="muted">${chapter.count} itens · a partir de ${escapeHtml(chapter.numero)}</span>
             </label>
             <a class="chapter-go" href="#${chapter.firstId}" data-index-id="${chapter.firstId}">abrir capítulo</a>
           </li>
