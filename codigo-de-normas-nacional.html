@@ -878,6 +878,7 @@ input[type="search"]:focus,select:focus,textarea:focus{border-color:var(--brand)
 .search-input-wrap input{border:0;box-shadow:none;padding:15px 0;font-size:16px;min-height:48px}
 .search-input-wrap input:focus{box-shadow:none}
 .index-list a,.fav-list a,.alteracoes-list a,.alteracoes-list .alteracao-item{font-size:13px;padding:9px 0;border-bottom:1px solid #eef2f7;color:#334155}
+#indexList{max-height:420px;overflow-y:auto;padding-right:6px;overscroll-behavior:contain}
 .result-list{display:grid;gap:14px}
 .result-card{padding:18px;scroll-margin-top:24px}
 .result-card.marked{border-color:var(--brand);box-shadow:0 0 0 4px rgba(0,118,255,.12)}
@@ -2320,7 +2321,7 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
         const existing = merged.get(label) || {};
         merged.set(label, {
           label,
-          url: (typeof item === 'string' ? existing.url : (item.url || existing.url)) || OFFICIAL_PAGE_URL,
+          url: existing.url || (typeof item === 'string' ? '' : item.url) || OFFICIAL_PAGE_URL,
           data: (typeof item === 'string' ? existing.data : (item.data || existing.data)) || datasAlteracoes[label] || ''
         });
       });
