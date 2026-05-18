@@ -278,6 +278,653 @@ tr:last-child td{border-bottom:none}
   th,td{padding:8px 9px}
   .money-cell{white-space:nowrap;text-align:right}
 }
+
+
+/* =========================================================
+   Ajuste visual: padrão Aplicador de Emolumentos
+   Mantém IDs, funções e lógica da ferramenta.
+   ========================================================= */
+:root{
+  --bg:#f5f7fb;
+  --panel:#ffffff;
+  --text:#172033;
+  --muted:#64748b;
+  --line:#d8dee9;
+  --brand:#0076ff;
+  --brand-dark:#005bd1;
+  --soft:#eef5ff;
+  --warn:#fff7ed;
+  --warn-border:#fed7aa;
+  --ok:#ecfdf5;
+  --bad:#fff1f2;
+  --shadow:0 18px 55px rgba(15,23,42,.09);
+  --radius:22px;
+}
+
+body{
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(0,118,255,.12), transparent 32rem),
+    linear-gradient(180deg,#f8fbff 0%,var(--bg) 55%,#eef2f7 100%);
+  color:var(--text);
+  line-height:1.48;
+}
+
+.page{
+  width:min(1120px,calc(100% - 56px));
+  max-width:none;
+  margin:0 auto;
+  padding:34px 0 54px;
+}
+
+.hero{
+  margin:0 0 22px;
+}
+
+.hero-card{
+  background:rgba(255,255,255,.86);
+  border:1px solid rgba(216,222,233,.8);
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  padding:32px 28px 30px;
+  backdrop-filter:blur(12px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  background:var(--soft);
+  color:var(--brand-dark);
+  border:1px solid #cfe2ff;
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.02em;
+  text-transform:none;
+  margin-bottom:14px;
+}
+
+.eyebrow::before{
+  display:none;
+}
+
+h1{
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  margin:0;
+  font-size:clamp(30px,4vw,52px);
+  line-height:1.02;
+  letter-spacing:-.045em;
+  font-weight:850;
+  color:#0f172a;
+}
+
+.lead{
+  margin:20px 0 0;
+  max-width:none;
+  width:100%;
+  color:#334155;
+  font-size:18px;
+  line-height:1.7;
+}
+
+.pn-hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:20px;
+}
+
+.pn-hero-actions a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:10px 14px;
+  border-radius:14px;
+  font-size:14px;
+  font-weight:850;
+  text-decoration:none;
+  border:1px solid transparent;
+  transition:transform .08s, filter .15s, background .15s;
+}
+
+.pn-hero-actions a:hover{
+  text-decoration:none;
+  filter:brightness(.98);
+}
+
+.pn-hero-actions .pn-primary-link{
+  background:var(--brand);
+  color:#fff;
+  border-color:var(--brand);
+  box-shadow:0 12px 28px rgba(0,118,255,.22);
+}
+
+.pn-hero-actions a:not(.pn-primary-link){
+  background:#fff;
+  border-color:#cbd5e1;
+  color:#0f172a;
+}
+
+.pn-editorial,
+.pn-support-section{
+  margin-top:22px;
+  margin-bottom:0;
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(216,222,233,.84);
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  padding:30px 28px;
+  color:#172033;
+}
+
+.pn-editorial h2,
+.pn-support-section h2{
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  margin:0 0 12px;
+  font-size:clamp(28px,3vw,42px);
+  line-height:1.08;
+  letter-spacing:-.035em;
+  font-weight:850;
+  color:#0f172a;
+}
+
+.pn-editorial p,
+.pn-support-section p{
+  color:#334155;
+  margin:0 0 14px;
+  font-size:16px;
+  line-height:1.7;
+}
+
+.pn-info-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-top:22px;
+}
+
+.pn-info-card{
+  background:#fff;
+  border:1px solid #dbe3ef;
+  border-radius:18px;
+  padding:18px;
+  min-height:auto;
+}
+
+.pn-info-card h3{
+  margin:0 0 9px;
+  font-size:16px;
+  line-height:1.25;
+  color:#0f172a;
+  letter-spacing:-.01em;
+}
+
+.pn-info-card p{
+  font-size:14px;
+  color:#475569;
+  line-height:1.65;
+}
+
+.pn-note{
+  margin-top:20px;
+  background:#f8fafc;
+  border-left:4px solid #2563eb;
+  border-radius:0;
+  padding:16px 18px;
+  color:#334155;
+  font-size:16px;
+  line-height:1.7;
+}
+
+.pn-meta{
+  margin-top:16px;
+  font-size:14px;
+  color:#64748b;
+}
+
+.grid{
+  display:block;
+  margin-top:22px;
+}
+
+.panel,
+.result-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:0 12px 36px rgba(15,23,42,.06);
+}
+
+.panel{
+  padding:0 0 24px;
+  overflow:visible;
+}
+
+.panel > .section-kicker{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  background:var(--soft);
+  color:var(--brand-dark);
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:12px;
+  font-weight:850;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin:28px 28px 0;
+}
+
+.question-title{
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  font-size:clamp(26px,3vw,38px);
+  line-height:1.22;
+  font-weight:850;
+  letter-spacing:-.035em;
+  margin:14px 28px 12px;
+  padding-bottom:2px;
+  color:#0f172a;
+}
+
+.panel > p{
+  margin:0 28px 18px;
+  color:#64748b;
+  font-size:14px;
+}
+
+.form-grid{
+  padding:10px 28px 0;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.form-field.full{
+  grid-column:1/-1;
+}
+
+.saved-data-actions{
+  margin-top:2px;
+}
+
+.saved-data-actions .saved-actions-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+}
+
+.saved-data-actions .btn{
+  min-height:42px;
+  padding:10px 14px;
+}
+
+.saved-data-actions .hint{
+  flex-basis:100%;
+}
+
+.uppercase-field{
+  text-transform:uppercase;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:750;
+  color:#273244;
+  margin:0 0 7px;
+}
+
+.hint{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  border:1px solid #cbd5e1;
+  background:#fff;
+  color:var(--text);
+  border-radius:14px;
+  padding:12px;
+  outline:none;
+  transition:border-color .15s, box-shadow .15s;
+}
+
+input,
+select{
+  height:48px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--brand);
+  box-shadow:0 0 0 4px rgba(0,118,255,.12);
+}
+
+.segmented,
+.segmented.three{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+
+.radio-card span{
+  min-height:100px;
+  border:1px solid #dbe3ef;
+  border-radius:18px;
+  background:#fff;
+  padding:18px;
+}
+
+.radio-card input:checked + span{
+  border-color:var(--brand);
+  box-shadow:0 0 0 4px rgba(0,118,255,.12);
+  background:#f8fbff;
+}
+
+.radio-card strong{
+  color:#0f172a;
+}
+
+.actions{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:10px;
+  margin:24px 28px;
+}
+
+.btn{
+  border:0;
+  border-radius:15px;
+  padding:12px 14px;
+  cursor:pointer;
+  font-weight:800;
+  transition:transform .08s, filter .15s, background .15s;
+  justify-content:center;
+}
+
+.btn:active{
+  transform:translateY(1px);
+}
+
+.btn-primary{
+  background:var(--brand);
+  color:white;
+}
+
+.btn-primary:hover{
+  background:var(--brand-dark);
+}
+
+.btn-secondary{
+  background:#e2e8f0;
+  color:#0f172a;
+  border-color:#e2e8f0;
+}
+
+.btn-ghost{
+  background:#fff;
+  border:1px solid #cbd5e1;
+  color:#0f172a;
+ }
+
+.result-card{
+  margin:24px 28px 28px;
+  padding:18px;
+  border-radius:22px;
+}
+
+.result-card h2{
+  margin:0 0 12px;
+  font-size:20px;
+  letter-spacing:-.02em;
+}
+
+.result-total{
+  background:linear-gradient(180deg,var(--brand),var(--brand-dark));
+  color:white;
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:18px;
+}
+
+.result-total::after{
+  display:none;
+}
+
+.result-total .label{
+  color:#dbeafe;
+  font-size:13px;
+  margin:0 0 4px;
+}
+
+.result-total .value{
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:-.035em;
+}
+
+.row-item{
+  padding:12px 0;
+  border-bottom:1px solid #e5eaf2;
+}
+
+.status{
+  display:none;
+  align-items:center;
+  gap:8px;
+  padding:11px 13px;
+  border-radius:14px;
+  background:var(--warn);
+  color:#9a3412;
+  border:1px solid var(--warn-border);
+  font-size:13px;
+  font-weight:700;
+  margin-top:14px;
+}
+
+.status.show{
+  display:flex;
+}
+
+.status.ok{
+  background:var(--ok);
+  color:#047857;
+  border:1px solid #bbf7d0;
+}
+
+.pn-steps{
+  margin:20px 0 0;
+  padding:0;
+  list-style:none;
+  display:grid;
+  gap:12px;
+  counter-reset:none;
+}
+
+.pn-steps li{
+  border:1px solid #dbe3ef;
+  background:#fff;
+  border-radius:16px;
+  padding:14px 18px 14px 60px;
+  color:#475569;
+  font-size:14px;
+  line-height:1.6;
+  position:relative;
+  min-height:62px;
+  display:flex;
+  align-items:center;
+}
+
+.pn-steps li::before{
+  width:34px;
+  height:34px;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+  border-radius:12px;
+  background:var(--soft);
+  color:var(--brand-dark);
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.pn-faq-list{
+  display:grid;
+  gap:10px;
+  margin-top:20px;
+}
+
+.pn-faq-list details{
+  margin:0;
+  border:1px solid #dbe3ef;
+  border-radius:16px;
+  background:#fff;
+  overflow:hidden;
+}
+
+.pn-faq-list summary{
+  padding:14px 16px;
+  background:#f8fafc;
+  color:#0f172a;
+  font-weight:850;
+  cursor:pointer;
+}
+
+.pn-faq-list details p{
+  padding:14px 16px;
+  color:#475569;
+  font-size:14px;
+  line-height:1.65;
+}
+
+.footer{
+  margin-top:22px;
+  padding:15px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  color:#64748b;
+  font-size:13px;
+}
+
+.footer-links,
+.footer-support{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 16px;
+}
+
+.footer-links{
+  padding-top:12px;
+  border-top:1px solid #e2e8f0;
+}
+
+.footer-links a{
+  font-weight:800;
+  color:#0f172a;
+}
+
+.footer-support a{
+  color:var(--brand);
+  font-weight:700;
+}
+
+.footer-small{
+  display:block;
+  color:#64748b;
+  font-size:13px;
+  line-height:1.55;
+}
+
+#gerador{
+  scroll-margin-top:22px;
+}
+
+@media (max-width:980px){
+  .page{
+    width:min(100% - 22px,1220px);
+  }
+
+  .hero-card,
+  .pn-editorial,
+  .pn-support-section{
+    padding:22px 18px;
+    border-radius:22px;
+  }
+
+  .pn-info-grid,
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .actions{
+    grid-template-columns:1fr;
+  }
+
+  .segmented,
+  .segmented.three{
+    grid-template-columns:1fr;
+  }
+
+  .question-title{
+    margin-left:18px;
+    margin-right:18px;
+    line-height:1.22;
+    padding-bottom:2px;
+  }
+
+  .panel > p,
+  .form-grid,
+  .actions,
+  .result-card{
+    margin-left:18px;
+    margin-right:18px;
+  }
+
+  .form-grid{
+    padding-left:0;
+    padding-right:0;
+  }
+}
+
+
+/* Ajuste fino: alinha o título "Dados do ato" com o texto explicativo do bloco. */
+.panel > .question-title{
+  display:block;
+  width:calc(100% - 56px);
+  margin-left:28px !important;
+  margin-right:28px !important;
+  padding-left:0 !important;
+  text-indent:0 !important;
+  transform:none !important;
+}
+.panel > p{
+  margin-left:28px !important;
+  margin-right:28px !important;
+}
+
+@media (max-width:980px){
+  .panel > .question-title{
+    width:calc(100% - 36px);
+    margin-left:18px !important;
+    margin-right:18px !important;
+  }
+  .panel > p{
+    margin-left:18px !important;
+    margin-right:18px !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -337,7 +984,7 @@ tr:last-child td{border-bottom:none}
         <div class="form-grid">
           <div class="form-field">
             <label for="escrevente">Escrevente responsável</label>
-            <input id="escrevente" autocomplete="name" placeholder="Nome do escrevente" required />
+            <input id="escrevente" class="uppercase-field" autocomplete="name" placeholder="Nome do escrevente" required />
           </div>
 
           <div class="form-field">
@@ -347,12 +994,20 @@ tr:last-child td{border-bottom:none}
 
           <div class="form-field">
             <label for="cartorio">Cartório</label>
-            <input id="cartorio" autocomplete="organization" placeholder="Nome do cartório" required />
+            <input id="cartorio" class="uppercase-field" autocomplete="organization" placeholder="Nome do cartório" required />
           </div>
 
           <div class="form-field">
             <label for="solicitadoPor">Solicitado por</label>
-            <input id="solicitadoPor" autocomplete="name" placeholder="Nome completo do solicitante" required />
+            <input id="solicitadoPor" class="uppercase-field" autocomplete="name" placeholder="Nome completo do solicitante" required />
+          </div>
+
+          <div class="form-field full saved-data-actions">
+            <div class="saved-actions-row" aria-label="Dados salvos neste navegador">
+              <button type="button" class="btn btn-secondary" id="btnSalvarDadosCartorio">Salvar dados do cartório</button>
+              <button type="button" class="btn btn-ghost" id="btnLimparDadosCartorio">Limpar dados salvos</button>
+            </div>
+            <span class="hint" id="dadosCartorioStatus">Salva neste navegador: escrevente responsável, contato escrevente e solicitado por.</span>
           </div>
 
           <div class="form-field full">
@@ -617,7 +1272,16 @@ const TABELA_REGISTRO = [
 let ultimoResultado = null;
 
 const el = (id) => document.getElementById(id);
+const CHAVE_DADOS_CARTORIO = 'portalNotarial.orcamento.dadosCartorio';
+const CAMPOS_CAIXA_ALTA = ['escrevente','cartorio','solicitadoPor'];
 const dinheiroInputs = ['valorBase','valorOutros'];
+
+CAMPOS_CAIXA_ALTA.forEach((id) => {
+  const campo = el(id);
+  if (!campo) return;
+  campo.addEventListener('input', () => converterCampoParaCaixaAlta(campo));
+  campo.addEventListener('blur', () => converterCampoParaCaixaAlta(campo));
+});
 
 dinheiroInputs.forEach((id) => {
   const campo = el(id);
@@ -656,10 +1320,83 @@ el('btnImprimir').addEventListener('click', imprimirOrcamento);
 el('btnGerarPDF').addEventListener('click', gerarPDF);
 el('btnCopiar').addEventListener('click', copiarResultado);
 
+const btnSalvarDadosCartorio = el('btnSalvarDadosCartorio');
+if (btnSalvarDadosCartorio) btnSalvarDadosCartorio.addEventListener('click', salvarDadosCartorio);
+
+const btnLimparDadosCartorio = el('btnLimparDadosCartorio');
+if (btnLimparDadosCartorio) btnLimparDadosCartorio.addEventListener('click', limparDadosCartorioSalvos);
+
+carregarDadosCartorioSalvos();
 configuraCamposObrigatorios();
 atualizaCamposTributo();
 calcular(false);
 ocultarResultado();
+
+function converterCampoParaCaixaAlta(campo){
+  if (!campo) return;
+  const inicio = campo.selectionStart;
+  const fim = campo.selectionEnd;
+  const valorConvertido = String(campo.value || '').toLocaleUpperCase('pt-BR');
+  if (campo.value !== valorConvertido) {
+    campo.value = valorConvertido;
+    try {
+      campo.setSelectionRange(inicio, fim);
+    } catch (error) {
+      // Campo pode não permitir seleção em alguns navegadores.
+    }
+  }
+}
+
+function normalizarCamposCaixaAlta(){
+  CAMPOS_CAIXA_ALTA.forEach((id) => converterCampoParaCaixaAlta(el(id)));
+}
+
+function informarStatusDadosCartorio(mensagem){
+  const status = el('dadosCartorioStatus');
+  if (status) status.textContent = mensagem;
+}
+
+function salvarDadosCartorio(){
+  normalizarCamposCaixaAlta();
+  const dados = {
+    escrevente: el('escrevente')?.value.trim() || '',
+    contatoEscrevente: el('contatoEscrevente')?.value.trim() || '',
+    solicitadoPor: el('solicitadoPor')?.value.trim() || ''
+  };
+
+  try {
+    localStorage.setItem(CHAVE_DADOS_CARTORIO, JSON.stringify(dados));
+    informarStatusDadosCartorio('Dados salvos neste navegador.');
+  } catch (error) {
+    informarStatusDadosCartorio('Não foi possível salvar os dados neste navegador.');
+  }
+}
+
+function carregarDadosCartorioSalvos(){
+  try {
+    const salvo = localStorage.getItem(CHAVE_DADOS_CARTORIO);
+    if (!salvo) return;
+    const dados = JSON.parse(salvo);
+
+    if (dados.escrevente && el('escrevente')) el('escrevente').value = dados.escrevente;
+    if (dados.contatoEscrevente && el('contatoEscrevente')) el('contatoEscrevente').value = dados.contatoEscrevente;
+    if (dados.solicitadoPor && el('solicitadoPor')) el('solicitadoPor').value = dados.solicitadoPor;
+
+    normalizarCamposCaixaAlta();
+    informarStatusDadosCartorio('Dados salvos carregados neste navegador.');
+  } catch (error) {
+    informarStatusDadosCartorio('Não foi possível carregar os dados salvos.');
+  }
+}
+
+function limparDadosCartorioSalvos(){
+  try {
+    localStorage.removeItem(CHAVE_DADOS_CARTORIO);
+    informarStatusDadosCartorio('Dados salvos removidos deste navegador.');
+  } catch (error) {
+    informarStatusDadosCartorio('Não foi possível remover os dados salvos.');
+  }
+}
 
 function configuraCamposObrigatorios(){
   ['escrevente','contatoEscrevente','cartorio','solicitadoPor','naturezaAto','valorBase'].forEach((id) => {
@@ -696,6 +1433,7 @@ function atualizaObrigatoriedadeCondicional(){
 }
 
 function validarCamposObrigatorios(){
+  normalizarCamposCaixaAlta();
   atualizaObrigatoriedadeCondicional();
 
   const campos = ['escrevente','contatoEscrevente','cartorio','solicitadoPor','naturezaAto','valorBase'];
@@ -808,6 +1546,7 @@ function buscaFaixa(valorBase, tabela){
 }
 
 function calcular(rolar = true, validar = rolar){
+  normalizarCamposCaixaAlta();
   if (validar && !validarCamposObrigatorios()) return false;
 
   const valorBase = parseMoeda(el('valorBase').value);
