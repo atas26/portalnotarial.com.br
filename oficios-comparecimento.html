@@ -4,6 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gerador de ofício para declaração de comparecimento</title>
+  <meta name="description" content="Ferramenta para gerar ofício de declaração de comparecimento, com preenchimento dos dados, prévia editável, template em PDF e emissão do arquivo final para conferência do usuário." />
+  <meta name="robots" content="index,follow" />
+  <meta name="google-adsense-account" content="ca-pub-1578115877344777" />
+  <link rel="canonical" href="https://portalnotarial.com.br/oficios-comparecimento.html" />
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1578115877344777"
+     crossorigin="anonymous"></script>
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-TTD149ZWLC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TTD149ZWLC');
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
@@ -25,451 +40,702 @@
       font-display: swap;
     }
 
-    :root {
-      --azul: rgb(0, 118, 255);
-      --azul-escuro: #0f172a;
-      --cinza: #64748b;
-      --cinza-claro: #f6f8fb;
-      --borda: #dbe3ef;
-      --branco: #ffffff;
-      --vermelho: rgb(232, 57, 70);
+    :root{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --text:#172033;
+      --muted:#64748b;
+      --line:#d8dee9;
+      --brand:#0076ff;
+      --brand-dark:#005bd1;
+      --soft:#eef5ff;
+      --warn:#fff7ed;
+      --warn-border:#fed7aa;
+      --ok:#ecfdf5;
+      --bad:#fff1f2;
+      --danger:#e83946;
+      --shadow:0 18px 55px rgba(15,23,42,.09);
+      --radius:22px;
     }
 
-    * {
-      box-sizing: border-box;
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(0,118,255,.12), transparent 32rem),
+        linear-gradient(180deg,#f8fbff 0%,var(--bg) 55%,#eef2f7 100%);
+      color:var(--text);
+      line-height:1.48;
     }
 
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--cinza-claro);
-      color: var(--azul-escuro);
+    a{color:var(--brand-dark)}
+
+    .shell{
+      width:min(1220px,calc(100% - 32px));
+      margin:0 auto;
+      padding:34px 0 54px;
     }
 
-    .shell {
-      max-width: 1120px;
-      margin: 34px auto;
-      padding: 0 20px 40px;
+    .hero{
+      background:rgba(255,255,255,.86);
+      border:1px solid rgba(216,222,233,.8);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:32px 28px 30px;
+      margin:0 0 22px;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:0;
+      align-items:stretch;
+      backdrop-filter:blur(12px);
     }
 
-    .hero {
-      background: linear-gradient(135deg, #ffffff 0%, #eef6ff 100%);
-      border: 1px solid var(--borda);
-      border-radius: 22px;
-      padding: 28px;
-      margin-bottom: 22px;
-      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+    .eyebrow{
+      display:inline-flex;
+      width:max-content;
+      gap:8px;
+      align-items:center;
+      background:var(--soft);
+      color:var(--brand-dark);
+      border:1px solid #cfe2ff;
+      border-radius:999px;
+      padding:6px 12px;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.02em;
+      margin:0 0 14px;
     }
 
-    .hero h1 {
-      margin: 0 0 10px;
-      font-size: 28px;
-      line-height: 1.2;
+    .hero h1,
+    h1{
+      margin:0;
+      font-size:clamp(30px,4vw,52px);
+      line-height:1.02;
+      letter-spacing:-.045em;
+      color:#0f172a;
     }
 
-    .hero p {
-      margin: 0;
-      max-width: 840px;
-      color: #42526b;
-      line-height: 1.55;
-      font-size: 15px;
+    .hero p{
+      margin:20px 0 0;
+      max-width:none;
+      width:100%;
+      color:#334155;
+      font-size:18px;
+      line-height:1.7;
     }
 
-    .alerta {
-      margin-top: 18px;
-      border: 1px solid rgba(232, 57, 70, 0.32);
-      background: rgba(232, 57, 70, 0.08);
-      color: #8a1f2c;
-      border-radius: 14px;
-      padding: 13px 15px;
-      font-size: 14px;
-      line-height: 1.45;
+    .alerta{
+      margin-top:18px;
+      max-width:none;
+      width:100%;
+      color:#475569;
+      font-size:14px;
+      line-height:1.65;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-left:4px solid var(--brand);
+      border-radius:14px;
+      padding:14px 16px;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:20px;
     }
 
-    .card {
-      background: var(--branco);
-      border: 1px solid var(--borda);
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+    .hero-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:42px;
+      padding:10px 14px;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:850;
+      text-decoration:none;
+      border:1px solid transparent;
     }
 
-    .card.full {
-      grid-column: 1 / -1;
+    .hero-link:hover{
+      text-decoration:none;
+      filter:brightness(.98);
     }
 
-    .card h2 {
-      margin: 0 0 16px;
-      font-size: 18px;
+    .hero-link.primary-link{
+      background:var(--brand);
+      color:#fff;
+      box-shadow:0 12px 28px rgba(0,118,255,.22);
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
+    .hero-link.secondary-link{
+      background:#fff;
+      border-color:#cbd5e1;
+      color:#0f172a;
     }
 
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
+    .adsense-section{
+      margin-top:22px;
+      background:rgba(255,255,255,.88);
+      border:1px solid rgba(216,222,233,.84);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:30px 28px;
+      scroll-margin-top:26px;
     }
 
-    .field.full {
-      grid-column: 1 / -1;
+    .section-kicker{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      background:var(--soft);
+      color:var(--brand-dark);
+      border-radius:999px;
+      padding:6px 12px;
+      font-size:12px;
+      font-weight:850;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      margin-bottom:14px;
     }
 
-    label {
-      font-size: 13px;
-      font-weight: 700;
-      color: #263449;
+    .adsense-section h2{
+      margin:0 0 12px;
+      font-size:clamp(28px,3vw,42px);
+      line-height:1.08;
+      letter-spacing:-.035em;
+      color:#0f172a;
     }
 
-    input,
-    select,
-    textarea {
-      width: 100%;
-      border: 1px solid var(--borda);
-      border-radius: 12px;
-      padding: 11px 12px;
-      font-size: 14px;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--azul-escuro);
-      background: #fff;
-      outline: none;
+    .adsense-section p{
+      color:#334155;
+      margin:0;
+      font-size:16px;
+      line-height:1.7;
     }
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--azul);
-      box-shadow: 0 0 0 3px rgba(0, 118, 255, 0.12);
+    .info-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+      margin-top:22px;
+    }
+
+    .info-card{
+      background:#fff;
+      border:1px solid #dbe3ef;
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .info-card h3{
+      margin:0 0 9px;
+      font-size:16px;
+      line-height:1.25;
+      color:#0f172a;
+      letter-spacing:-.01em;
+    }
+
+    .info-card p{
+      font-size:14px;
+      color:#475569;
+      line-height:1.65;
+    }
+
+    .use-steps{
+      margin:20px 0 0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:12px;
+    }
+
+    .use-steps li{
+      display:grid;
+      grid-template-columns:34px 1fr;
+      gap:12px;
+      align-items:start;
+      background:#fff;
+      border:1px solid #dbe3ef;
+      border-radius:16px;
+      padding:14px;
+      color:#475569;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .use-steps strong{color:#0f172a}
+
+    .step-number{
+      width:34px;
+      height:34px;
+      display:grid;
+      place-items:center;
+      border-radius:12px;
+      background:var(--soft);
+      color:var(--brand-dark);
+      font-weight:900;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:18px;
+      align-items:start;
+      margin-top:22px;
+      scroll-margin-top:22px;
+    }
+
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow:0 12px 36px rgba(15,23,42,.06);
+    }
+
+    .card.full{grid-column:1 / -1}
+
+    .card h2,
+    .card-title-row h2{
+      margin:0 0 16px;
+      font-size:20px;
+      letter-spacing:-.02em;
+      color:#0f172a;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    .field{display:flex;flex-direction:column;gap:0}
+    .field.full{grid-column:1 / -1}
+
+    label{
+      display:block;
+      font-size:13px;
+      font-weight:750;
+      color:#273244;
+      margin:0 0 7px;
+    }
+
+    input,select,button,textarea{font:inherit}
+
+    input,select,textarea{
+      width:100%;
+      border:1px solid #cbd5e1;
+      background:#fff;
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 12px;
+      outline:none;
+      transition:border-color .15s, box-shadow .15s;
+    }
+
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--brand);
+      box-shadow:0 0 0 4px rgba(0,118,255,.12);
+    }
+
+    textarea{min-height:88px;resize:vertical}
+
+    .small-note,
+    .hint{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
+      margin-top:6px;
     }
 
     .actions,
-    .cartorio-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin-top: 18px;
+    .cartorio-actions,
+    .template-actions{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      align-items:center;
+      margin-top:18px;
     }
 
-    .cartorio-actions {
-      margin-top: 2px;
+    .cartorio-actions,
+    .template-actions{margin-top:10px}
+
+    .template-toggle{
+      width:100%;
+      margin:0 0 18px;
+      background:#e2e8f0;
+      color:#0f172a;
+      text-align:center;
     }
 
-    button {
-      border: 0;
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.15s ease, opacity 0.15s ease;
+    .template-panel{
+      display:none;
     }
 
-    button:hover {
-      transform: translateY(-1px);
+    .template-panel.is-visible{
+      display:block;
     }
 
-    button:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-      transform: none;
+    button{
+      border:0;
+      border-radius:15px;
+      padding:12px 14px;
+      cursor:pointer;
+      font-weight:800;
+      transition:transform .08s, filter .15s, background .15s, opacity .15s;
     }
 
-    .btn-primary {
-      background: var(--azul);
-      color: #fff;
+    button:active{transform:translateY(1px)}
+    button:hover{filter:brightness(.98)}
+    button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+
+    .btn-primary{
+      background:var(--brand);
+      color:#fff;
+      box-shadow:0 12px 28px rgba(0,118,255,.18);
     }
 
-    .btn-secondary {
-      background: #e9eef6;
-      color: #172033;
+    .btn-primary:hover{background:var(--brand-dark)}
+
+    .btn-secondary{
+      background:#e2e8f0;
+      color:#0f172a;
     }
 
-    .btn-danger {
-      background: rgba(232, 57, 70, 0.12);
-      color: #8a1f2c;
+    .btn-danger{
+      background:#fee2e2;
+      color:#991b1b;
     }
 
-    .status {
-      margin-top: 14px;
-      padding: 12px 14px;
-      background: #f8fafc;
-      border: 1px solid var(--borda);
-      border-radius: 12px;
-      color: #334155;
-      font-size: 14px;
-      line-height: 1.45;
-      white-space: pre-line;
+    .status,
+    .template-status{
+      margin-top:14px;
+      padding:13px 14px;
+      background:#f8fbff;
+      border:1px solid #dbeafe;
+      border-radius:17px;
+      color:#334155;
+      font-size:14px;
+      line-height:1.55;
+      white-space:pre-line;
     }
 
-    .small-note {
-      font-size: 12px;
-      color: var(--cinza);
-      line-height: 1.4;
-      margin-top: 7px;
+    .template-status{
+      font-size:12px;
+      margin-top:8px;
+      color:#475569;
+      border-radius:14px;
+      background:#f8fafc;
+      border-color:#e2e8f0;
     }
 
-
-
-    .signature-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    .signature-options{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
     }
 
-    .signature-option {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      border: 1px solid var(--borda);
-      border-radius: 14px;
-      padding: 14px;
-      background: #ffffff;
-      cursor: pointer;
+    .signature-option{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      border:1px solid #dbe3ef;
+      border-radius:16px;
+      padding:14px;
+      background:#f8fafc;
+      cursor:pointer;
     }
 
-    .signature-option input {
-      width: auto;
-      margin-top: 3px;
-      cursor: pointer;
+    .signature-option:hover{background:#fff}
+
+    .signature-option input{
+      width:auto;
+      margin-top:3px;
+      cursor:pointer;
     }
 
-    .signature-option strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 14px;
-      color: #172033;
+    .signature-option strong{
+      display:block;
+      margin-bottom:4px;
+      font-size:14px;
+      color:#172033;
     }
 
-    .signature-option span {
-      display: block;
-      font-size: 12px;
-      line-height: 1.4;
-      color: var(--cinza);
+    .signature-option span{
+      display:block;
+      font-size:12px;
+      line-height:1.4;
+      color:var(--muted);
     }
 
-    .preview .oficio-signature-line {
-      width: 8cm;
-      height: 18pt;
-      margin: 0 auto 6pt;
-      border-bottom: 1px solid #000000;
+    .card-title-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
     }
 
-    .preview .oficio-digital-note {
-      margin: -2pt 0 6pt;
-      text-align: center;
-      line-height: 1.5;
-      font-size: 12pt;
+    .card-title-row h2{margin:0}
+
+    .preview-panel{
+      display:none;
+      overflow-x:auto;
+      padding-bottom:8px;
     }
 
-    .template-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
+    .preview-panel.is-visible{display:block}
+
+    .preview{
+      width:21cm;
+      max-width:100%;
+      min-height:29.7cm;
+      margin:0 auto;
+      background:#ffffff;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      padding:6cm 2cm 2.5cm 2cm;
+      font-family:Carlito, Calibri, "Segoe UI", Arial, sans-serif;
+      line-height:1.5;
+      color:#000000;
+      font-size:12pt;
+      letter-spacing:normal;
+      word-spacing:normal;
+      box-shadow:0 16px 36px rgba(15,23,42,.10);
     }
 
-    .template-status {
-      margin-top: 8px;
-      padding: 9px 11px;
-      border-radius: 10px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      color: #475569;
-      font-size: 12px;
-      line-height: 1.4;
+    .preview.is-editing{
+      background:#fff;
+      border-color:var(--brand);
+      box-shadow:0 0 0 4px rgba(0,118,255,.12);
     }
 
-    .card-title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
+    .preview[contenteditable="true"]{outline:none}
+
+    .preview .oficio-line{margin:0 0 6pt;line-height:1.5}
+    .preview .oficio-right{margin:0 0 8pt;text-align:right;line-height:1.5}
+    .preview .oficio-space{height:14pt}
+    .preview .oficio-title{margin:0 0 18pt;font-weight:700;text-transform:uppercase;text-align:center;line-height:1.5}
+    .preview .oficio-paragraph{margin:0 0 12pt;text-align:justify;line-height:1.5}
+    .preview .oficio-signature{margin:0 0 6pt;font-weight:700;text-transform:uppercase;text-align:center;line-height:1.5}
+    .preview .oficio-center{margin:0 0 6pt;text-align:center;line-height:1.5}
+    .preview .oficio-signature-line{width:8cm;height:18pt;margin:0 auto 6pt;border-bottom:1px solid #000}
+    .preview .oficio-digital-note{margin:-2pt 0 6pt;text-align:center;line-height:1.5;font-size:12pt}
+
+    .source-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      margin-top:20px;
     }
 
-    .card-title-row h2 {
-      margin: 0;
+    .source-box{
+      background:#fff;
+      border:1px solid #dbe3ef;
+      border-radius:18px;
+      padding:18px;
     }
 
-    .preview-panel {
-      display: none;
-      overflow-x: auto;
-      padding-bottom: 8px;
+    .source-box h3{
+      margin:0 0 9px;
+      font-size:16px;
+      color:#0f172a;
     }
 
-    .preview-panel.is-visible {
-      display: block;
+    .source-box ul{
+      margin:0;
+      padding-left:18px;
+      color:#475569;
+      font-size:14px;
+      line-height:1.65;
     }
 
-    .preview {
-      width: 21cm;
-      max-width: 100%;
-      min-height: 29.7cm;
-      margin: 0 auto;
-      background: #ffffff;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      padding: 6cm 2cm 2.5cm 2cm;
-      font-family: Carlito, Calibri, "Segoe UI", Arial, sans-serif;
-      line-height: 1.5;
-      color: #000000;
-      font-size: 12pt;
-      letter-spacing: normal;
-      word-spacing: normal;
-      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.10);
+    .faq-list{
+      display:grid;
+      gap:10px;
+      margin-top:20px;
     }
 
-    .preview.is-editing {
-      background: #ffffff;
-      border-color: var(--azul);
-      box-shadow: 0 0 0 3px rgba(0, 118, 255, 0.10);
+    details{
+      margin-top:14px;
+      border:1px solid #dbe3ef;
+      border-radius:16px;
+      background:#fff;
+      overflow:hidden;
     }
 
-    .preview[contenteditable="true"] {
-      outline: none;
+    .faq-list details{margin:0}
+
+    summary{
+      cursor:pointer;
+      padding:14px 16px;
+      font-weight:850;
+      background:#f8fafc;
+      color:#0f172a;
     }
 
-    .preview .oficio-line {
-      margin: 0 0 6pt;
-      line-height: 1.5;
+    .faq-list .faq-body{
+      padding:14px 16px;
+      color:#475569;
+      font-size:14px;
+      line-height:1.65;
     }
 
-    .preview .oficio-right {
-      margin: 0 0 8pt;
-      text-align: right;
-      line-height: 1.5;
+    footer{
+      color:#64748b;
+      font-size:13px;
+      padding:0 0 44px;
     }
 
-    .preview .oficio-space {
-      height: 14pt;
+    footer .shell{
+      width:min(1220px,calc(100% - 32px));
+      margin:0 auto;
+      padding:0;
     }
 
-    .preview .oficio-title {
-      margin: 0 0 18pt;
-      font-weight: 700;
-      text-transform: uppercase;
-      text-align: center;
-      line-height: 1.5;
+    .src{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:15px;
     }
 
-    .preview .oficio-paragraph {
-      margin: 0 0 12pt;
-      text-align: justify;
-      line-height: 1.5;
+    .src p{margin:0 0 8px}
+    .src p:last-child{margin-bottom:0}
+
+    .institutional-nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px 16px;
+      margin-top:12px;
+      padding-top:12px;
+      border-top:1px solid #e2e8f0;
     }
 
-    .preview .oficio-signature {
-      margin: 0 0 6pt;
-      font-weight: 700;
-      text-transform: uppercase;
-      text-align: center;
-      line-height: 1.5;
+    .institutional-nav a{
+      font-weight:800;
+      color:#0f172a;
+      text-decoration:none;
     }
 
-    .preview .oficio-center {
-      margin: 0 0 6pt;
-      text-align: center;
-      line-height: 1.5;
+    .institutional-nav a:hover{text-decoration:underline}
+
+    @media (max-width:980px){
+      .grid{grid-template-columns:1fr}
+      .info-grid,.source-grid{grid-template-columns:1fr}
     }
 
-    footer {
-      color: var(--cinza);
-      font-size: 12px;
-      text-align: center;
-      padding: 20px;
+    @media (max-width:820px){
+      .form-grid,.signature-options{grid-template-columns:1fr}
+      .card-title-row{align-items:flex-start;flex-direction:column}
     }
 
-    @media print {
-      @page {
-        size: A4;
-        margin: 6cm 2cm 2.5cm 2cm;
-      }
-
-      body {
-        background: #ffffff;
-      }
-
-      body * {
-        visibility: hidden !important;
-      }
-
-      .preview,
-      .preview * {
-        visibility: visible !important;
-      }
-
-      .preview {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 17cm;
-        min-height: auto;
-        border: 0;
-        border-radius: 0;
-        background: #ffffff;
-        padding: 0;
-        color: #000000;
-        box-shadow: none;
-        font-family: Carlito, Calibri, Arial, sans-serif;
-        font-size: 12pt;
-        line-height: 1.5;
-      }
+    @media (max-width:620px){
+      .shell{width:min(100% - 22px,1220px);padding-top:22px}
+      .hero,.adsense-section,.card{padding:18px}
+      .actions,.cartorio-actions,.template-actions{grid-template-columns:1fr}
+      .hero h1,h1{font-size:30px}
+      .hero p{font-size:16px}
     }
 
-    @media (max-width: 820px) {
-      .grid,
-      .form-grid,
-      .signature-options {
-        grid-template-columns: 1fr;
-      }
-
-      .hero h1 {
-        font-size: 24px;
-      }
-
-      .card-title-row {
-        align-items: flex-start;
-        flex-direction: column;
+    @media print{
+      @page{size:A4;margin:6cm 2cm 2.5cm 2cm}
+      body{background:#fff}
+      body *{visibility:hidden!important}
+      .preview,.preview *{visibility:visible!important}
+      .preview{
+        position:absolute;
+        left:0;
+        top:0;
+        width:17cm;
+        min-height:auto;
+        border:0;
+        border-radius:0;
+        background:#fff;
+        padding:0;
+        color:#000;
+        box-shadow:none;
+        font-family:Carlito, Calibri, Arial, sans-serif;
+        font-size:12pt;
+        line-height:1.5;
       }
     }
   </style>
 </head>
 <body>
   <main class="shell">
-    <section class="hero">
-      <h1>Gerador de ofício para declaração de comparecimento</h1>
+    <section class="hero" aria-labelledby="titulo">
+      <div class="eyebrow">Ofícios notariais</div>
+      <h1 id="titulo">Gerador de ofício para declaração de comparecimento</h1>
       <p>
         Preencha os dados da pessoa atendida, revise a prévia da declaração e gere um PDF no padrão do ofício.
       </p>
       <div class="alerta">
         Revise todos os campos antes de gerar o arquivo final. A ferramenta monta a declaração com base nos dados informados pelo usuário.
       </div>
+      <div class="hero-actions" aria-label="Atalhos da página">
+        <a class="hero-link primary-link" href="#ferramenta">Ir para a ferramenta</a>
+        <a class="hero-link secondary-link" href="#criterios-fontes">Ver critérios e fontes</a>
+      </div>
     </section>
 
-    <section class="grid">
+    <section class="adsense-section" id="informacoes-ferramenta" aria-labelledby="infoTitulo">
+      <div class="section-kicker">Informações</div>
+      <h2 id="infoTitulo">O que a ferramenta faz</h2>
+      <p>
+        A ferramenta gera uma declaração de comparecimento com base nos dados informados pelo usuário. Ela permite preencher identificação do comparecente, data, horários, cartório, escrevente, assinante, cargo, tipo de assinatura e template do cartório em PDF.
+      </p>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <h3>Quando usar</h3>
+          <p>Use quando for necessário emitir uma declaração simples de comparecimento para comprovar que determinada pessoa esteve no cartório em data e horário informados, para tratar de assuntos particulares.</p>
+        </article>
+        <article class="info-card">
+          <h3>Como interpretar o resultado</h3>
+          <p>O resultado é a prévia da declaração e o PDF final gerado a partir dos campos preenchidos. Antes de usar o arquivo, confira nomes, documentos, data, horários, cargo, assinatura e template aplicado.</p>
+        </article>
+        <article class="info-card">
+          <h3>Limite operacional</h3>
+          <p>A ferramenta não verifica a presença física do comparecente, não consulta sistemas externos e não substitui a conferência do atendimento realizado pela serventia.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="adsense-section" id="como-usar" aria-labelledby="comoUsarTitulo">
+      <div class="section-kicker">Como usar</div>
+      <h2 id="comoUsarTitulo">Como usar a ferramenta</h2>
+      <p>
+        Preencha os campos obrigatórios, selecione o tipo de assinatura, revise a prévia e gere o PDF final. O template do cartório é opcional e pode ser salvo neste navegador para uso posterior.
+      </p>
+      <ol class="use-steps">
+        <li><span class="step-number">1</span><span><strong>Informe os dados.</strong> Preencha protocolo, ano, cartório, escrevente, comparecente, CPF, RG, data, horários, assinante e cargo.</span></li>
+        <li><span class="step-number">2</span><span><strong>Revise a prévia.</strong> Abra a prévia, confira o texto e, se necessário, edite diretamente o conteúdo antes da emissão.</span></li>
+        <li><span class="step-number">3</span><span><strong>Gere ou imprima.</strong> Escolha assinatura digital ou física e use os botões de geração ou impressão da declaração.</span></li>
+      </ol>
+    </section>
+
+    <section class="grid" id="ferramenta">
       <div class="card full">
         <h2>1. Arquivos</h2>
-        <div class="form-grid">
-          <div class="field full">
-            <label for="templatePdf">Template do cartório em PDF</label>
-            <input type="file" id="templatePdf" accept="application/pdf" />
-            <div class="small-note">Opcional. Use um papel timbrado em PDF para mesclar com a declaração.</div>
-            <div class="template-actions">
-              <button type="button" class="btn-secondary" id="btnSalvarTemplate">Salvar template como modelo</button>
-              <button type="button" class="btn-danger" id="btnLimparTemplate">Limpar template salvo</button>
+        <button type="button" class="template-toggle" id="btnToggleTemplate" aria-expanded="false" aria-controls="templateCampos">Mostrar campos do template do cartório</button>
+        <div class="template-panel" id="templateCampos">
+          <div class="form-grid">
+            <div class="field full">
+              <label for="templatePdf">Template do cartório em PDF</label>
+              <input type="file" id="templatePdf" accept="application/pdf" />
+              <div class="small-note">Opcional. Use um papel timbrado em PDF para mesclar com a declaração.</div>
+              <div class="template-actions">
+                <button type="button" class="btn-secondary" id="btnSalvarTemplate">Salvar template como modelo</button>
+                <button type="button" class="btn-danger" id="btnLimparTemplate">Limpar template salvo</button>
+              </div>
+              <div class="template-status" id="templateStatus">Nenhum template salvo neste navegador.</div>
             </div>
-            <div class="template-status" id="templateStatus">Nenhum template salvo neste navegador.</div>
           </div>
         </div>
         <div class="status" id="statusBox">Preencha os dados e revise a prévia antes de gerar o PDF final.</div>
@@ -605,16 +871,90 @@
         </div>
       </div>
     </section>
+
+    <section class="adsense-section" id="criterios-fontes" aria-labelledby="criteriosTitulo">
+      <div class="section-kicker">Critérios e fontes</div>
+      <h2 id="criteriosTitulo">Critérios utilizados</h2>
+      <p>
+        A declaração é formada com os dados digitados pelo usuário, com validação básica de CPF, data e campos obrigatórios. O PDF final pode usar template em PDF indicado pelo usuário e é montado no próprio navegador com as bibliotecas externas carregadas na página.
+      </p>
+
+      <div class="source-grid">
+        <article class="source-box">
+          <h3>Fontes utilizadas pela ferramenta</h3>
+          <ul>
+            <li>Dados preenchidos pelo usuário no formulário.</li>
+            <li>Template do cartório enviado ou salvo no navegador, quando utilizado.</li>
+            <li>Texto da prévia da declaração, inclusive quando editado manualmente pelo usuário.</li>
+            <li>Rotina local de validação do CPF informado.</li>
+          </ul>
+        </article>
+        <article class="source-box">
+          <h3>Limites da ferramenta</h3>
+          <ul>
+            <li>Não confirma comparecimento em sistema externo.</li>
+            <li>Não valida RG em base oficial.</li>
+            <li>Não substitui a conferência do atendimento, da identidade e da finalidade da declaração.</li>
+            <li>Não guarda os dados em servidor próprio. Os dados salvos ficam no navegador do usuário.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="adsense-section" id="faq" aria-labelledby="faqTitulo">
+      <div class="section-kicker">FAQ</div>
+      <h2 id="faqTitulo">Perguntas frequentes</h2>
+
+      <div class="faq-list">
+        <details>
+          <summary>A declaração é emitida automaticamente sem conferência?</summary>
+          <div class="faq-body">Não. O usuário deve conferir todos os dados, a prévia e o PDF final antes de utilizar o documento.</div>
+        </details>
+        <details>
+          <summary>O template do cartório é obrigatório?</summary>
+          <div class="faq-body">Não. O template em PDF é opcional. Quando selecionado ou salvo neste navegador, ele é aplicado como fundo da declaração.</div>
+        </details>
+        <details>
+          <summary>Os dados são enviados para servidor?</summary>
+          <div class="faq-body">A montagem da declaração ocorre no navegador. O salvamento de dados do cartório e template usa recursos locais do navegador, como localStorage e IndexedDB.</div>
+        </details>
+        <details>
+          <summary>A ferramenta verifica a identidade do comparecente?</summary>
+          <div class="faq-body">Não. A ferramenta apenas valida a estrutura do CPF informado. A conferência de identidade e do atendimento deve ser feita pela serventia.</div>
+        </details>
+        <details>
+          <summary>Posso editar o texto antes de gerar o PDF?</summary>
+          <div class="faq-body">Sim. A prévia é editável. Após concluir a edição, o PDF será gerado com o texto exibido na prévia.</div>
+        </details>
+      </div>
+    </section>
   </main>
 
   <footer>
-    Ferramenta em versão inicial. O usuário deve revisar todos os dados antes de gerar o PDF final.
+    <div class="shell">
+      <div class="src">
+        <p>Ferramenta em versão inicial. O usuário deve revisar todos os dados antes de gerar o PDF final.</p>
+        <p>Uso recomendado. Apoio à redação e emissão de declaração de comparecimento. O resultado não substitui a conferência do caso concreto.</p>
+        <p>Projeto apoiado por <a href="https://escriturapublica.substack.com" target="_blank" rel="noopener">Escritura Pública</a> | <a href="https://www.atesta.com.br" target="_blank" rel="noopener">Atesta</a></p>
+        <nav class="institutional-nav" aria-label="Links institucionais">
+          <a href="https://portalnotarial.com.br/">Início</a>
+          <a href="https://portalnotarial.com.br/sobre.html">Sobre</a>
+          <a href="https://portalnotarial.com.br/contato.html">Contato</a>
+          <a href="https://portalnotarial.com.br/politica-de-privacidade.html">Privacidade</a>
+          <a href="https://portalnotarial.com.br/termos-de-uso.html">Termos</a>
+          <a href="https://portalnotarial.com.br/aviso-legal.html">Aviso legal</a>
+          <a href="https://portalnotarial.com.br/mapa-do-site.html">Mapa do site</a>
+        </nav>
+      </div>
+    </div>
   </footer>
 
   <script>
     const ids = {
       templatePdf: document.getElementById('templatePdf'),
       templateStatus: document.getElementById('templateStatus'),
+      btnToggleTemplate: document.getElementById('btnToggleTemplate'),
+      templateCampos: document.getElementById('templateCampos'),
       btnSalvarTemplate: document.getElementById('btnSalvarTemplate'),
       btnLimparTemplate: document.getElementById('btnLimparTemplate'),
       statusBox: document.getElementById('statusBox'),
@@ -672,6 +1012,7 @@
     ids.btnLimpar.addEventListener('click', limparTudo);
     ids.btnSalvarDados.addEventListener('click', salvarDadosAssinatura);
     ids.btnLimparDadosSalvos.addEventListener('click', limparDadosSalvos);
+    ids.btnToggleTemplate.addEventListener('click', alternarCamposTemplateCartorio);
     ids.btnSalvarTemplate.addEventListener('click', salvarTemplateCartorio);
     ids.btnLimparTemplate.addEventListener('click', limparTemplateCartorioSalvo);
     document.querySelectorAll('input[name="tipoAssinatura"]').forEach(function (campo) {
@@ -685,6 +1026,12 @@
         atualizarStatusTemplate('Template selecionado para este ofício: ' + ids.templatePdf.files[0].name + '. Clique em “Salvar template como modelo” para reutilizar nas próximas vezes.');
       }
     });
+
+    function alternarCamposTemplateCartorio() {
+      const aberto = ids.templateCampos.classList.toggle('is-visible');
+      ids.btnToggleTemplate.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+      ids.btnToggleTemplate.textContent = aberto ? 'Ocultar campos do template do cartório' : 'Mostrar campos do template do cartório';
+    }
 
     function inicializarDatas() {
       const hoje = new Date();
