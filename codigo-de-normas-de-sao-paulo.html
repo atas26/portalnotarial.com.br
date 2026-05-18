@@ -1465,8 +1465,124 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
       return out;
     }
 
+    function normalizeFootnoteNumber(value) {
+      const digits = String(value || '').replace(/\D/g, '');
+      if (!digits) return '';
+      return String(Number(digits));
+    }
+
+    function displayFootnoteNumber(value) {
+      const digits = String(value || '').replace(/\D/g, '');
+      if (!digits) return '';
+      return digits.length >= 4 ? digits.padStart(4, '0') : digits;
+    }
+
+    function extractFootnoteRefs(text) {
+      const refs = new Set();
+      const raw = String(text || '');
+      const patterns = [
+        /\[(\d{1,4})\]/g,
+        /<sup[^>]*>(\d{1,4})<\/sup>/gi
+      ];
+      patterns.forEach(pattern => {
+        let match;
+        while ((match = pattern.exec(raw)) !== null) {
+          const key = normalizeFootnoteNumber(match[1]);
+          if (key) refs.add(key);
+        }
+      });
+      return refs;
+    }
+
+    function splitFootnoteString(value) {
+      const raw = String(value || '').replace(/\r/g, '\n').trim();
+      if (!raw) return [];
+
+      const marker = /(?:^|\n)\s*(?:\[(\d{1,4})\]|(\d{1,4}))\s+[–—-]?\s*/g;
+      const matches = Array.from(raw.matchAll(marker));
+
+      if (!matches.length) {
+        const simple = raw.match(/^\s*(?:\[(\d{1,4})\]|(\d{1,4}))\s+[–—-]?\s*(.+)$/s);
+        if (simple) {
+          return [{ numero: simple[1] || simple[2] || '', texto: (simple[3] || '').trim() }];
+        }
+        return [{ numero: '', texto: raw }];
+      }
+
+      return matches.map((match, index) => {
+        const contentStart = match.index + match[0].length;
+        const contentEnd = index + 1 < matches.length ? matches[index + 1].index : raw.length;
+        return {
+          numero: match[1] || match[2] || '',
+          texto: raw.slice(contentStart, contentEnd).trim()
+        };
+      }).filter(note => note.texto || note.numero);
+    }
+
+    function normalizeFootnoteEntry(entry) {
+      if (!entry) return [];
+
+      if (typeof entry === 'string') {
+        return splitFootnoteString(entry);
+      }
+
+      if (Array.isArray(entry)) {
+        return entry.flatMap(normalizeFootnoteEntry);
+      }
+
+      const numero = entry.numero || entry.num || entry.indice || entry.id || entry.ref || entry.chave || '';
+      const texto = entry.texto || entry.nota || entry.conteudo || entry.content || entry.descricao || entry.valor || '';
+
+      if (texto || numero) {
+        return [{ numero, texto: String(texto || '').trim() }];
+      }
+
+      return Object.values(entry).flatMap(normalizeFootnoteEntry);
+    }
+
+    function getRecordFootnotes(rec) {
+      const sources = [
+        rec && rec.notas,
+        rec && rec.rodapes,
+        rec && rec.rodape,
+        rec && rec.notasRodape,
+        rec && rec.notas_rodape,
+        rec && rec.footnotes
+      ];
+
+      const normalized = sources
+        .filter(Boolean)
+        .flatMap(normalizeFootnoteEntry)
+        .map(note => ({
+          numero: displayFootnoteNumber(note.numero),
+          chave: normalizeFootnoteNumber(note.numero),
+          texto: String(note.texto || '').trim()
+        }))
+        .filter(note => note.texto || note.numero);
+
+      const seen = new Set();
+      return normalized.filter(note => {
+        const key = `${note.chave || note.numero}::${note.texto}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    }
+
+    function getRelevantFootnotes(rec) {
+      const allNotes = getRecordFootnotes(rec);
+      if (!allNotes.length) return [];
+
+      const refs = extractFootnoteRefs(rec && rec.texto);
+      if (!refs.size) {
+        return allNotes.length === 1 ? allNotes : [];
+      }
+
+      return allNotes.filter(note => note.chave && refs.has(note.chave));
+    }
+
     function formatFootnoteRefs(html) {
-      return String(html || '').replace(/\[(\d{4})\]/g, '<sup class="footnote-ref">$1</sup>');
+      return String(html || '').replace(/\[(\d{1,4})\]/g, '<sup class="footnote-ref">$1</sup>');
     }
 
     function formatNormativeParagraph(text, q) {
@@ -1489,23 +1605,14 @@ Art. 3.º Este Provimento entra em vigor na data de sua publicação.`;
         return `<p${cls}>${formatNormativeParagraph(p, q)}</p>`;
       }).join('');
 
-      const notes = Array.isArray(rec && rec.notas) ? rec.notas : [];
+      const notes = getRelevantFootnotes(rec);
       if (!notes.length) return bodyHtml;
 
       const notesHtml = notes.map(n => {
-        let numero = '';
-        let texto = '';
-        if (typeof n === 'string') {
-          const match = String(n).match(/^(\d{1,4})\s+(.*)$/);
-          numero = match ? match[1] : '';
-          texto = match ? match[2] : String(n);
-        } else {
-          numero = n && n.numero ? n.numero : '';
-          texto = n && n.texto ? n.texto : '';
-        }
-        return `<p><span class="footnote-number">${escapeHtml(numero)}</span> ${highlight(texto, q)}</p>`;
+        const numero = n.numero ? `<span class="footnote-number">${escapeHtml(n.numero)}</span>` : '';
+        return `<p>${numero} ${highlight(n.texto, q)}</p>`;
       }).join('');
-      return `${bodyHtml}<section class="footnotes"><h4>Notas de rodapé</h4>${notesHtml}</section>`;
+      return `${bodyHtml}<section class="footnotes"><h4>Notas de rodapé do item</h4>${notesHtml}</section>`;
     }
 
     function renderResults() {
